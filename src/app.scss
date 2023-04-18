@@ -266,6 +266,10 @@ textarea {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	overscroll-behavior: none;
+
+	-webkit-user-select: none;
+	user-select: none;
+	-webkit-user-drag: none;
 }
 
 html,
@@ -276,4 +280,6 @@ body {
 
 body {
 	position: relative;
+	cursor: none;
+	background: #5d5d5d;
 }
