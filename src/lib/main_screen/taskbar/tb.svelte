@@ -1,29 +1,66 @@
 <script lang="ts">
-	let openmenu = false;
+	import { onMount } from 'svelte';
+	import { is_menu_open } from '../is_openmenu/i';
+	let openmenu: boolean;
+	is_menu_open.subscribe((value: boolean) => {
+		openmenu = value;
+	});
 
-	function changeline() {
-		const desktop_working_area = document.getElementById('desktop_working_area');
-		const line1 = document.getElementById('line1') as HTMLDivElement;
-		const line2 = document.getElementById('line2') as HTMLDivElement;
-		if (openmenu) {
+	// function changeline() {
+	// 	const desktop_working_area = document.getElementById('desktop_working_area');
+	// 	const line1 = document.getElementById('line1') as HTMLDivElement;
+	// 	const line2 = document.getElementById('line2') as HTMLDivElement;
+	// 	if (openmenu) {
+	// 		line1.classList.remove('line1_active');
+	// 		line2.classList.remove('line2_active');
+	// 		if (desktop_working_area !== null) {
+	// 			desktop_working_area.classList.remove('smol_mainscreen');
+	// 		}
+	// 		is_menu_open.update((_) => false);
+	// 	} else {
+	// 		line1.classList.add('line1_active');
+	// 		line2.classList.add('line2_active');
+	// 		if (desktop_working_area !== null) {
+	// 			desktop_working_area.classList.add('smol_mainscreen');
+	// 		}
+	// 		is_menu_open.update((_) => true);
+	// 	}
+	// }
+
+	let desktop_working_area: HTMLDivElement | null = null;
+	let line1: HTMLDivElement | null = null;
+	let line2: HTMLDivElement | null = null;
+
+	onMount(() => {
+		desktop_working_area = document.getElementById('desktop_working_area') as HTMLDivElement;
+		line1 = document.getElementById('line1') as HTMLDivElement;
+		line2 = document.getElementById('line2') as HTMLDivElement;
+	});
+
+	$: if (desktop_working_area !== null && line1 !== null && line2 !== null) {
+		if (!$is_menu_open) {
 			line1.classList.remove('line1_active');
 			line2.classList.remove('line2_active');
-			if (desktop_working_area != null) {
+			if (desktop_working_area !== null) {
 				desktop_working_area.classList.remove('smol_mainscreen');
 			}
-			openmenu = false;
 		} else {
 			line1.classList.add('line1_active');
 			line2.classList.add('line2_active');
-			if (desktop_working_area != null) {
+			if (desktop_working_area !== null) {
 				desktop_working_area.classList.add('smol_mainscreen');
 			}
-			openmenu = true;
 		}
 	}
 </script>
 
-<button class="taskbar" id="taskbar_menu" on:click={changeline}>
+<button
+	class="taskbar"
+	id="taskbar_menu"
+	on:click={() => {
+		is_menu_open.update((_) => !_);
+	}}
+>
 	<div class="line" id="line1" />
 	<div class="line" id="line2" />
 </button>
