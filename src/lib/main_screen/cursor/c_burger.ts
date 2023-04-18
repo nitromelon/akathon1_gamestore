@@ -1,5 +1,5 @@
-export function c_burger(div: HTMLDivElement) {
-	const taskbar_menu = document.getElementById('taskbar_menu') as HTMLDivElement;
+export function c_burger(div: HTMLDivElement, target: string) {
+	const taskbar_menu = document.getElementById(target) as HTMLDivElement;
 	document.addEventListener('mousemove', (e) => {
 		const rect = taskbar_menu.getBoundingClientRect();
 		if (

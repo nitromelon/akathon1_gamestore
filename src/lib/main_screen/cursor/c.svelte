@@ -6,6 +6,15 @@
 		const cursor = document.getElementById('cursor') as HTMLDivElement;
 		const dot = document.getElementById('dot') as HTMLDivElement;
 
+		document.addEventListener(
+			'mousemove',
+			() => {
+				cursor.style.display = 'block';
+				dot.style.display = 'block';
+			},
+			{ once: true }
+		);
+
 		document.addEventListener('mousemove', (e) => {
 			move(e);
 			if (
@@ -27,7 +36,7 @@
 			stylemouse('48px', '1');
 		});
 
-		c_burger(cursor);
+		c_burger(cursor, 'taskbar_menu');
 
 		function move(e: MouseEvent) {
 			cursor.style.top = e.pageY + 'px';
@@ -51,6 +60,7 @@
 <style lang="scss">
 	#cursor,
 	#dot {
+		display: none;
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -64,7 +74,7 @@
 	#cursor {
 		height: 48px;
 		width: 48px;
-		transition: all 0.3s cubic-bezier(0, 0, 0, 1), border-radius .3s cubic-bezier(0, 1, 0, 1);
+		transition: all 0.3s cubic-bezier(0, 0, 0, 1), border-radius 0.3s cubic-bezier(0, 1, 0, 1);
 	}
 
 	#dot {

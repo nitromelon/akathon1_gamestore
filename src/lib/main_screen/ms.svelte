@@ -4,7 +4,7 @@
 </script>
 
 <div class="mainscreen">
-	<div class="desktop">
+	<div class="desktop" id="desktop_working_area">
 		<div class="wallpaper_filter">
 			<h1>Kirito</h1>
 		</div>
@@ -18,6 +18,8 @@
 		position: fixed;
 		height: 100%;
 		width: 100%;
+		background-color: rgba(0, 0, 0, 0.5);
+		backdrop-filter: grayscale(1) blur(10px);
 		.desktop {
 			position: absolute;
 			top: 0;
@@ -26,6 +28,9 @@
 			width: 100%;
 			background: url('./main_screen/ms2.jpg') no-repeat center center fixed;
 			background-size: cover;
+			outline: 1px solid #fafafa;
+			overflow: hidden;
+			transition: 1s cubic-bezier(1, 0.2, 0.2, 1);
 			.wallpaper_filter {
 				position: absolute;
 				top: 0;
@@ -45,9 +50,16 @@
 					-webkit-text-stroke: 1px #fafafa;
 					font-weight: 100;
 					color: transparent;
-					padding: 16px
+					padding: 16px;
 				}
 			}
+		}
+	}
+
+	:global {
+		.smol_mainscreen {
+			transform: scale(0.7);
+			border-radius: 24px;
 		}
 	}
 </style>

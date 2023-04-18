@@ -281,5 +281,6 @@ body {
 body {
 	position: relative;
 	cursor: none;
-	background: #5d5d5d;
+	background: url('./main_screen/ms2.jpg') no-repeat center center fixed;
+	background-size: cover;
 }
