@@ -1,16 +1,25 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { is_menu_open } from './is_openmenu/i';
 	import Taskbar from './taskbar/tb.svelte';
 	import Cursor from './cursor/c.svelte';
 	import Navigation from './navigation/nav.svelte';
-	// setInterval(() => {
-	// 	// is_menu_open.set(true);
-	// 	let af;
-	// 	is_menu_open.subscribe((value: boolean) => {
-	// 		af = value;
-	// 	});
-	// 	console.log(af)
-	// }, 1000)
+	import Appframe from './appframe/frame.svelte';
+
+	let time = new Date();
+
+	$: hour = time.getHours() < 10 ? '0' + time.getHours().toString() : time.getHours();
+	$: minute = time.getMinutes() < 10 ? '0' + time.getMinutes().toString() : time.getMinutes();
+
+	onMount(() => {
+		const interval = setInterval(() => {
+			time = new Date();
+		}, 1000);
+
+		return () => {
+			clearInterval(interval);
+		};
+	});
 </script>
 
 <div class="mainscreen">
@@ -23,8 +32,10 @@
 		}}
 	>
 		<div class="wallpaper_filter">
-			<h1>Kirito | Game store</h1>
+			<p class="time">{hour}:{minute}</p>
+			<h1 class="slogan">Kirito | Game store</h1>
 		</div>
+		<Appframe title={"Demo test title + App"}/>
 	</div>
 	<Navigation />
 	<Taskbar />
@@ -48,7 +59,7 @@
 			background-size: cover;
 			outline: 1px solid #fafafa;
 			overflow: hidden;
-			transition: 1s cubic-bezier(0, 1, 0, 1);
+			transition: 0.5s cubic-bezier(0, 1, 0, 1);
 			z-index: 2;
 			.wallpaper_filter {
 				position: absolute;
@@ -58,18 +69,27 @@
 				width: 100%;
 				background-color: rgba(0, 0, 0, 0.5);
 				backdrop-filter: grayscale(1);
-				h1 {
+				.slogan {
 					position: absolute;
 					top: 50%;
 					left: 50%;
 					transform: translate(-50%, -50%);
 					font-family: var(--font_family);
 					font-size: 64px;
-					color: #fafafa;
 					-webkit-text-stroke: 1px #fafafa;
-					font-weight: 100;
+					// font-weight: 100;
 					color: transparent;
 					padding: 16px;
+				}
+
+				.time {
+					position: absolute;
+					top: 16px;
+					left: 50%;
+					transform: translate(-50%, 0);
+					font-family: var(--font_family);
+					font-size: 18px;
+					color: #fafafa;
 				}
 			}
 		}
@@ -79,6 +99,9 @@
 		.smol_mainscreen {
 			transform: scale(0.7);
 			border-radius: 24px;
+			* {
+				pointer-events: none;
+			}
 		}
 	}
 </style>

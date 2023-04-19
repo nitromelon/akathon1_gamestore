@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { c_burger } from './c_burger';
+	import { c_link } from './c_link';
+	import { c_frame } from './frame/c_frame';
+	import { is_cursor_locked } from '../is_already_locked/cursor';
 
 	onMount(() => {
 		const cursor = document.getElementById('cursor') as HTMLDivElement;
@@ -36,7 +39,25 @@
 			stylemouse('48px', '1');
 		});
 
+		Array.from(document.getElementsByClassName('desktop_menu_link')).forEach((link, i) => {
+			c_link(cursor, link as HTMLAnchorElement, i);
+		});
 		c_burger(cursor, 'taskbar_menu');
+
+		// demo
+		c_frame(cursor, 'frame_titlebar_button_close');
+		c_frame(cursor, 'frame_titlebar_button_maximize');
+		c_frame(cursor, 'frame_titlebar_button_minimize');
+
+		document.addEventListener('mousemove', (e: MouseEvent) => {
+			if ($is_cursor_locked.size === 0) {
+				move(e);
+				cursor.style.height = '48px';
+				cursor.style.width = '48px';
+				cursor.style.transform = 'translate(-50%, -50%)';
+				cursor.style.borderRadius = '50%';
+			}
+		});
 
 		function move(e: MouseEvent) {
 			cursor.style.top = e.pageY + 'px';
