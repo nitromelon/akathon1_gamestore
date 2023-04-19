@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { is_menu_open } from './is_openmenu/i';
+	import { frame_collection } from './collection/window';
 	import Taskbar from './taskbar/tb.svelte';
 	import Cursor from './cursor/c.svelte';
 	import Navigation from './navigation/nav.svelte';
-	import Appframe from './appframe/frame.svelte';
+	import Traybar from './taskbar/traybar.svelte';
+	import Frame from './appframe/frame.svelte';
 
 	let time = new Date();
 
@@ -35,7 +37,14 @@
 			<p class="time">{hour}:{minute}</p>
 			<h1 class="slogan">Kirito | Game store</h1>
 		</div>
-		<Appframe title={"Demo test title + App"}/>
+		<Frame title={"Demo test title + App"}/>
+		<!-- <Appframe title={"Demo test title + Appwg"}/> -->
+		{#each $frame_collection as app}
+			{#if app !== null}
+				<svelte:component this={Frame} title={app} />
+			{/if}
+		{/each}
+		<Traybar />
 	</div>
 	<Navigation />
 	<Taskbar />

@@ -1,9 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { is_menu_open } from '../is_openmenu/i';
+	import { are_there_maximized_app } from '../are_there_maximized_app/script';
 	let desktop_working_area: HTMLDivElement | null = null;
 	let line1: HTMLDivElement | null = null;
 	let line2: HTMLDivElement | null = null;
+	let height: number = 64;
+	let bottom: number = 16;
 
 	onMount(() => {
 		desktop_working_area = document.getElementById('desktop_working_area') as HTMLDivElement;
@@ -26,6 +29,14 @@
 			}
 		}
 	}
+
+	$: if ($are_there_maximized_app.size === 0 || $is_menu_open) {
+		height = 64;
+		bottom = 16;
+	} else {
+		height = 40;
+		bottom = 5;
+	};
 </script>
 
 <button
@@ -34,6 +45,7 @@
 	on:click={() => {
 		is_menu_open.update((_) => !_);
 	}}
+	style="height: {height}px; bottom: {bottom}px;"
 >
 	<div class="line" id="line1" />
 	<div class="line" id="line2" />
@@ -55,6 +67,7 @@
 		border-radius: 4px;
 		flex-direction: column;
 		justify-content: center;
+		transition: height 0.3s cubic-bezier(0, 1, 0, 1), bottom 0.3s cubic-bezier(0, 1, 0, 1);
 		.line {
 			height: 1px;
 			width: 36px;

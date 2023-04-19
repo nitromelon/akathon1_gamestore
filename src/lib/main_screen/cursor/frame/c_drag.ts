@@ -5,11 +5,10 @@ is_menu_open.subscribe((value) => {
 	open = value;
 });
 
-export function c_drag(div: HTMLDivElement, target: string) {
-	const taskbar_menu = document.getElementById(target) as HTMLDivElement;
-	const key = target;
+export function c_drag(div: HTMLDivElement, target: HTMLAnchorElement, n: number) {
+	const key = `frame_titlebar_draggable_area_${n}`;
 	document.addEventListener('mousemove', (e) => {
-		const rect = taskbar_menu.getBoundingClientRect();
+		const rect = target.getBoundingClientRect();
 		if (
 			e.clientX >= rect.left &&
 			e.clientX <= rect.right &&
@@ -21,12 +20,9 @@ export function c_drag(div: HTMLDivElement, target: string) {
 				n.add(key);
 				return n;
 			});
-			div.style.height = taskbar_menu.offsetHeight + 'px';
-			div.style.width = taskbar_menu.offsetWidth + 'px';
-			div.style.top = `${rect.top}px`;
-			div.style.left = `${rect.left}px`;
-			div.style.transform = 'none';
-			div.style.borderRadius = '0px';
+			div.style.opacity = '0';
+			div.style.height = '36px';
+			div.style.width = '36px';
 		} else
 			is_cursor_locked.update((n) => {
 				n.delete(key);

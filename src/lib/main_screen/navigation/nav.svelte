@@ -1,12 +1,102 @@
+<script lang="ts">
+	import { frame_collection } from "../collection/window";
+</script>
+
 <div class="menu">
-	<a class="desktop_menu_link" href="./about" on:click|preventDefault>#About</a>
-	<a class="desktop_menu_link" href="./product" on:click|preventDefault>#Product</a>
-	<a class="desktop_menu_link" href="./payment" on:click|preventDefault>#Payment</a>
-	<a class="desktop_menu_link" href="https://mercury.swin.edu.au/cos10026/s104182520/assign2/enhancements2.php">
+	<a
+		class="desktop_menu_link"
+		href="./about"
+		on:click|preventDefault={() => {
+			frame_collection.update((n) => {
+				if (!n.includes('about')) {
+					const pos = n.indexOf(null);
+					if (pos === -1) {
+						n.push('about');
+					} else {
+						n[pos] = 'about';
+					}
+				}
+				return n;
+			});
+		}}>#About</a
+	>
+	<a
+		class="desktop_menu_link"
+		href="./product"
+		on:click|preventDefault={() => {
+			frame_collection.update((n) => {
+				if (!n.includes('product')) {
+					const pos = n.indexOf(null);
+					if (pos === -1) {
+						n.push('product');
+					} else {
+						n[pos] = 'product';
+					}
+				}
+				return n;
+			});
+		}}
+		>#Product
+	</a>
+	<a
+		class="desktop_menu_link"
+		href="./payment"
+		on:click|preventDefault={() => {
+			frame_collection.update((n) => {
+				if (!n.includes('payment')) {
+					const pos = n.indexOf(null);
+					if (pos === -1) {
+						n.push('payment');
+					} else {
+						n[pos] = 'payment';
+					}
+				}
+				return n;
+			});
+		}}>#Payment</a
+	>
+	<a
+		rel="noopener noreferrer"
+		target="_blank"
+		class="desktop_menu_link"
+		href="https://mercury.swin.edu.au/cos10026/s104182520/assign2/enhancements2.php"
+	>
 		#Legacy_enhancement
 	</a>
-	<a class="desktop_menu_link" href="./login" on:click|preventDefault>#Login</a>
-	<a class="desktop_menu_link" href="./signup" on:click|preventDefault>#Signup</a>
+	<a
+		class="desktop_menu_link"
+		href="./login"
+		on:click|preventDefault={() => {
+			frame_collection.update((n) => {
+				if (!n.includes('login')) {
+					const pos = n.indexOf(null);
+					if (pos === -1) {
+						n.push('login');
+					} else {
+						n[pos] = 'login';
+					}
+				}
+				return n;
+			});
+		}}>#Login</a
+	>
+	<a
+		class="desktop_menu_link"
+		href="./signup"
+		on:click|preventDefault={() => {
+			frame_collection.update((n) => {
+				if (!n.includes('signup')) {
+					const pos = n.indexOf(null);
+					if (pos === -1) {
+						n.push('signup');
+					} else {
+						n[pos] = 'signup';
+					}
+				}
+				return n;
+			});
+		}}>#Signup</a
+	>
 </div>
 
 <style lang="scss">

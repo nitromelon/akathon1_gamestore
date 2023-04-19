@@ -5,12 +5,10 @@ is_menu_open.subscribe((value) => {
 	open = value;
 });
 
-
-export function c_frame(div: HTMLDivElement, target: string) {
-	const taskbar_menu = document.getElementById(target) as HTMLDivElement;
-	const key = 'menu_burger' + target;
+export function c_frame(div: HTMLDivElement, target: HTMLAnchorElement, n: number) {
+	const key = `titlebar_button_${n}`;
 	document.addEventListener('mousemove', (e) => {
-		const rect = taskbar_menu.getBoundingClientRect();
+		const rect = target.getBoundingClientRect();
 		if (
 			e.clientX >= rect.left &&
 			e.clientX <= rect.right &&
@@ -22,12 +20,18 @@ export function c_frame(div: HTMLDivElement, target: string) {
 				n.add(key);
 				return n;
 			});
-			div.style.height = taskbar_menu.offsetHeight + 'px';
-			div.style.width = taskbar_menu.offsetWidth + 'px';
+			div.style.height = target.offsetHeight + 'px';
+			div.style.width = target.offsetWidth + 'px';
 			div.style.top = `${rect.top}px`;
 			div.style.left = `${rect.left}px`;
 			div.style.transform = 'none';
 			div.style.borderRadius = '0px';
+			div.style.borderTop = 'none';
+			div.style.borderRight = 'none';
+			div.style.borderBottom = 'none';
+			if (n % 3 === 1 || n % 3 === 2) {
+				div.style.borderRight = '1px solid #fafafa';
+			}
 		} else
 			is_cursor_locked.update((n) => {
 				n.delete(key);
