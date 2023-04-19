@@ -1,5 +1,33 @@
 <script lang="ts">
 	export let title: string;
+	let is_hold = false;
+	let drag_event: MouseEvent | null = null;
+	$: {
+		if (drag_event !== null && is_hold === true) {
+			const frame = (drag_event.target as HTMLDivElement).parentNode?.parentNode as HTMLDivElement;
+			const x = drag_event.clientX;
+			const y = drag_event.clientY;
+			const x_offset = x - frame.offsetLeft;
+			const y_offset = y - frame.offsetTop;
+			const cursor = document.getElementById("cursor") as HTMLDivElement;
+			const move = (e: MouseEvent) => {
+				const x = e.clientX;
+				const y = e.clientY;
+				frame.style.left = `${x - x_offset}px`;
+				frame.style.top = `${y - y_offset}px`;
+				cursor.style.display = "none";
+			};
+			const up = () => {
+				is_hold = false;
+				drag_event = null;
+				document.removeEventListener("mousemove", move);
+				document.removeEventListener("mouseup", up);
+				cursor.style.display = "block";
+			};
+			document.addEventListener("mousemove", move);
+			document.addEventListener("mouseup", up);
+		}
+	}
 </script>
 
 <div class="frame">
@@ -17,6 +45,18 @@
 				<div class="line" />
 			</button>
 		</div>
+		<div
+			class="draggable_area"
+			id="frame_titlebar_draggable_area"
+			on:mousedown|preventDefault={(e) => {
+				is_hold = true;
+				drag_event = e;
+			}}
+			on:mouseup|preventDefault={() => {
+				is_hold = false;
+				drag_event = null;
+			}}
+		/>
 		<div class="title">{title}</div>
 	</div>
 	<div class="content" />
@@ -118,9 +158,13 @@
 			.title {
 				position: relative;
 				font-family: var(--font_family);
-				margin-left: 18px;
+				margin: 0 18px;
 				font-size: 12px;
 				color: #fafafa;
+			}
+			.draggable_area {
+				height: 100%;
+				flex: 1;
 			}
 		}
 		.content {

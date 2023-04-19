@@ -3,6 +3,7 @@
 	import { c_burger } from './c_burger';
 	import { c_link } from './c_link';
 	import { c_frame } from './frame/c_frame';
+	import { c_drag } from './frame/c_drag';
 	import { is_cursor_locked } from '../is_already_locked/cursor';
 
 	onMount(() => {
@@ -48,6 +49,7 @@
 		c_frame(cursor, 'frame_titlebar_button_close');
 		c_frame(cursor, 'frame_titlebar_button_maximize');
 		c_frame(cursor, 'frame_titlebar_button_minimize');
+		c_drag(cursor, 'frame_titlebar_draggable_area');
 
 		document.addEventListener('mousemove', (e: MouseEvent) => {
 			if ($is_cursor_locked.size === 0) {
@@ -56,6 +58,7 @@
 				cursor.style.width = '48px';
 				cursor.style.transform = 'translate(-50%, -50%)';
 				cursor.style.borderRadius = '50%';
+				cursor.style.display = "block";
 			}
 		});
 
