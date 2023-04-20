@@ -2,9 +2,14 @@
 	import { onMount } from 'svelte';
 	import { c_burger } from './c_burger';
 	import { c_link } from './c_link';
-	// import { c_frame } from './frame/c_frame';
-	// import { c_drag } from './frame/c_drag';
 	import { is_cursor_locked } from '../is_already_locked/cursor';
+	import { c_frame } from './frame/c_frame';
+	import { frame_collection } from '../collection/window';
+	import { browser } from '$app/environment';
+	import { c_drag } from './frame/c_drag';
+
+	let three_btn_group: HTMLCollectionOf<Element> | null;
+	$: three_btn_group = null;
 
 	onMount(() => {
 		const cursor = document.getElementById('cursor') as HTMLDivElement;
@@ -44,14 +49,7 @@
 			c_link(cursor, link as HTMLAnchorElement, i);
 		});
 		c_burger(cursor, 'taskbar_menu');
-
-		// Array.from(document.getElementsByClassName('titlebar_button')).forEach((link, i) => {
-		// 	c_frame(cursor, link as HTMLAnchorElement, i);
-		// });
-
-		// Array.from(document.getElementsByClassName('draggable_area')).forEach((link, i) => {
-		// 	c_drag(cursor, link as HTMLAnchorElement, i);
-		// });
+		three_btn_group = document.getElementsByClassName('titlebar_button');
 
 		document.addEventListener('mousemove', (e: MouseEvent) => {
 			if ($is_cursor_locked.size === 0) {
@@ -82,6 +80,19 @@
 			dot.style.opacity = opacity;
 		}
 	});
+
+	$: {
+		if (browser) {
+			const cursor = document.getElementById('cursor') as HTMLDivElement;
+			$frame_collection;
+			Array.from(document.getElementsByClassName('titlebar_button')).forEach((link, i) => {
+				c_frame(cursor, link as HTMLAnchorElement, i);
+			});
+			Array.from(document.getElementsByClassName('draggable_area')).forEach((link, i) => {
+				c_drag(cursor, link as HTMLAnchorElement, i);
+			});
+		}
+	}
 </script>
 
 <div id="cursor" />

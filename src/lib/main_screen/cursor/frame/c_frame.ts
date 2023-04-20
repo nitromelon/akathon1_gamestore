@@ -7,7 +7,7 @@ is_menu_open.subscribe((value) => {
 
 export function c_frame(div: HTMLDivElement, target: HTMLAnchorElement, n: number) {
 	const key = `titlebar_button_${n}`;
-	document.addEventListener('mousemove', (e) => {
+	const frame_button = (e: MouseEvent) => {
 		const rect = target.getBoundingClientRect();
 		if (
 			e.clientX >= rect.left &&
@@ -37,5 +37,7 @@ export function c_frame(div: HTMLDivElement, target: HTMLAnchorElement, n: numbe
 				n.delete(key);
 				return n;
 			});
-	});
+	};
+	document.removeEventListener('mousemove', frame_button);
+	document.addEventListener('mousemove', frame_button);
 }

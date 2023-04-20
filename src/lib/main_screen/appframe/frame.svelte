@@ -7,6 +7,7 @@
 	let is_hold = false;
 	let drag_event: MouseEvent | null = null;
 	let is_maximized = false;
+	let drag_area: HTMLDivElement;
 
 	window_collection.update((n) => {
 		while (n.has(id)) {
@@ -146,7 +147,10 @@
 <div class="frame" {id} bind:this={daframe}>
 	<div class="titlebar">
 		<div class="buttons">
-			<button class="close titlebar_button" on:click|preventDefault={close_event}>
+			<button
+				class="close titlebar_button"
+				on:click|preventDefault={close_event}
+			>
 				<div class="line" />
 				<div class="line" />
 			</button>
@@ -173,6 +177,7 @@
 				drag_event = null;
 			}}
 			on:dblclick={db_maximize}
+			bind:this={drag_area}
 		/>
 		<div class="title">{title}</div>
 	</div>

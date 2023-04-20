@@ -7,7 +7,7 @@ is_menu_open.subscribe((value) => {
 
 export function c_drag(div: HTMLDivElement, target: HTMLAnchorElement, n: number) {
 	const key = `frame_titlebar_draggable_area_${n}`;
-	document.addEventListener('mousemove', (e) => {
+	const mousemove = (e: MouseEvent) => {
 		const rect = target.getBoundingClientRect();
 		if (
 			e.clientX >= rect.left &&
@@ -28,5 +28,7 @@ export function c_drag(div: HTMLDivElement, target: HTMLAnchorElement, n: number
 				n.delete(key);
 				return n;
 			});
-	});
+	};
+	document.removeEventListener('mousemove', mousemove);
+	document.addEventListener('mousemove', mousemove);
 }
