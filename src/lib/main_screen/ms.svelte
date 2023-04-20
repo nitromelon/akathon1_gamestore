@@ -7,6 +7,7 @@
 	import Navigation from './navigation/nav.svelte';
 	import Traybar from './taskbar/traybar.svelte';
 	import Frame from './appframe/frame.svelte';
+	import Help from './taskbar/help.svelte';
 
 	let time = new Date();
 
@@ -46,6 +47,7 @@
 		<Traybar />
 	</div>
 	<Navigation />
+	<Help />
 	<Taskbar />
 	<Cursor />
 </div>

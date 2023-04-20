@@ -7,9 +7,7 @@
 	import { frame_collection } from '../collection/window';
 	import { browser } from '$app/environment';
 	import { c_drag } from './frame/c_drag';
-
-	let three_btn_group: HTMLCollectionOf<Element> | null;
-	$: three_btn_group = null;
+	import { c_ex_help } from './c_extended_help';
 
 	onMount(() => {
 		const cursor = document.getElementById('cursor') as HTMLDivElement;
@@ -48,8 +46,9 @@
 		Array.from(document.getElementsByClassName('desktop_menu_link')).forEach((link, i) => {
 			c_link(cursor, link as HTMLAnchorElement, i);
 		});
+
 		c_burger(cursor, 'taskbar_menu');
-		three_btn_group = document.getElementsByClassName('titlebar_button');
+		c_ex_help(cursor, 'ms_help');
 
 		document.addEventListener('mousemove', (e: MouseEvent) => {
 			if ($is_cursor_locked.size === 0) {
@@ -95,7 +94,9 @@
 	}
 </script>
 
-<div id="cursor" />
+<div id="cursor">
+	<p>.</p>
+</div>
 <div id="dot" />
 
 <style lang="scss">
@@ -116,9 +117,20 @@
 		height: 48px;
 		width: 48px;
 		transition: all 0.3s cubic-bezier(0, 0, 0, 1), border-radius 0.3s cubic-bezier(0, 1, 0, 1);
+		* {
+			position: absolute;
+			top: -24px;
+			left: 50%;
+			white-space: nowrap;
+			transform: translateX(-50%);
+			color: #fafafa;
+		}
 	}
 
 	#dot {
-		border-width: 2px;
+		border: none;
+		height: 8px;
+		width: 8px;
+		backdrop-filter: invert(100%);
 	}
 </style>

@@ -11,8 +11,7 @@
 	const width = 640;
 	const x = Math.floor(Math.random() * (window.innerWidth - width));
 	const y = Math.floor(Math.random() * (window.innerHeight - height));
-
-	console.log(x, y);
+	let daframe: HTMLDivElement | null = null;
 
 	window_collection.update((n) => {
 		while (n.has(id)) {
@@ -123,6 +122,13 @@
 			frame_collection.update((n) => {
 				const pos = n.indexOf(title);
 				n[pos] = null;
+				for (let i = n.length - 1; i >= 0; i--) {
+					if (n[i] === null) {
+						n.pop();
+					} else {
+						break;
+					}
+				}
 				return n;
 			});
 			frame.remove();
@@ -137,7 +143,6 @@
 		daframe!.style.zIndex = '2';
 	};
 
-	let daframe: HTMLDivElement | null = null;
 	onMount(() => {
 		if (daframe === null) return;
 		daframe.style.transition =
@@ -196,7 +201,9 @@
 		/>
 		<div class="title">{title}</div>
 	</div>
-	<div class="content" />
+	<div class="content">
+		{$frame_collection} - text holder
+	</div>
 </div>
 
 <style lang="scss">
@@ -306,6 +313,12 @@
 			left: 0;
 			height: calc(100% - 36px);
 			width: 100%;
+
+			// demo
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: #fafafa;
 		}
 	}
 	:global {
