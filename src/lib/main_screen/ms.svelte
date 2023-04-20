@@ -37,8 +37,7 @@
 			<p class="time">{hour}:{minute}</p>
 			<h1 class="slogan">Kirito | Game store</h1>
 		</div>
-		<Frame title={"Demo test title + App"}/>
-		<!-- <Appframe title={"Demo test title + Appwg"}/> -->
+		<!-- <Frame title={"Demo test title + App"}/> -->
 		{#each $frame_collection as app}
 			{#if app !== null}
 				<svelte:component this={Frame} title={app} />

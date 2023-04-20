@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { are_there_maximized_app } from '../are_there_maximized_app/script';
 	import { frame_collection, window_collection } from '../collection/window';
 	export let title: string;
@@ -123,9 +124,26 @@
 		}, 600);
 	};
 	// Todo: do something like cursor for id
+	let daframe: HTMLDivElement | null = null;
+	onMount(() => {
+		if (daframe === null) return;
+		daframe.style.transition =
+			'transform 0.3s 0.25s cubic-bezier(0, 1, 0, 1), opacity 0.25s cubic-bezier(0, 1, 0, 1)';
+		daframe.style.opacity = '0';
+		daframe.style.transform = 'scale(0.9)';
+		daframe.style.pointerEvents = 'none';
+		setTimeout(() => {
+			daframe!.style.opacity = '1';
+			daframe!.style.transform = 'scale(1)';
+			daframe!.style.pointerEvents = 'auto';
+			setTimeout(() => {
+				daframe!.style.transition = '0.3s cubic-bezier(0, 1, 0, 1)';
+			}, 250);
+		}, 300);
+	});
 </script>
 
-<div class="frame" {id}>
+<div class="frame" {id} bind:this={daframe}>
 	<div class="titlebar">
 		<div class="buttons">
 			<button class="close titlebar_button" on:click|preventDefault={close_event}>

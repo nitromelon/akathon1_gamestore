@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { frame_collection } from "../collection/window";
+	import { frame_collection } from '../collection/window';
+	import { is_menu_open } from '../is_openmenu/i';
 </script>
 
 <div class="menu">
@@ -18,6 +19,7 @@
 				}
 				return n;
 			});
+			is_menu_open.set(false);
 		}}>#About</a
 	>
 	<a
@@ -35,6 +37,7 @@
 				}
 				return n;
 			});
+			is_menu_open.set(false);
 		}}
 		>#Product
 	</a>
@@ -53,6 +56,7 @@
 				}
 				return n;
 			});
+			is_menu_open.set(false);
 		}}>#Payment</a
 	>
 	<a
@@ -78,6 +82,7 @@
 				}
 				return n;
 			});
+			is_menu_open.set(false)
 		}}>#Login</a
 	>
 	<a
@@ -95,6 +100,7 @@
 				}
 				return n;
 			});
+			is_menu_open.set(false)
 		}}>#Signup</a
 	>
 </div>
