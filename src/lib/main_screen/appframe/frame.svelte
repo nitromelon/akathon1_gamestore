@@ -7,7 +7,12 @@
 	let is_hold = false;
 	let drag_event: MouseEvent | null = null;
 	let is_maximized = false;
-	let drag_area: HTMLDivElement;
+	const height = 480;
+	const width = 640;
+	const x = Math.floor(Math.random() * (window.innerWidth - width));
+	const y = Math.floor(Math.random() * (window.innerHeight - height));
+
+	console.log(x, y);
 
 	window_collection.update((n) => {
 		while (n.has(id)) {
@@ -77,7 +82,6 @@
 					return n;
 			  });
 		is_maximized = !is_maximized;
-		// drag_event = null;
 	};
 
 	const db_maximize = (e: MouseEvent) => {
@@ -124,7 +128,15 @@
 			frame.remove();
 		}, 600);
 	};
-	// Todo: do something like cursor for id
+
+	const change_z_order = () => {
+		for (let i of $window_collection) {
+			const frame = document.getElementById(i) as HTMLDivElement;
+			frame.style.zIndex = '1';
+		}
+		daframe!.style.zIndex = '2';
+	};
+
 	let daframe: HTMLDivElement | null = null;
 	onMount(() => {
 		if (daframe === null) return;
@@ -144,13 +156,17 @@
 	});
 </script>
 
-<div class="frame" {id} bind:this={daframe}>
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div
+	class="frame"
+	{id}
+	bind:this={daframe}
+	on:mousedown={change_z_order}
+	style="top: {y}px; left: {x}px; height: {height}px; width: {width}px;"
+>
 	<div class="titlebar">
 		<div class="buttons">
-			<button
-				class="close titlebar_button"
-				on:click|preventDefault={close_event}
-			>
+			<button class="close titlebar_button" on:click|preventDefault={close_event}>
 				<div class="line" />
 				<div class="line" />
 			</button>
@@ -177,7 +193,6 @@
 				drag_event = null;
 			}}
 			on:dblclick={db_maximize}
-			bind:this={drag_area}
 		/>
 		<div class="title">{title}</div>
 	</div>
@@ -187,15 +202,12 @@
 <style lang="scss">
 	.frame {
 		position: absolute;
-		top: calc(50% - 250px);
-		left: calc(50% - 500px);
-		height: 500px;
-		width: 1000px;
 		border: 1px solid #fafafa;
 		backdrop-filter: blur(1vw);
 		border-radius: 6px;
 		overflow: hidden;
 		transition: 0.3s cubic-bezier(0, 1, 0, 1);
+		z-index: 3;
 		.titlebar {
 			position: absolute;
 			top: 0;
