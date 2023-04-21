@@ -211,7 +211,7 @@
 		.desktop_menu_link {
 			position: relative;
 			border-radius: 100px;
-			height: 50px;
+			height: 60px;
 			width: calc(25% - 128px);
 			overflow: hidden;
 			text-decoration: none;
@@ -219,7 +219,6 @@
 			outline: none;
 			transform: translateY(-64px);
 			overflow: hidden;
-			transition: .3s filter cubic-bezier(0, 1, 0, 1);
 			.desktop_menu_link_group {
 				position: absolute;
 				height: 100%;
@@ -271,26 +270,26 @@
 	:global {
 		.display_menu_links {
 			// make first a tag translateY 0px
-			a {
+			.desktop_menu_link {
 				transform: translateY(0px) !important;
-			}
-			a:nth-child(1) {
-				transition: transform 0.5s cubic-bezier(0, 1, 0, 1);
-			}
-			a:nth-child(2) {
-				transition: transform 0.5s cubic-bezier(0, 1, 0, 1) 0.1s;
-			}
-			a:nth-child(3) {
-				transition: transform 0.5s cubic-bezier(0, 1, 0, 1) 0.2s;
-			}
-			a:nth-child(4) {
-				transition: transform 0.5s cubic-bezier(0, 1, 0, 1) 0.3s;
-			}
-			a:nth-child(5) {
-				transition: transform 0.5s cubic-bezier(0, 1, 0, 1) 0.4s;
-			}
-			a:nth-child(6) {
-				transition: transform 0.5s cubic-bezier(0, 1, 0, 1) 0.5s;
+				&:nth-child(1) {
+					transition: transform 0.3s cubic-bezier(0, 1, 0, 1);
+				}
+				&:nth-child(2) {
+					transition: transform 0.3s cubic-bezier(0, 1, 0, 1) 0.1s;
+				}
+				&:nth-child(3) {
+					transition: transform 0.3s cubic-bezier(0, 1, 0, 1) 0.2s;
+				}
+				&:nth-child(4) {
+					transition: transform 0.3s cubic-bezier(0, 1, 0, 1) 0.3s;
+				}
+				&:nth-child(5) {
+					transition: transform 0.3s cubic-bezier(0, 1, 0, 1) 0.4s;
+				}
+				&:nth-child(6) {
+					transition: transform 0.3s cubic-bezier(0, 1, 0, 1) 0.5s;
+				}
 			}
 		}
 	}

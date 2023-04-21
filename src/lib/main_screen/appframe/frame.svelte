@@ -9,8 +9,8 @@
 	let is_maximized = false;
 	const height = 480;
 	const width = 640;
-	const x = Math.floor(Math.random() * (window.innerWidth - width));
-	const y = Math.floor(Math.random() * (window.innerHeight - height));
+	let x = 0;
+	let y = 0;
 	let daframe: HTMLDivElement | null = null;
 
 	window_collection.update((n) => {
@@ -158,6 +158,18 @@
 				daframe!.style.transition = '0.3s cubic-bezier(0, 1, 0, 1)';
 			}, 250);
 		}, 300);
+
+		if (title === 'help') {
+			x = (window.innerWidth - width) / 2;
+			y = (window.innerHeight - height - 64) / 2;
+		} else {
+			x = Math.floor(Math.random() * (window.innerWidth - width));
+			y = Math.floor(Math.random() * (window.innerHeight - height - 64));
+		}
+
+		// return () => {
+		// 	alert('unmount');
+		// }
 	});
 </script>
 
@@ -170,23 +182,25 @@
 	style="top: {y}px; left: {x}px; height: {height}px; width: {width}px;"
 >
 	<div class="titlebar">
-		<div class="buttons">
-			<button class="close titlebar_button" on:click|preventDefault={close_event}>
-				<div class="line" />
-				<div class="line" />
-			</button>
-			<button
-				class="maximize titlebar_button"
-				id="frame_titlebar_button_maximize"
-				on:click|preventDefault={maximize}
-			>
-				<div class="group1" />
-				<div class="group2" />
-			</button>
-			<button class="minimize titlebar_button">
-				<div class="line" />
-			</button>
-		</div>
+		{#if title !== 'help'}
+			<div class="buttons">
+				<button class="close titlebar_button" on:click|preventDefault={close_event}>
+					<div class="line" />
+					<div class="line" />
+				</button>
+				<button
+					class="maximize titlebar_button"
+					id="frame_titlebar_button_maximize"
+					on:click|preventDefault={maximize}
+				>
+					<div class="group1" />
+					<div class="group2" />
+				</button>
+				<button class="minimize titlebar_button">
+					<div class="line" />
+				</button>
+			</div>
+		{/if}
 		<div
 			class="draggable_area"
 			on:mousedown|preventDefault={(e) => {

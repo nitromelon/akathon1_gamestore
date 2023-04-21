@@ -8,6 +8,7 @@
 	import Traybar from './taskbar/traybar.svelte';
 	import Frame from './appframe/frame.svelte';
 	import Help from './taskbar/help.svelte';
+	import { is_extendedhelp } from './is_extendedhelp/script';
 
 	let time = new Date();
 
@@ -44,6 +45,9 @@
 				<svelte:component this={Frame} title={app} />
 			{/if}
 		{/each}
+		{#if $is_extendedhelp}
+			<Frame title="help" />
+		{/if}
 		<Traybar />
 	</div>
 	<Navigation />

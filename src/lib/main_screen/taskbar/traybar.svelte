@@ -4,6 +4,7 @@
 
 	$: height = $are_there_maximized_app.size !== 0 ? 40 : 64;
 	$: bottom = $are_there_maximized_app.size !== 0 ? 5 : 16;
+	$: inner_height = $are_there_maximized_app.size !== 0 ? 100 : 70;
 	// $: p = Array.from($are_there_maximized_app);
 
 	// $: {
@@ -16,6 +17,7 @@
 	<!-- {#each p as list}
 		<p>{list}</p>
 	{/each} -->
+	<div class="inner_area" style="height: {inner_height}%;" />
 </div>
 
 <style lang="scss">
@@ -28,7 +30,15 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		transition: height .3s cubic-bezier(0,1,0,1), bottom .3s cubic-bezier(0,1,0,1);
-		color: #fafafa
+		transition: height 0.3s cubic-bezier(0, 1, 0, 1), bottom 0.3s cubic-bezier(0, 1, 0, 1);
+		color: #fafafa;
+		.inner_area {
+			position: absolute;
+			width: 100%;
+			border-radius: 100px;
+			backdrop-filter: blur(10px);
+			border: 1px solid #fafafa;
+			transition: height 0.3s cubic-bezier(0, 1, 0, 1);
+		}
 	}
 </style>

@@ -94,9 +94,7 @@
 	}
 </script>
 
-<div id="cursor">
-	<p>.</p>
-</div>
+<div id="cursor" />
 <div id="dot" />
 
 <style lang="scss">
@@ -117,14 +115,6 @@
 		height: 48px;
 		width: 48px;
 		transition: all 0.3s cubic-bezier(0, 0, 0, 1), border-radius 0.3s cubic-bezier(0, 1, 0, 1);
-		* {
-			position: absolute;
-			top: -24px;
-			left: 50%;
-			white-space: nowrap;
-			transform: translateX(-50%);
-			color: #fafafa;
-		}
 	}
 
 	#dot {
