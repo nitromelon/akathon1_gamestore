@@ -114,6 +114,26 @@
 			return n;
 		});
 		setTimeout(() => {
+			window_collection.update((n) => {
+				n.delete(id);
+				return n;
+			});
+			frame_collection.update((n) => {
+				const pos = n.indexOf(title);
+				n[pos] = null;
+				for (let i = n.length - 1; i >= 0; i--) {
+					if (n[i] === null) {
+						n.pop();
+					} else {
+						break;
+					}
+				}
+				return n;
+			});
+			are_there_maximized_app.update((n) => {
+				n.delete(id);
+				return n;
+			});
 			frame.remove();
 		}, 600);
 	};
@@ -158,26 +178,12 @@
 	});
 
 	onDestroy(() => {
-		window_collection.update((n) => {
-			n.delete(id);
-			return n;
-		});
-		frame_collection.update((n) => {
-			const pos = n.indexOf(title);
-			n[pos] = null;
-			for (let i = n.length - 1; i >= 0; i--) {
-				if (n[i] === null) {
-					n.pop();
-				} else {
-					break;
-				}
-			}
-			return n;
-		});
-		are_there_maximized_app.update((n) => {
-			n.delete(id);
-			return n;
-		});
+		if (title === 'help') {
+			are_there_maximized_app.update((n) => {
+				n.delete(id);
+				return n;
+			});
+		}
 	});
 </script>
 

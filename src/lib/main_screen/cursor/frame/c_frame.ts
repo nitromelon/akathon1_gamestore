@@ -31,6 +31,11 @@ export function c_frame(div: HTMLDivElement, target: HTMLAnchorElement, n: numbe
 			div.style.borderBottom = 'none';
 			if (n % 3 === 1 || n % 3 === 2) {
 				div.style.borderRight = '1px solid #fafafa';
+				div.style.transition =
+					'.3s cubic-bezier(0, 1, 0, 1), border-top 0s .3s, border-bottom 0s .3s';
+			} else {
+				div.style.transition =
+					'.3s cubic-bezier(0, 1, 0, 1), border-top 0s .3s , border-right 0s .3s, border-bottom 0s .3s';
 			}
 		} else
 			is_cursor_locked.update((n) => {
