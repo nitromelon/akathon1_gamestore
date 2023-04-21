@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
 	import { are_there_maximized_app } from '../are_there_maximized_app/script';
-	import { frame_collection, window_collection } from '../collection/window';
+	import { current_window, frame_collection, window_collection } from '../collection/window';
+	import { browser } from '$app/environment';
 	export let title: string;
 	let id = 'frame' + Math.floor(Math.random() * 2 ** 32).toString();
 	let is_hold = false;
@@ -138,6 +139,12 @@
 		}, 600);
 	};
 
+	const minimize_event = () => {
+		if (browser) {
+			document.getElementById('button' + id)?.click();
+		}
+	};
+
 	const change_z_order = () => {
 		for (let i of $window_collection) {
 			const frame = document.getElementById(i);
@@ -146,10 +153,12 @@
 			}
 		}
 		daframe!.style.zIndex = '2';
+		$current_window = daframe;
 	};
 
 	onMount(() => {
 		if (daframe === null) return;
+		$current_window = daframe;
 		daframe.style.transition =
 			'transform 0.3s 0.25s cubic-bezier(0, 1, 0, 1), opacity 0.25s cubic-bezier(0, 1, 0, 1)';
 		daframe.style.opacity = '0';
@@ -171,10 +180,6 @@
 			x = Math.floor(Math.random() * (window.innerWidth - width));
 			y = Math.floor(Math.random() * (window.innerHeight - height - 64));
 		}
-
-		// return () => {
-		// 	alert('unmount');
-		// }
 	});
 
 	onDestroy(() => {
@@ -210,7 +215,7 @@
 					<div class="group1" />
 					<div class="group2" />
 				</button>
-				<button class="minimize titlebar_button">
+				<button class="minimize titlebar_button" on:click|preventDefault={minimize_event}>
 					<div class="line" />
 				</button>
 			</div>
@@ -230,7 +235,7 @@
 		<div class="title">{title}</div>
 	</div>
 	<div class="content">
-		{$frame_collection} - text holder
+		<!-- Todo: add something in here -->
 	</div>
 </div>
 
@@ -241,7 +246,7 @@
 		backdrop-filter: blur(1vw);
 		border-radius: 6px;
 		overflow: hidden;
-		transition: 0.3s cubic-bezier(0, 1, 0, 1);
+		transition: all 0.3s cubic-bezier(0, 1, 0, 1), opacity 0.3s cubic-bezier(0, 0, 0, 1);
 		z-index: 3;
 		.titlebar {
 			position: absolute;

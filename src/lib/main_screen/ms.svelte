@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { is_menu_open } from './is_openmenu/i';
-	import { frame_collection } from './collection/window';
+	import { current_window, frame_collection } from './collection/window';
 	import Taskbar from './taskbar/tb.svelte';
 	import Cursor from './cursor/c.svelte';
 	import Navigation from './navigation/nav.svelte';
@@ -35,7 +35,15 @@
 			is_menu_open.update((_) => false);
 		}}
 	>
-		<div class="wallpaper_filter">
+		<div
+			class="wallpaper_filter"
+			on:click={(e) => {
+				if (e.target === e.currentTarget) {
+					$current_window = null;
+				}
+				console.log(e.target, e.currentTarget);
+			}}
+		>
 			<p class="time">{hour}:{minute}</p>
 			<h1 class="slogan">Kirito | Game store</h1>
 		</div>

@@ -3,5 +3,5 @@
 <svelte:head>
 	<title>Home - Gamestore</title>
 	<meta name="description" content="Game store, Made by FullHD group" />
-	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<!-- <meta name="viewport" content="width=device-width,initial-scale=1" /> -->
 </svelte:head>

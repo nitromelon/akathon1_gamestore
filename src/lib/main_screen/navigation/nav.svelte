@@ -237,7 +237,7 @@
 			text-decoration: none;
 			color: #fafafa;
 			outline: none;
-			transform: translateY(-83px);
+			transform: translateY(-600%);
 			overflow: hidden;
 			.desktop_menu_link_group {
 				position: absolute;

@@ -8,6 +8,7 @@
 	import { browser } from '$app/environment';
 	import { c_drag } from './frame/c_drag';
 	import { c_ex_help } from './c_extended_help';
+	import { c_traybar } from './traybar/c_traybar';
 
 	onMount(() => {
 		const cursor = document.getElementById('cursor') as HTMLDivElement;
@@ -49,6 +50,7 @@
 
 		c_burger(cursor, 'taskbar_menu');
 		c_ex_help(cursor, 'ms_help');
+		c_traybar(cursor, 'mainscreen_traybar');
 
 		document.addEventListener('mousemove', (e: MouseEvent) => {
 			if ($is_cursor_locked.size === 0) {

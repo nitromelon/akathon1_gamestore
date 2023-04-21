@@ -3,3 +3,5 @@ import type { Writable } from 'svelte/store';
 
 export const window_collection: Writable<Set<string>> = writable(new Set());
 export const frame_collection: Writable<Array<string | null>> = writable([]);
+
+export const current_window: Writable<HTMLDivElement | null> = writable(null);
