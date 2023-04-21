@@ -209,6 +209,26 @@
 		font-family: var(--font_family);
 		color: #fafafa;
 		.desktop_menu_link {
+			&:nth-child(1) {
+				transition: transform 0.3s cubic-bezier(0, 1, 0, 1);
+			}
+			&:nth-child(2) {
+				transition: transform 0.3s cubic-bezier(0, 1, 0, 1) 0.1s;
+			}
+			&:nth-child(3) {
+				transition: transform 0.3s cubic-bezier(0, 1, 0, 1) 0.2s;
+			}
+			&:nth-child(4) {
+				transition: transform 0.3s cubic-bezier(0, 1, 0, 1) 0.3s;
+			}
+			&:nth-child(5) {
+				transition: transform 0.3s cubic-bezier(0, 1, 0, 1) 0.4s;
+			}
+			&:nth-child(6) {
+				transition: transform 0.3s cubic-bezier(0, 1, 0, 1) 0.5s;
+			}
+		}
+		.desktop_menu_link {
 			position: relative;
 			border-radius: 100px;
 			height: 60px;
@@ -217,7 +237,7 @@
 			text-decoration: none;
 			color: #fafafa;
 			outline: none;
-			transform: translateY(-64px);
+			transform: translateY(-83px);
 			overflow: hidden;
 			.desktop_menu_link_group {
 				position: absolute;
@@ -272,24 +292,6 @@
 			// make first a tag translateY 0px
 			.desktop_menu_link {
 				transform: translateY(0px) !important;
-				&:nth-child(1) {
-					transition: transform 0.3s cubic-bezier(0, 1, 0, 1);
-				}
-				&:nth-child(2) {
-					transition: transform 0.3s cubic-bezier(0, 1, 0, 1) 0.1s;
-				}
-				&:nth-child(3) {
-					transition: transform 0.3s cubic-bezier(0, 1, 0, 1) 0.2s;
-				}
-				&:nth-child(4) {
-					transition: transform 0.3s cubic-bezier(0, 1, 0, 1) 0.3s;
-				}
-				&:nth-child(5) {
-					transition: transform 0.3s cubic-bezier(0, 1, 0, 1) 0.4s;
-				}
-				&:nth-child(6) {
-					transition: transform 0.3s cubic-bezier(0, 1, 0, 1) 0.5s;
-				}
 			}
 		}
 	}

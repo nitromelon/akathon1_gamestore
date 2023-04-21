@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { are_there_maximized_app } from '../are_there_maximized_app/script';
 	import { frame_collection, window_collection } from '../collection/window';
 	export let title: string;
@@ -16,7 +16,6 @@
 	window_collection.update((n) => {
 		while (n.has(id)) {
 			id = 'frame' + Math.floor(Math.random() * 2 ** 32).toString();
-			console.log(id);
 		}
 		n.add(id);
 		return n;
@@ -115,30 +114,16 @@
 			return n;
 		});
 		setTimeout(() => {
-			window_collection.update((n) => {
-				n.delete(id);
-				return n;
-			});
-			frame_collection.update((n) => {
-				const pos = n.indexOf(title);
-				n[pos] = null;
-				for (let i = n.length - 1; i >= 0; i--) {
-					if (n[i] === null) {
-						n.pop();
-					} else {
-						break;
-					}
-				}
-				return n;
-			});
 			frame.remove();
 		}, 600);
 	};
 
 	const change_z_order = () => {
 		for (let i of $window_collection) {
-			const frame = document.getElementById(i) as HTMLDivElement;
-			frame.style.zIndex = '1';
+			const frame = document.getElementById(i);
+			if (frame !== null) {
+				frame.style.zIndex = '1';
+			}
 		}
 		daframe!.style.zIndex = '2';
 	};
@@ -170,6 +155,29 @@
 		// return () => {
 		// 	alert('unmount');
 		// }
+	});
+
+	onDestroy(() => {
+		window_collection.update((n) => {
+			n.delete(id);
+			return n;
+		});
+		frame_collection.update((n) => {
+			const pos = n.indexOf(title);
+			n[pos] = null;
+			for (let i = n.length - 1; i >= 0; i--) {
+				if (n[i] === null) {
+					n.pop();
+				} else {
+					break;
+				}
+			}
+			return n;
+		});
+		are_there_maximized_app.update((n) => {
+			n.delete(id);
+			return n;
+		});
 	});
 </script>
 
