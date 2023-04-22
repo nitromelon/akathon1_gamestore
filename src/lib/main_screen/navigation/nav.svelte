@@ -232,7 +232,8 @@
 			position: relative;
 			border-radius: 100px;
 			height: 60px;
-			width: calc(25% - 128px);
+			width: 128px;
+			// width: auto;
 			overflow: hidden;
 			text-decoration: none;
 			color: #fafafa;

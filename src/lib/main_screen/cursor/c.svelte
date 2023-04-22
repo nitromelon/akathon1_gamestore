@@ -24,7 +24,6 @@
 		);
 
 		document.addEventListener('mousemove', (e) => {
-			move(e);
 			if (
 				Math.abs(e.pageX - cursor.offsetLeft) > 300 ||
 				Math.abs(e.pageY - cursor.offsetTop) > 300
@@ -34,13 +33,15 @@
 				setTimeout(() => {
 					cursor.style.transition = 'all 0.3s cubic-bezier(0, 0, 0, 1)';
 				}, 100);
+			} else {
+				move(e);
 			}
 		});
 
-		document.documentElement.addEventListener('mouseleave', () => {
+		document.addEventListener('mouseleave', () => {
 			stylemouse('0px', '0');
 		});
-		document.documentElement.addEventListener('mouseenter', () => {
+		document.addEventListener('mouseenter', () => {
 			stylemouse('48px', '1');
 		});
 
@@ -52,11 +53,10 @@
 		c_ex_help(cursor, 'ms_help');
 		c_traybar(cursor, 'mainscreen_traybar');
 
-		document.addEventListener('mousemove', (e: MouseEvent) => {
+		document.addEventListener('mousemove', () => {
 			if ($is_cursor_locked.size === 0) {
-				move(e);
 				cursor.style.height = '48px';
-				cursor.style.width = '48px';
+				cursor.style.width = `48px`;
 				cursor.style.transform = 'translate(-50%, -50%)';
 				cursor.style.borderRadius = '50%';
 				cursor.style.display = 'block';
@@ -116,6 +116,7 @@
 	#cursor {
 		height: 48px;
 		width: 48px;
+		transform: translate(-50%, -50%);
 		transition: all 0.3s cubic-bezier(0, 0, 0, 1), border-radius 0.3s cubic-bezier(0, 1, 0, 1);
 	}
 

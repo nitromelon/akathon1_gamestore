@@ -244,6 +244,7 @@
 		position: absolute;
 		border: 1px solid #fafafa;
 		backdrop-filter: blur(1vw);
+		background: $background_noise center;
 		border-radius: 6px;
 		overflow: hidden;
 		transition: all 0.3s cubic-bezier(0, 1, 0, 1), opacity 0.3s cubic-bezier(0, 0, 0, 1);
