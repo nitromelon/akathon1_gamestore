@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	const text = 'Home - Gamestore';
+	const text = 'Kirito | Gamestore';
 
 	onMount(() => {
 		const c = (a: number) => {
@@ -18,7 +18,7 @@
 				a === text.length &&
 					setTimeout(() => {
 						return d(a - 1);
-					}, 500);
+					}, 250);
 			}
 		};
 		const d = (a: number) => {

@@ -41,7 +41,6 @@
 				if (e.target === e.currentTarget) {
 					$current_window = null;
 				}
-				console.log(e.target, e.currentTarget);
 			}}
 		>
 			<p class="time">{hour}:{minute}</p>

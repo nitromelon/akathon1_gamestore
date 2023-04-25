@@ -1,7 +1,13 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
 	import { are_there_maximized_app } from '../are_there_maximized_app/script';
-	import { current_window, frame_collection, window_collection } from '../collection/window';
+	import {
+		current_window,
+		cursor_direction,
+		frame_collection,
+		hold_cursor,
+		window_collection
+	} from '../collection/window';
 	import { browser } from '$app/environment';
 	export let title: string;
 	let id = 'frame' + Math.floor(Math.random() * 2 ** 32).toString();
@@ -156,6 +162,47 @@
 		$current_window = daframe;
 	};
 
+	const detect_mouse_type = (e: MouseEvent) => {
+		if (e.currentTarget === e.target) {
+			const pos = daframe?.getBoundingClientRect();
+			if (pos !== undefined) {
+				const x = e.clientX;
+				const y = e.clientY;
+
+				const rectLeft = pos.x;
+				const rectRight = pos.x + pos.width;
+				const rectTop = pos.y;
+				const rectBottom = pos.y + pos.height;
+				let side: string | null = null,
+					high: string | null = null;
+				if (x < rectLeft + 12) {
+					side = 'left';
+				} else if (x > rectRight - 12) {
+					side = 'right';
+				} else {
+					side = null;
+				}
+				if (y < rectTop + 12) {
+					high = 'top';
+				} else if (y > rectBottom - 12) {
+					high = 'bottom';
+				} else {
+					high = null;
+				}
+				cursor_direction.update((n) => {
+					n = (high === null ? '' : high) + (side === null ? '' : side);
+					n = n === '' ? null : n;
+					return n;
+				});
+			}
+		} else {
+			cursor_direction.update((n) => {
+				n = null;
+				return n;
+			});
+		}
+	};
+
 	onMount(() => {
 		if (daframe === null) return;
 		$current_window = daframe;
@@ -180,6 +227,15 @@
 			x = Math.floor(Math.random() * (window.innerWidth - width));
 			y = Math.floor(Math.random() * (window.innerHeight - height - 64));
 		}
+
+		document.addEventListener('mousemove', (e) => {
+			if (e.target !== daframe && $hold_cursor === false) {
+				cursor_direction.update((n) => {
+					n = null;
+					return n;
+				});
+			}
+		});
 	});
 
 	onDestroy(() => {
@@ -199,6 +255,7 @@
 	bind:this={daframe}
 	on:mousedown={change_z_order}
 	style="top: {y}px; left: {x}px; height: {height}px; width: {width}px;"
+	on:mousemove={detect_mouse_type}
 >
 	<div class="titlebar">
 		{#if title !== 'help'}
@@ -246,7 +303,7 @@
 		backdrop-filter: blur(1vw);
 		background: $background_noise center;
 		border-radius: 6px;
-		overflow: hidden;
+		// overflow: hidden;
 		transition: all 0.3s cubic-bezier(0, 1, 0, 1), opacity 0.3s cubic-bezier(0, 0, 0, 1);
 		z-index: 3;
 		.titlebar {
@@ -260,6 +317,8 @@
 			align-items: center;
 			justify-content: space-between;
 			flex-direction: row-reverse;
+			overflow: hidden;
+			border-radius: 6px 6px 0 0;
 			.buttons {
 				position: relative;
 				display: flex;
@@ -347,12 +406,24 @@
 			left: 0;
 			height: calc(100% - 36px);
 			width: 100%;
+			overflow: hidden;
+			border-radius: 0 0 6px 6px;
 
 			// demo
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			color: #fafafa;
+		}
+
+		&::before {
+			content: '';
+			position: absolute;
+			top: -16px;
+			left: -16px;
+			bottom: -16px;
+			right: -16px;
+			border: #fafafa 1px solid;
 		}
 	}
 	:global {
@@ -380,6 +451,9 @@
 						}
 					}
 				}
+			}
+			&::before {
+				display: none;
 			}
 		}
 	}

@@ -10,6 +10,8 @@
 	import { c_ex_help } from './c_extended_help';
 	import { c_traybar } from './traybar/c_traybar';
 
+	import Cursor_Extension from './extension/resize/file.svelte';
+
 	onMount(() => {
 		const cursor = document.getElementById('cursor') as HTMLDivElement;
 		const dot = document.getElementById('dot') as HTMLDivElement;
@@ -97,7 +99,9 @@
 </script>
 
 <div id="cursor" />
-<div id="dot" />
+<div id="dot">
+	<Cursor_Extension type="resize"/>
+</div>
 
 <style lang="scss">
 	#cursor,

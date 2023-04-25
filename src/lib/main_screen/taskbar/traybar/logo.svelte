@@ -14,7 +14,7 @@
 	onMount(() => {
 		if ($current_window === null) {
 			// I hope this will never happen or else I die lol 💀.
-			alert('Fail when catch current window. Error code: 1');
+			console.error('Fail when catch current window. Error code: 1');
 		}
 		app_for_logo = $current_window;
 		id_app_for_logo = ('button' + app_for_logo?.id) as string;
