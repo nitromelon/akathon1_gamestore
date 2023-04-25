@@ -163,6 +163,9 @@
 	};
 
 	const detect_mouse_type = (e: MouseEvent) => {
+		if (is_maximized || $current_window !== daframe) {
+			return;
+		}
 		if (e.currentTarget === e.target) {
 			const pos = daframe?.getBoundingClientRect();
 			if (pos !== undefined) {
@@ -189,13 +192,15 @@
 				} else {
 					high = null;
 				}
-				cursor_direction.update((n) => {
-					n = (high === null ? '' : high) + (side === null ? '' : side);
-					n = n === '' ? null : n;
-					return n;
-				});
+				if (!$hold_cursor) {
+					cursor_direction.update((n) => {
+						n = (high === null ? '' : high) + (side === null ? '' : side);
+						n = n === '' ? null : n;
+						return n;
+					});
+				}
 			}
-		} else {
+		} else if (!$hold_cursor) {
 			cursor_direction.update((n) => {
 				n = null;
 				return n;
@@ -229,11 +234,61 @@
 		}
 
 		document.addEventListener('mousemove', (e) => {
-			if (e.target !== daframe && $hold_cursor === false) {
-				cursor_direction.update((n) => {
-					n = null;
-					return n;
-				});
+			if (daframe === null) return;
+			if ($current_window !== null) {
+				if (e.target !== $current_window && !$current_window.contains(e.target as Node)) {
+					if (!$hold_cursor) {
+						cursor_direction.update((n) => {
+							n = null;
+							return n;
+						});
+					}
+				}
+			}
+		});
+
+		document.addEventListener('mousemove', (e) => {
+			if ($current_window === null) return;
+			if ($hold_cursor && $cursor_direction !== null) {
+				const x = e.clientX;
+				const y = e.clientY;
+				const pos = $current_window.getBoundingClientRect();
+				switch ($cursor_direction) {
+					case 'right':
+						$current_window.style.width = x - pos.x + 'px';
+						break;
+					case 'left':
+						$current_window.style.left = x + 'px';
+						$current_window.style.width = pos.x + pos.width - x + 'px';
+						break;
+					case 'top':
+						$current_window.style.top = y + 'px';
+						$current_window.style.height = pos.y + pos.height - y + 'px';
+						break;
+					case 'bottom':
+						$current_window.style.height = y - pos.y + 'px';
+						break;
+					case 'topleft':
+						$current_window.style.left = x + 'px';
+						$current_window.style.top = y + 'px';
+						$current_window.style.width = pos.x + pos.width - x + 'px';
+						$current_window.style.height = pos.y + pos.height - y + 'px';
+						break;
+					case 'bottomright':
+						$current_window.style.width = x - pos.x + 'px';
+						$current_window.style.height = y - pos.y + 'px';
+						break;
+					case 'topright':
+						$current_window.style.top = y + 'px';
+						$current_window.style.width = x - pos.x + 'px';
+						$current_window.style.height = pos.y + pos.height - y + 'px';
+						break;
+					case 'bottomleft':
+						$current_window.style.left = x + 'px';
+						$current_window.style.width = pos.x + pos.width - x + 'px';
+						$current_window.style.height = y - pos.y + 'px';
+						break;
+				}
 			}
 		});
 	});
@@ -246,6 +301,14 @@
 			});
 		}
 	});
+
+	$: box_shadow_pref = '0 7px 15px 0 #1a1a1a21, 0 1px 4px 0 #1a1a1a1c';
+
+	$: {
+		$current_window === daframe
+			? (box_shadow_pref = '0 7px 15px 0 #fafafa21, 0 1px 4px 0 #fafafa1c')
+			: (box_shadow_pref = '0 2px 4px 0 #fafafa13, 0 1px 1px 0 #fafafa11');
+	}
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -254,7 +317,7 @@
 	{id}
 	bind:this={daframe}
 	on:mousedown={change_z_order}
-	style="top: {y}px; left: {x}px; height: {height}px; width: {width}px;"
+	style="top: {y}px; left: {x}px; height: {height}px; width: {width}px; box-shadow: {box_shadow_pref};"
 	on:mousemove={detect_mouse_type}
 >
 	<div class="titlebar">
@@ -303,7 +366,8 @@
 		backdrop-filter: blur(1vw);
 		background: $background_noise center;
 		border-radius: 6px;
-		// overflow: hidden;
+		// min-height: 480px;
+		// min-width: 640px;
 		transition: all 0.3s cubic-bezier(0, 1, 0, 1), opacity 0.3s cubic-bezier(0, 0, 0, 1);
 		z-index: 3;
 		.titlebar {
@@ -423,7 +487,7 @@
 			left: -16px;
 			bottom: -16px;
 			right: -16px;
-			border: #fafafa 1px solid;
+			// border: #fafafa 1px solid;
 		}
 	}
 	:global {
