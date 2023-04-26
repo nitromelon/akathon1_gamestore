@@ -302,11 +302,11 @@
 		}
 	});
 
-	$: box_shadow_pref = '0 7px 15px 0 #1a1a1a21, 0 1px 4px 0 #1a1a1a1c';
+	$: box_shadow_pref = '0 26px 58px 0 #fafafa22, 0 5px 14px 0 #fafafa18';
 
 	$: {
 		$current_window === daframe
-			? (box_shadow_pref = '0 7px 15px 0 #fafafa21, 0 1px 4px 0 #fafafa1c')
+			? (box_shadow_pref = '0 26px 58px 0 #fafafa22, 0 5px 14px 0 #fafafa18')
 			: (box_shadow_pref = '0 2px 4px 0 #fafafa13, 0 1px 1px 0 #fafafa11');
 	}
 </script>

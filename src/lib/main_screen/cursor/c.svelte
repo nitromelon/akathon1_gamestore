@@ -4,13 +4,14 @@
 	import { c_link } from './c_link';
 	import { is_cursor_locked } from '../is_already_locked/cursor';
 	import { c_frame } from './frame/c_frame';
-	import { frame_collection } from '../collection/window';
+	import { cursor_direction, frame_collection, hold_cursor } from '../collection/window';
 	import { browser } from '$app/environment';
 	import { c_drag } from './frame/c_drag';
 	import { c_ex_help } from './c_extended_help';
 	import { c_traybar } from './traybar/c_traybar';
 
 	import Cursor_Extension from './extension/resize/file.svelte';
+	let cursor_opacity = 1;
 
 	onMount(() => {
 		const cursor = document.getElementById('cursor') as HTMLDivElement;
@@ -63,7 +64,9 @@
 				cursor.style.borderRadius = '50%';
 				cursor.style.display = 'block';
 				cursor.style.border = '1px solid #fafafa';
-				cursor.style.opacity = '1';
+				if (!($hold_cursor && $cursor_direction !== null)) {
+					cursor.style.opacity = '1';
+				}
 				cursor.style.transition =
 					'all 0.3s cubic-bezier(0, 0, 0, 1), border-radius 0.3s cubic-bezier(0, 1, 0, 1)';
 			}
@@ -96,11 +99,19 @@
 			});
 		}
 	}
+
+	$: {
+		if ($hold_cursor && $cursor_direction !== null) {
+			cursor_opacity = 0;
+		} else {
+			cursor_opacity = 1;
+		}
+	}
 </script>
 
-<div id="cursor" />
+<div id="cursor" style="opacity: {cursor_opacity}" />
 <div id="dot">
-	<Cursor_Extension type="resize"/>
+	<Cursor_Extension type="resize" />
 </div>
 
 <style lang="scss">
