@@ -1,0 +1,46 @@
+{
+	"genres": [
+		{
+			"name": "Action",
+			"games": [
+				{
+					"name": "Game 1",
+					"image_url": "https://example.com/game1.jpg",
+					"genres": ["Action"],
+					"price": 9.99,
+					"availability": true,
+					"short_description": "Short description of Game 1"
+				},
+				{
+					"name": "Game 2",
+					"image_url": "https://example.com/game2.jpg",
+					"genres": ["Action"],
+					"price": 14.99,
+					"availability": false,
+					"short_description": "Short description of Game 2"
+				}
+			]
+		},
+		{
+			"name": "Adventure",
+			"games": [
+				{
+					"name": "Game 3",
+					"image_url": "https://example.com/game3.jpg",
+					"genres": ["Adventure"],
+					"price": 19.99,
+					"availability": true,
+					"short_description": "Short description of Game 3"
+				},
+				{
+					"name": "Game 4",
+					"image_url": "https://example.com/game4.jpg",
+					"genres": ["Adventure"],
+					"price": 24.99,
+					"availability": true,
+					"short_description": "Short description of Game 4"
+				}
+			]
+		}
+	]
+}

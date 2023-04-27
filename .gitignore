@@ -3,7 +3,8 @@ node_modules
 /build
 /.svelte-kit
 /package
-.env
+# .env
+# 	|- disable due to sharing .env file for friends to test
 .env.*
 !.env.example
 vite.config.js.timestamp-*

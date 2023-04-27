@@ -14,7 +14,7 @@
 	let is_hold = false;
 	let drag_event: MouseEvent | null = null;
 	let is_maximized = false;
-	const height = 480;
+	const height = 520;
 	const width = 640;
 	let x = 0;
 	let y = 0;
@@ -500,6 +500,7 @@
 			border-left: none !important;
 			border-right: none !important;
 			border-top: none !important;
+			box-shadow: 0 2px 4px 0 #fafafa13, 0 1px 1px 0 #fafafa11 !important;
 			.titlebar {
 				.buttons {
 					.maximize {
