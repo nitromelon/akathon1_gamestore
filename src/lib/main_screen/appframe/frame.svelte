@@ -9,7 +9,10 @@
 		window_collection
 	} from '../collection/window';
 	import { browser } from '$app/environment';
+	import Product from '$lib/app/product/file.svelte';
+
 	export let title: string;
+
 	let id = 'frame' + Math.floor(Math.random() * 2 ** 32).toString();
 	let is_hold = false;
 	let drag_event: MouseEvent | null = null;
@@ -356,6 +359,9 @@
 	</div>
 	<div class="content">
 		<!-- Todo: add something in here -->
+		{#if title === 'product'}
+			<Product />
+		{/if}
 	</div>
 </div>
 
@@ -472,12 +478,6 @@
 			width: 100%;
 			overflow: hidden;
 			border-radius: 0 0 6px 6px;
-
-			// demo
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			color: #fafafa;
 		}
 
 		&::before {
