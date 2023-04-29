@@ -360,7 +360,7 @@
 	<div class="content">
 		<!-- Todo: add something in here -->
 		{#if title === 'product'}
-			<Product />
+			<Product parent={id} />
 		{/if}
 	</div>
 </div>
@@ -389,6 +389,8 @@
 			flex-direction: row-reverse;
 			overflow: hidden;
 			border-radius: 6px 6px 0 0;
+			opacity: 0;
+			transition: all 0.3s cubic-bezier(0, 1, 0, 1) 0.3s;
 			.buttons {
 				position: relative;
 				display: flex;
@@ -454,6 +456,10 @@
 				margin: 0 18px;
 				font-size: 12px;
 				color: #fafafa;
+				max-width: 20%;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
 			}
 			.draggable_area {
 				height: 100%;
@@ -472,12 +478,27 @@
 		}
 		.content {
 			position: absolute;
-			top: 36px;
+			// top: 36px;
+			top: 0;
 			left: 0;
-			height: calc(100% - 36px);
+			// height: calc(100% - 36px);
+			height: 100%;
 			width: 100%;
 			overflow: hidden;
-			border-radius: 0 0 6px 6px;
+			border-radius: 6px;
+			transition: 0.3s cubic-bezier(0, 1, 0, 1) 0.3s;
+		}
+
+		&:hover {
+			.titlebar {
+				display: flex;
+				opacity: 1;
+			}
+			.content {
+				top: 36px;
+				height: calc(100% - 36px);
+				border-radius: 0 0 6px 6px;
+			}
 		}
 
 		&::before {

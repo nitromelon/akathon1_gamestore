@@ -5,6 +5,12 @@
 	import { onMount } from 'svelte';
 
 	export let name: string;
+	let modified_name: string = name;
+	if (name.includes('/')) {
+		modified_name = name.split('/').pop()?.toString().trim() as string;
+	} else {
+		modified_name = name[0]?.toUpperCase() + name.slice(1).toLowerCase();
+	}
 	let logo_component: HTMLButtonElement;
 	let app_for_logo: HTMLDivElement | null = null;
 	let id_app_for_logo: string;
@@ -99,7 +105,7 @@
 		}
 	}}
 >
-	<p>{name[0]?.toUpperCase() + name.slice(1).toLowerCase()}</p>
+	<p>{modified_name}</p>
 	<div class="line" />
 </button>
 
