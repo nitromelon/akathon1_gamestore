@@ -11,6 +11,8 @@
 	import { c_traybar } from './traybar/c_traybar';
 
 	import Cursor_Extension from './extension/resize/file.svelte';
+	import { c_product_detail_des } from './c_product_detail_des';
+	import { c_img_logo_detail_des } from './c_img_logo_detail_des';
 	let cursor_opacity = 1;
 
 	onMount(() => {
@@ -97,6 +99,14 @@
 			Array.from(document.getElementsByClassName('draggable_area')).forEach((link, i) => {
 				c_drag(cursor, link as HTMLAnchorElement, i);
 			});
+			Array.from(document.getElementsByClassName('description_detail_game_product')).forEach(
+				(link, i) => {
+					c_product_detail_des(cursor, link as HTMLDivElement, i);
+				}
+			);
+			Array.from(document.getElementsByClassName('logo_detail_game_product')).forEach((link, i) => {
+				c_img_logo_detail_des(cursor, link as HTMLDivElement, i);
+			});
 		}
 	}
 
@@ -139,6 +149,6 @@
 		border: none;
 		height: 8px;
 		width: 8px;
-		backdrop-filter: invert(100%);
+		backdrop-filter: invert(100%) brightness(200%);
 	}
 </style>

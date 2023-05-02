@@ -10,8 +10,16 @@
 	} from '../collection/window';
 	import { browser } from '$app/environment';
 	import Product from '$lib/app/product/file.svelte';
+	import Game from '$lib/app/product/game/file.svelte';
 
 	export let title: string;
+	const temp_title = title;
+	let title2 = title;
+	let special_title: number | null = null;
+	if (title.includes('product / ')) {
+		special_title = parseInt(title.split('product / ')[1]?.split('-')[1] ?? title);
+		title2 = title.split('product / ')[1]?.split('-')[0] ?? title;
+	}
 
 	let id = 'frame' + Math.floor(Math.random() * 2 ** 32).toString();
 	let is_hold = false;
@@ -355,12 +363,17 @@
 			}}
 			on:dblclick={db_maximize}
 		/>
-		<div class="title">{title}</div>
+		<div class="title">{title2}</div>
 	</div>
 	<div class="content">
 		<!-- Todo: add something in here -->
-		{#if title === 'product'}
-			<Product parent={id} />
+		{#if title === 'product' || temp_title.includes('product / ')}
+			{#if special_title !== null}
+				<Game id={special_title} />
+			{:else}
+				<!-- <Product parent={id} /> -->
+				<Product />
+			{/if}
 		{/if}
 	</div>
 </div>
@@ -390,7 +403,7 @@
 			overflow: hidden;
 			border-radius: 6px 6px 0 0;
 			opacity: 0;
-			transition: all 0.3s cubic-bezier(0, 1, 0, 1) 0.3s;
+			transition: all 0.3s cubic-bezier(0, 1, 0, 1) 3s;
 			.buttons {
 				position: relative;
 				display: flex;
@@ -486,18 +499,20 @@
 			width: 100%;
 			overflow: hidden;
 			border-radius: 6px;
-			transition: 0.3s cubic-bezier(0, 1, 0, 1) 0.3s;
+			transition: 0.3s cubic-bezier(0, 1, 0, 1) 3s;
 		}
 
 		&:hover {
 			.titlebar {
 				display: flex;
 				opacity: 1;
+				transition-delay: 0s;
 			}
 			.content {
 				top: 36px;
 				height: calc(100% - 36px);
 				border-radius: 0 0 6px 6px;
+				transition-delay: 0s;
 			}
 		}
 

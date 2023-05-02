@@ -7,7 +7,7 @@
 	export let name: string;
 	let modified_name: string = name;
 	if (name.includes('/')) {
-		modified_name = name.split('/').pop()?.toString().trim() as string;
+		modified_name = name.split('/').pop()?.toString().trim().split('-')[0] ?? name;
 	} else {
 		modified_name = name[0]?.toUpperCase() + name.slice(1).toLowerCase();
 	}

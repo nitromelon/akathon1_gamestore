@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { are_there_maximized_app } from '$lib/main_screen/are_there_maximized_app/script';
+	// import { are_there_maximized_app } from '$lib/main_screen/are_there_maximized_app/script';
 	import { frame_collection } from '$lib/main_screen/collection/window';
 	import { onMount } from 'svelte';
-
-	export let parent: string;
+	import Search from './search/file.svelte';
+	import Search2 from './search/search2.svelte';
+	// export let parent: string;
 
 	const test = [
 		{
@@ -147,8 +148,6 @@
 	let eof: HTMLElement;
 
 	onMount(() => {
-		product?.prepend(eof);
-		product?.append(eof.cloneNode(true));
 		const first_element = product?.children[1] as HTMLDivElement | undefined;
 		if (first_element !== undefined && product !== undefined) {
 			product.scrollLeft = first_element.offsetLeft;
@@ -199,10 +198,10 @@
 						left: child.offsetLeft,
 						behavior: 'smooth'
 					});
-					child.classList.add('product_not_visible');
+					// child.classList.add('product_not_visible');
 					break;
 				} else {
-					child.classList.remove('product_not_visible');
+					// child.classList.remove('product_not_visible');
 				}
 			}
 		} else {
@@ -213,11 +212,11 @@
 						left: child.offsetLeft,
 						behavior: 'smooth'
 					});
-					child.classList.add('product_not_visible');
+					// child.classList.add('product_not_visible');
 					break;
 				} else {
 					timeout = setTimeout(() => {
-						child.classList.remove('product_not_visible');
+						// child.classList.remove('product_not_visible');
 					}, 300);
 				}
 			}
@@ -230,25 +229,24 @@
 		}
 	};
 
-	$: {
-		if ($are_there_maximized_app.has(parent)) {
-			if (product !== undefined) {
-				for (let i = 0; i < product?.children.length; i++) {
-					let child = product?.children[i] as HTMLDivElement;
-					console.log(child);
-					child.classList.add('product_not_visible');
-				}
-			}
-		} else {
-			if (product !== undefined) {
-				for (let i = 0; i < product?.children.length; i++) {
-					let child = product?.children[i] as HTMLDivElement;
-					console.log(child);
-					child.classList.add('product_not_visible');
-				}
-			}
-		}
-	}
+	// $: {
+	// 	if ($are_there_maximized_app.has(parent)) {
+	// 		if (product !== undefined) {
+	// 			for (let i = 0; i < product?.children.length; i++) {
+	// 				let child = product?.children[i] as HTMLDivElement;
+	// 				console.log(child);
+	// 				child.classList.add('product_not_visible');
+	// 			}
+	// 		}
+	// 	} else {
+	// 		if (product !== undefined) {
+	// 			for (let i = 0; i < product?.children.length; i++) {
+	// 				let child = product?.children[i] as HTMLDivElement;
+	// 				child.classList.add('product_not_visible');
+	// 			}
+	// 		}
+	// 	}
+	// }
 </script>
 
 <div
@@ -256,6 +254,9 @@
 	bind:this={product}
 	on:wheel|preventDefault={product_scroll}
 >
+	<div class="the_end" bind:this={eof}>
+		<Search2 />
+	</div>
 	{#each test as a}
 		<div class="product_container product_not_visible">
 			<div class="wallpaper" />
@@ -270,8 +271,8 @@
 							class="learnmore"
 							on:click|preventDefault={() => {
 								frame_collection.update((frame) => {
-									if (frame.includes(`product / ${a.Name}`)) return frame;
-									frame = [...frame, `product / ${a.Name}`];
+									if (frame.includes(`product / ${a.Name}-${a.ID}`)) return frame;
+									frame = [...frame, `product / ${a.Name}-${a.ID}`];
 									return frame;
 								});
 							}}>Learn More</button
@@ -283,7 +284,7 @@
 		</div>
 	{/each}
 	<div class="the_end" bind:this={eof}>
-		<h1>End</h1>
+		<Search />
 	</div>
 </div>
 
@@ -300,11 +301,21 @@
 		.product_container,
 		.the_end {
 			height: 100%;
-			width: 100%;
+			width: calc(100% - 64px);
 			position: relative;
 			display: inline-block;
 			overflow: hidden;
 			white-space: normal;
+		}
+		.product_container::after {
+			// border right
+			content: '';
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 1px;
+			height: 100%;
+			background-color: #fafafa;
 		}
 		.product_container {
 			.wallpaper {
@@ -313,16 +324,28 @@
 				left: 0;
 				width: 100%;
 				height: 100%;
-				background: url('./main_screen/ms.jpg') no-repeat center fixed;
+				background: url('./main_screen/ms.jpg') no-repeat center fixed; // test demo
 				background-size: cover;
-				background-color: #1a1a1a50;
-				background-blend-mode: multiply;
-				transition: background-color 0.3s cubic-bezier(0, 0, 0, 1);
-				// transform: scale(1.2);
+				filter: grayscale(100%);
+				transition: 0.3s cubic-bezier(0, 0, 0, 1);
+				&:before {
+					content: '';
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					backdrop-filter: contrast(0.5);
+					background-color: rgba(26, 26, 26, 0.5);
+					transition: 0.3s cubic-bezier(0, 0, 0, 1);
+				}
 			}
 			&:hover {
 				.wallpaper {
-					background-color: #1a1a1a80;
+					filter: grayscale(0%);
+					&::before {
+						backdrop-filter: contrast(1);
+					}
 				}
 			}
 			.info {
@@ -366,12 +389,14 @@
 						min-height: 48px;
 						max-height: 50%;
 						// overflow: hidden;
+						line-height: 1.2;
 						margin: 0;
 						padding: 0;
 						-webkit-text-stroke: 1px #fafafa;
 						color: transparent;
 						transform: translateX(72px);
 						transition: transform 0.3s cubic-bezier(0, 0, 0, 1) 0.4s;
+						margin-bottom: 8px;
 					}
 					.subtitle {
 						position: relative;
