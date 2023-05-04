@@ -56,7 +56,7 @@
 		height: 100%;
 		width: 100%;
 		overflow: hidden;
-		overflow-y: scroll;
+		overflow-y: auto;
 		scrollbar-width: none;
 		&::-webkit-scrollbar {
 			display: none;
@@ -82,8 +82,8 @@
 				left: 0;
 				height: 100%;
 				width: 100%;
-				background-color: rgba(26, 26, 26, 0.8);
-				backdrop-filter: grayscale(1) blur(1vw);
+				background-color: rgba(26, 26, 26, 0.5);
+				backdrop-filter: grayscale(1) contrast(0.5) blur(1vw);
 			}
 			.hero_text {
 				background: url('./main_screen/ms.jpg') no-repeat center center fixed;
@@ -102,7 +102,7 @@
 				text-align: center;
 				&:hover {
 					.letter {
-						-webkit-text-fill-color: #1a1a1a;
+						-webkit-text-fill-color: #2c2c2c;
 						&:hover {
 							-webkit-text-fill-color: transparent;
 						}
@@ -229,12 +229,19 @@
 				position: relative;
 				height: calc(100% - 64px);
 				overflow: hidden;
-				overflow-y: scroll;
-				scrollbar-width: none;
+				overflow-y: auto;
+				scrollbar-width: thin;
 				overscroll-behavior: auto;
 				color: #fafafa;
+				padding-right: 16px;
 				&::-webkit-scrollbar {
-					display: none;
+					width: 8px;
+					border: 1px solid #1a1a1a;
+					border-radius: 100px;
+				}
+				&::-webkit-scrollbar-thumb {
+					border: 1px solid #fafafa;
+					border-radius: 100px;
 				}
 				.description {
 					font-size: 14px;

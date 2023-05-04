@@ -48,7 +48,7 @@
 			left: 32px;
 			height: calc(100% - 120px - 64px);
 			width: calc(100% - 64px);
-			overflow-y: scroll;
+			overflow-y: auto;
 			overflow-x: hidden;
 			scrollbar-width: none;
 			&::-webkit-scrollbar {

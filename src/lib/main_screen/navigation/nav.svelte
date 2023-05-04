@@ -17,7 +17,7 @@
 <div class="menu" bind:this={ms_menu}>
 	<a
 		class="desktop_menu_link"
-		href="./about"
+		href="#about"
 		on:click|preventDefault={() => {
 			frame_collection.update((n) => {
 				if (!n.includes('about')) {
@@ -46,7 +46,7 @@
 	</a>
 	<a
 		class="desktop_menu_link"
-		href="./product"
+		href="#product"
 		on:click|preventDefault={() => {
 			frame_collection.update((n) => {
 				if (!n.includes('product')) {
@@ -75,7 +75,7 @@
 	</a>
 	<a
 		class="desktop_menu_link"
-		href="./payment"
+		href="#payment"
 		on:click|preventDefault={() => {
 			frame_collection.update((n) => {
 				if (!n.includes('payment')) {
@@ -116,9 +116,11 @@
 			{/if}
 		{/each}
 	</a> -->
+	<!-- Todo: When done signing in / up. If admin (will require 2nd password), login -> logout | signup -> manager page. User: login -> logout | signup -> username -->
+	<!-- Todo: also, frame_collection must not have 2 old page  -->
 	<a
 		class="desktop_menu_link"
-		href="./login"
+		href="#login"
 		on:click|preventDefault={() => {
 			frame_collection.update((n) => {
 				if (!n.includes('login')) {
@@ -155,7 +157,7 @@
 	</a>
 	<a
 		class="desktop_menu_link"
-		href="./signup"
+		href="#signup"
 		on:click|preventDefault={() => {
 			frame_collection.update((n) => {
 				if (!n.includes('signup')) {

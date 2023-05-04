@@ -11,6 +11,7 @@
 	import { browser } from '$app/environment';
 	import Product from '$lib/app/product/file.svelte';
 	import Game from '$lib/app/product/game/file.svelte';
+	import Signup from '$lib/app/signup/file.svelte';
 
 	export let title: string;
 	const temp_title = title;
@@ -374,6 +375,9 @@
 				<!-- <Product parent={id} /> -->
 				<Product />
 			{/if}
+		{/if}
+		{#if title === 'signup'}
+			<Signup />
 		{/if}
 	</div>
 </div>

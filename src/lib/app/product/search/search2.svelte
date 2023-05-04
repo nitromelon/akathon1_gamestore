@@ -10,13 +10,17 @@
 		<div class="search_stuff">
 			<input type="text" placeholder="Search" />
 		</div>
-		<p class="protip" style="; height: {height}">
+		<p
+			class="protip"
+			style="; height: {height}"
+			id="product_search_protip"
+		>
 			Tips: (Please drag the sidebar due to the poor code design of the authors)<br /><br />
 			+ If you want to search for the game name, enter name:game_name.<br />
 			+ If you want to search for the genre name, enter genre:genre_name.<br />
 			+ If you want to seach for the specific ID, enter ID:number. <br />
-			!! Items must be separated by spaces. <br />
-			Ex: "name:Kirito genre:Action" or "ID:1 ID:2 ID:3" <br /><br />
+			!! Items must be separated by "|". <br />
+			Ex: "name:Kirito|genre:Action" or "ID:1|ID:2 | ID:3" <br /><br />
 			The result will be displayed in the next page. Check it out! <br />
 			Besides, if you are still keeping the value in the search box, we will show the games according
 			to that value until you remove the keywords.
@@ -92,11 +96,10 @@
 				font-size: 12px;
 				color: #fafafa;
 				overflow: hidden;
-				overflow-y: scroll !important;
+				overflow-y: auto;
 				transition: height 0.3s cubic-bezier(0, 1, 0, 1);
 				scrollbar-width: thin;
 				scrollbar-color: #fafafa #1a1a1a;
-				overscroll-behavior: none;
 				padding-right: 8px;
 				max-width: calc(100% - 64px);
 				&::-webkit-scrollbar {

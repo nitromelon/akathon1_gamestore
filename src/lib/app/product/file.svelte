@@ -145,7 +145,6 @@
 	});
 
 	let product: HTMLElement | undefined = undefined;
-	let eof: HTMLElement;
 
 	onMount(() => {
 		const first_element = product?.children[1] as HTMLDivElement | undefined;
@@ -188,6 +187,9 @@
 	let timeout: string | number | NodeJS.Timeout | undefined;
 	const product_scroll = (e: WheelEvent) => {
 		const product = e.currentTarget as HTMLDivElement;
+		if (e.target === document.getElementById('product_search_protip')) {
+			return;
+		}
 		product.scrollLeft += e.deltaY;
 		if (e.deltaY > 0) {
 			clearTimeout(timeout);
@@ -254,9 +256,7 @@
 	bind:this={product}
 	on:wheel|preventDefault={product_scroll}
 >
-	<div class="the_end" bind:this={eof}>
-		<Search2 />
-	</div>
+	<div class="the_end"><Search2 /></div>
 	{#each test as a}
 		<div class="product_container product_not_visible">
 			<div class="wallpaper" />
@@ -283,9 +283,7 @@
 			</div>
 		</div>
 	{/each}
-	<div class="the_end" bind:this={eof}>
-		<Search />
-	</div>
+	<div class="the_end"><Search /></div>
 </div>
 
 <style lang="scss">
