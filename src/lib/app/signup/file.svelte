@@ -1,5 +1,8 @@
 <script lang="ts">
+	import { frame_collection } from '$lib/main_screen/collection/window';
+
 	const cheatcode: string = 'CownyJummyWuvwySweatyGeometwySausagy';
+	let form: HTMLFormElement | null = null;
 	let warning: Array<string | false> = ['', '', '', '', '', '', ''];
 	let firstname: string = '';
 	let lastname: string = '';
@@ -11,7 +14,6 @@
 	let current_input: number = 0;
 	// 0 = firstname, 1 = lastname, 2 = username, 3 = password, 4 = email, 5 = phonenumber, 6 = address
 	let timeout_id: ReturnType<typeof setTimeout> | null = null;
-	let form: HTMLFormElement | null = null;
 	$: if (firstname === cheatcode) {
 		firstname = 'Hawwywuvdebug';
 		lastname = 'Pottew';
@@ -136,6 +138,15 @@
 			warning[6] = false;
 		}
 	}
+
+	const jump = (event: KeyboardEvent) => {
+		if (event.key === 'Enter') {
+			event.preventDefault();
+			if (warning[current_input] === false) {
+				current_input++;
+			}
+		}
+	};
 </script>
 
 <div class="signup">
@@ -213,109 +224,89 @@
 			<form
 				action=""
 				method="post"
-				on:submit|preventDefault={() => {
+				on:submit|preventDefault={async () => {
 					if (warning.every((item) => item === false)) {
-						// alert('Success');
-						// Todo
+						const post_json = JSON.stringify({
+							firstname,
+							lastname,
+							username,
+							password,
+							email,
+							phonenumber,
+							address
+						});
+						console.log(post_json);
 					}
 				}}
 				bind:this={form}
+				autocomplete="on"
 			>
 				<input
 					class="single_input"
 					type="text"
 					name="firstname"
-					id=""
+					id="signup_input_firstname"
 					bind:value={firstname}
 					placeholder="Firstname"
 					style="display: {current_input === 0 ? 'inline-block' : 'none'};"
-					on:keydown={(event) => {
-						if (event.key === 'Enter' && warning[0] === false) {
-							event.preventDefault();
-							current_input++;
-						}
-					}}
+					on:keydown={jump}
 				/>
 				<input
 					class="single_input"
 					type="text"
 					name="lastname"
-					id=""
+					id="signup_input_lastname"
 					bind:value={lastname}
 					placeholder="Lastname"
 					style="display: {current_input === 1 ? 'inline-block' : 'none'};"
-					on:keydown={(event) => {
-						if (event.key === 'Enter' && warning[1] === false) {
-							event.preventDefault();
-							current_input++;
-						}
-					}}
+					on:keydown={jump}
 				/>
 				<input
 					class="single_input"
 					type="text"
 					name="username"
-					id=""
+					id="signup_input_username"
 					bind:value={username}
 					placeholder="Username"
 					style="display: {current_input === 2 ? 'inline-block' : 'none'};"
-					on:keydown={(event) => {
-						if (event.key === 'Enter' && warning[2] === false) {
-							event.preventDefault();
-							current_input++;
-						}
-					}}
+					on:keydown={jump}
 				/>
 				<input
 					class="single_input"
 					type="password"
 					name="password"
-					id=""
+					id="signup_input_password"
 					bind:value={password}
 					placeholder="Password"
 					style="display: {current_input === 3 ? 'inline-block' : 'none'};"
-					on:keydown={(event) => {
-						if (event.key === 'Enter' && warning[3] === false) {
-							event.preventDefault();
-							current_input++;
-						}
-					}}
+					on:keydown={jump}
+					autocomplete="on"
 				/>
 				<input
 					class="single_input"
 					type="email"
 					name="email"
-					id=""
+					id="signup_input_email"
 					bind:value={email}
 					placeholder="Email"
 					style="display: {current_input === 4 ? 'inline-block' : 'none'};"
-					on:keydown={(event) => {
-						if (event.key === 'Enter' && warning[4] === false) {
-							event.preventDefault();
-							current_input++;
-						}
-					}}
+					on:keydown={jump}
 				/>
 				<input
 					class="single_input"
 					type="tel"
 					name="phonenumber"
-					id=""
+					id="signup_input_phonenumber"
 					bind:value={phonenumber}
 					placeholder="Phone number"
 					style="display: {current_input === 5 ? 'inline-block' : 'none'};"
-					on:keydown={(event) => {
-						if (event.key === 'Enter' && warning[5] === false) {
-							event.preventDefault();
-							current_input++;
-						}
-					}}
+					on:keydown={jump}
 				/>
 				<input
 					class="single_input"
 					type="text"
 					name="address"
-					id=""
+					id="signup_input_address"
 					bind:value={address}
 					placeholder="Address"
 					style="display: {current_input === 6 ? 'inline-block' : 'none'};"
@@ -347,7 +338,7 @@
 						}
 					}}
 				>
-					previous
+					{firstname !== 'Hawwywuvdebug' ? `previous` : `pwevious *screams*`}
 				</button>
 				<button
 					class="next"
@@ -360,14 +351,32 @@
 						}
 					}}
 				>
-					next
+					{firstname !== 'Hawwywuvdebug' ? `next` : `nyext`}
 				</button>
 				<input
 					type="submit"
-					value="Let's go!"
+					value={firstname !== 'Hawwywuvdebug' ? `Let's go!` : `Wet's go?!?!`}
 					class="submit_btn"
-					style="display: {warning.every((item) => item === false) ? 'flex' : 'none'};"
+					style="opacity: {warning.every((item) => item === false) ? '1' : '0'};"
 				/>
+				<button
+					class="notmemyet"
+					on:click|preventDefault={() => {
+						frame_collection.update((n) => {
+							if (!n.includes('login')) {
+								const pos = n.indexOf(null);
+								if (pos === -1) {
+									n.push('login');
+								} else {
+									n[pos] = 'login';
+								}
+							}
+							return n;
+						});
+					}}
+				>
+					Already our member?
+				</button>
 			</form>
 		</div>
 		<div class="halfright">
@@ -456,6 +465,10 @@
 </div>
 
 <style lang="scss">
+	*::selection {
+		background-color: #fafafa;
+		color: #1a1a1a;
+	}
 	.signup {
 		position: relative;
 		width: 100%;
@@ -563,13 +576,18 @@
 						all: unset;
 						// box-sizing: border-box;
 						color: #fafafa;
+						&:focus {
+							color: #fafafa;
+							border: 1px solid #fafafa;
+						}
 					}
 					.submit_btn {
 						// display: none !important;
 						position: absolute;
 						bottom: 0;
 						left: 0;
-						width: 80px;
+						min-width: 80px;
+						padding: 4px 16px;
 						height: 32px;
 						border: 1px solid #fafafa;
 						border-radius: 100px;
@@ -577,9 +595,60 @@
 						justify-content: center;
 						align-items: center;
 						transition: 0.3s cubic-bezier(0, 0, 0, 1), transform 0.3s cubic-bezier(0, 1, 0, 1);
+						white-space: nowrap;
 						&:hover {
 							background-color: #fafafa;
 							color: #1a1a1a;
+						}
+						&:active {
+							transform: scale(0.95);
+						}
+					}
+					.notmemyet {
+						all: unset;
+						position: absolute;
+						bottom: 0;
+						right: 0;
+						padding: 4px 0px;
+						height: 32px;
+						// border: 1px solid #fafafa;
+						// border-radius: 100px;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						color: #fafafa;
+						transition: 0.3s cubic-bezier(0, 0, 0, 1), transform 0.3s cubic-bezier(0, 1, 0, 1);
+						white-space: nowrap;
+						&::before {
+							content: '';
+							position: absolute;
+							bottom: 4px;
+							left: 0;
+							width: 0;
+							height: 1px;
+							background: #fafafa;
+						}
+						&::after {
+							content: '';
+							position: absolute;
+							bottom: 4px;
+							right: 0;
+							width: 0;
+							height: 1px;
+							background: #fafafa;
+							transition: 0.3s cubic-bezier(0, 1, 0, 1);
+						}
+						&:hover {
+							color: #909090;
+							&::before {
+								width: 100%;
+								transition: 0.3s cubic-bezier(0, 1, 0, 1);
+							}
+							&::after {
+								width: 100%;
+								transition: 0s;
+								transition-delay: 300ms;
+							}
 						}
 						&:active {
 							transform: scale(0.95);
@@ -591,9 +660,11 @@
 						position: relative;
 						width: 100%;
 						height: 36px;
-						border: 1px solid #fafafa;
+						border: 1px solid #909090;
+						color: #909090;
 						border-radius: 100px;
 						padding: 0px 16px;
+						transition: 0.25s cubic-bezier(0, 0, 0, 1);
 					}
 					.next,
 					.previous {

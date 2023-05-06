@@ -69,14 +69,15 @@
 		height: 100%;
 		width: 100%;
 		background-color: rgba(0, 0, 0, 0.5);
-		backdrop-filter: grayscale(1) blur(1vw);
+		backdrop-filter: blur(calc((2vw + 2vh) / 2));
+		// backdrop-filter: grayscale(1) blur(1vw);
 		.desktop {
 			position: absolute;
 			top: 0;
 			left: 0;
 			height: 100%;
 			width: 100%;
-			background: url('./main_screen/ms2.jpg') no-repeat center center fixed;
+			background: url('./main_screen/ms3.jpg') no-repeat center center fixed;
 			background-size: cover;
 			outline: 1px solid #fafafa;
 			overflow: hidden;
@@ -88,8 +89,8 @@
 				left: 0;
 				height: 100%;
 				width: 100%;
-				background-color: rgba(0, 0, 0, 0.5);
-				backdrop-filter: grayscale(1);
+				background-color: rgba(26, 26, 26, 0.5);
+				// backdrop-filter: grayscale(1);
 				.slogan {
 					position: absolute;
 					top: 50%;
@@ -105,7 +106,7 @@
 
 				.time {
 					position: absolute;
-					top: 16px;
+					top: 32px;
 					left: 50%;
 					transform: translate(-50%, 0);
 					font-family: var(--font_family);

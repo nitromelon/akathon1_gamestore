@@ -12,6 +12,9 @@
 	import Product from '$lib/app/product/file.svelte';
 	import Game from '$lib/app/product/game/file.svelte';
 	import Signup from '$lib/app/signup/file.svelte';
+	import Login from '$lib/app/login/file.svelte';
+	import User from '$lib/app/user/file.svelte';
+	import Payment from '$lib/app/payment/file.svelte';
 
 	export let title: string;
 	const temp_title = title;
@@ -379,6 +382,15 @@
 		{#if title === 'signup'}
 			<Signup />
 		{/if}
+		{#if title === 'login'}
+			<Login />
+		{/if}
+		{#if title === 'user'}
+			<User />
+		{/if}
+		{#if title === 'payment'}
+			<Payment />
+		{/if}
 	</div>
 </div>
 
@@ -386,7 +398,7 @@
 	.frame {
 		position: absolute;
 		border: 1px solid #fafafa;
-		backdrop-filter: blur(1vw);
+		backdrop-filter: blur(calc((2vw + 2vh) / 2));
 		background: $background_noise center;
 		border-radius: 6px;
 		// min-height: 480px;

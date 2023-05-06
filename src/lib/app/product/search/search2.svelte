@@ -1,6 +1,76 @@
 <script lang="ts">
 	// let tip_display = 'none';
 	let height = '0px';
+	let keywords: string | null = null;
+	let old_result: string | null = null;
+	let timeout: ReturnType<typeof setTimeout> | null = null;
+	$: {
+		if (timeout !== null) {
+			clearTimeout(timeout);
+		}
+		timeout = setTimeout(async () => {
+			if (keywords === null || keywords.trim() === '') {
+				return;
+			}
+			keywords = keywords.trim();
+			// todo: move to writeable store to access globally
+			const trimmed_kw = keywords
+				.split('|')
+				.filter((kw) => kw !== '' && kw.includes(':'))
+				.map((kw) =>
+					kw
+						.split(':')
+						.map((kw) => kw.trim())
+						.filter((kw) => kw !== '')
+				)
+				.filter((kw) => kw.length === 2)
+				.reduce((arr: { [key: string]: Array<String> }, [key, val]) => {
+					if (key === undefined || val === undefined || (key !== 'name' && key !== 'genre'))
+						return arr;
+					const santinized_val = val.replace(/[^a-zA-Z0-9 ]/g, '');
+					if (arr[key]) {
+						arr[key]?.push(santinized_val);
+					} else {
+						arr[key] = [santinized_val];
+					}
+					return arr;
+				}, {});
+
+			if (Object.keys(trimmed_kw).length === 0) {
+				return;
+			}
+
+			const objectized_kw = trimmed_kw
+				? Object.entries(trimmed_kw).map(([key, val]) => ({
+						key,
+						values: [...new Set(val)]
+				  }))
+				: null;
+
+			const jsonified_kw = objectized_kw
+				? JSON.stringify({
+						data: objectized_kw,
+						Game_ID: null
+				  })
+				: null;
+
+			if (jsonified_kw === null || jsonified_kw === old_result) {
+				return;
+			}
+			old_result = jsonified_kw;
+
+			let fetch_result = await fetch('http://localhost:3000/product/search', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: jsonified_kw
+			}).then((res) => res.json());
+
+			console.log(fetch_result);
+
+		}, 2500);
+	}
 </script>
 
 <div class="search">
@@ -8,22 +78,17 @@
 	<div class="kirito_search_engine">
 		<h1>Kirito Search</h1>
 		<div class="search_stuff">
-			<input type="text" placeholder="Search" />
+			<input type="text" placeholder="Search" bind:value={keywords} />
 		</div>
-		<p
-			class="protip"
-			style="; height: {height}"
-			id="product_search_protip"
-		>
-			Tips: (Please drag the sidebar due to the poor code design of the authors)<br /><br />
+		<p class="protip" style="; height: {height}" id="product_search_protip">
+			Tips:<br /><br />
 			+ If you want to search for the game name, enter name:game_name.<br />
 			+ If you want to search for the genre name, enter genre:genre_name.<br />
-			+ If you want to seach for the specific ID, enter ID:number. <br />
 			!! Items must be separated by "|". <br />
-			Ex: "name:Kirito|genre:Action" or "ID:1|ID:2 | ID:3" <br /><br />
+			Ex: "name:Kirito|genre:Action" <br /><br />
 			The result will be displayed in the next page. Check it out! <br />
 			Besides, if you are still keeping the value in the search box, we will show the games according
-			to that value until you remove the keywords.
+			to that value until you remove the keywords. <br />
 		</p>
 	</div>
 	<button

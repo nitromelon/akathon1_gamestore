@@ -60,6 +60,18 @@
 			gap: 10px;
 			padding-left: 24px;
 			padding-right: 24px;
+			scrollbar-width: thin;
+			scrollbar-color: #fafafa #1a1a1a;
+			&::-webkit-scrollbar {
+				width: 8px;
+				border: 1px solid #fafafa;
+				border-radius: 16px;
+			}
+			&::-webkit-scrollbar-thumb {
+				background-color: #fafafa;
+				width: 1px;
+				border-radius: 16px;
+			}
 		}
 	}
 </style>

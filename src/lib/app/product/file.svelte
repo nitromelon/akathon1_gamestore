@@ -5,8 +5,17 @@
 	import Search from './search/file.svelte';
 	import Search2 from './search/search2.svelte';
 	// export let parent: string;
-
-	const test = [
+	type App = {
+		ID: number;
+		Genre: string;
+		Price: number;
+		Rate: number;
+		Description: string;
+		Image_path: string;
+		Name: string;
+		Subtitle: string;
+	};
+	const test: Array<App> = [
 		{
 			ID: 6,
 			Genre: 'Action',
@@ -249,16 +258,59 @@
 	// 		}
 	// 	}
 	// }
+	const result_array = test.map((a) => {
+		return a.Price === 0 ? `Free` : `$${a.Price.toFixed(2)}`;
+	});
+
+	const handle_cart = (id: number) => {
+		if (localStorage.getItem('cart') === null) {
+			localStorage.setItem('cart', JSON.stringify([]));
+		}
+		let cart: Array<number> = JSON.parse(localStorage.getItem('cart') as string);
+		if (!cart.includes(id)) {
+			cart.push(id);
+			localStorage.setItem('cart', JSON.stringify(cart));
+			result_array[id - 1] = `Added`;
+		} else {
+			frame_collection.update((n) => {
+				if (!n.includes('payment')) {
+					const pos = n.indexOf(null);
+					if (pos === -1) {
+						n.push('payment');
+					} else {
+						n[pos] = 'payment';
+					}
+				}
+				return n;
+			});
+		}
+	};
+
+	const mouseenter_btn = (i: number, a: App) => {
+		result_array[i] = `Add to cart`;
+		if (localStorage.getItem('cart') !== null) {
+			let cart: Array<number> = JSON.parse(localStorage.getItem('cart') as string);
+			if (cart.includes(a.ID)) {
+				result_array[i] = `Purchase`;
+			}
+		}
+	};
+
+	const mouseleave_btn = (i: number, a: App) => {
+		result_array[i] = a.Price === 0 ? `Free` : `$${a.Price.toFixed(2)}`;
+		if (localStorage.getItem('cart') !== null) {
+			let cart: Array<number> = JSON.parse(localStorage.getItem('cart') as string);
+			if (cart.includes(a.ID)) {
+				result_array[i] = `Added`;
+			}
+		}
+	};
 </script>
 
-<div
-	class="product product_content_file"
-	bind:this={product}
-	on:wheel|preventDefault={product_scroll}
->
+<div class="product product_content_file" bind:this={product} on:wheel|passive={product_scroll}>
 	<div class="the_end"><Search2 /></div>
-	{#each test as a}
-		<div class="product_container product_not_visible">
+	{#each test as a, i}
+		<div class="product_container product_not_visible" id="product_list_game{a.ID}">
 			<div class="wallpaper" />
 			<div class="info">
 				<h1 class="genre">#{a.Genre} | {a.Rate.toFixed(2).replace(/\.?0+$/, '')} / 5</h1>
@@ -270,14 +322,37 @@
 						<button
 							class="learnmore"
 							on:click|preventDefault={() => {
-								frame_collection.update((frame) => {
-									if (frame.includes(`product / ${a.Name}-${a.ID}`)) return frame;
-									frame = [...frame, `product / ${a.Name}-${a.ID}`];
-									return frame;
+								frame_collection.update((n) => {
+									if (!n.includes(`product / ${a.Name}-${a.ID}`)) {
+										const pos = n.indexOf(null);
+										if (pos === -1) {
+											n.push(`product / ${a.Name}-${a.ID}`);
+										} else {
+											n[pos] = `product / ${a.Name}-${a.ID}`;
+										}
+									}
+									return n;
 								});
 							}}>Learn More</button
 						>
-						<button class="price">{a.Price === 0 ? `Free` : `$${a.Price.toFixed(2)}`}</button>
+						<!-- Todo: hover: if not in cart -> change text to add to cart -> Added. If yes -> change text to Ctrl + Z -> fee -->
+						<button
+							class="price"
+							on:click|preventDefault={() => {
+								handle_cart(a.ID);
+							}}
+							on:mouseenter|preventDefault={() => {
+								mouseenter_btn(i, a);
+							}}
+							on:mouseleave|preventDefault={() => {
+								mouseleave_btn(i, a);
+							}}
+						>
+							<p class="price" style="display:block">
+								<!-- {a.Price === 0 ? `Free` : `$${a.Price.toFixed(2)}`} -->
+								{result_array[i]}
+							</p>
+						</button>
 					</div>
 				</div>
 			</div>
@@ -299,7 +374,8 @@
 		.product_container,
 		.the_end {
 			height: 100%;
-			width: calc(100% - 64px);
+			// width: calc(100% - 64px);
+			width: 100%;
 			position: relative;
 			display: inline-block;
 			overflow: hidden;
@@ -324,7 +400,7 @@
 				height: 100%;
 				background: url('./main_screen/ms.jpg') no-repeat center fixed; // test demo
 				background-size: cover;
-				filter: grayscale(100%);
+				// filter: grayscale(100%);
 				transition: 0.3s cubic-bezier(0, 0, 0, 1);
 				&:before {
 					content: '';
@@ -333,16 +409,18 @@
 					left: 0;
 					width: 100%;
 					height: 100%;
-					backdrop-filter: contrast(0.5);
-					background-color: rgba(26, 26, 26, 0.5);
+					// backdrop-filter: contrast(0.5);
+					background-color: rgba(26, 26, 26, 0.7);
+					// background-color: rgba(107, 91, 149, 0.7);
 					transition: 0.3s cubic-bezier(0, 0, 0, 1);
 				}
 			}
 			&:hover {
 				.wallpaper {
-					filter: grayscale(0%);
+					// filter: grayscale(0%);
 					&::before {
-						backdrop-filter: contrast(1);
+						// backdrop-filter: contrast(1);
+						background-color: rgba(26, 26, 26, 0.5);
 					}
 				}
 			}
@@ -433,6 +511,10 @@
 						.price {
 							background-color: #fafafa;
 							color: #1a1a1a;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							overflow: hidden;
 							&:hover {
 								background-color: #ffffff;
 								color: #1a1a1a;

@@ -11,6 +11,16 @@
 		Name: 'The Legend of Zelda: Breath of the Wild',
 		Subtitle: 'Discover a world as never before!'
 	};
+	const handle_cart = (id: number) => {
+		if (localStorage.getItem('cart') === null) {
+			localStorage.setItem('cart', JSON.stringify([]));
+		}
+		let cart = JSON.parse(localStorage.getItem('cart') as string);
+		if (!cart.includes(id)) {
+			cart.push(id);
+			localStorage.setItem('cart', JSON.stringify(cart));
+		}
+	};
 </script>
 
 <div class="content">
@@ -27,7 +37,14 @@
 	</div>
 	<section class="page2">
 		<h1 class="gamename">{result.Name}</h1>
-		<button class="buy">Add to cart</button>
+		<button
+			class="buy"
+			on:click|preventDefault={() => {
+				handle_cart(id);
+			}}
+		>
+			Add to cart
+		</button>
 		<div class="logo logo_detail_game_product" />
 		<div class="vertical_line" />
 		<div class="des">
@@ -82,8 +99,10 @@
 				left: 0;
 				height: 100%;
 				width: 100%;
-				background-color: rgba(26, 26, 26, 0.5);
-				backdrop-filter: grayscale(1) contrast(0.5) blur(1vw);
+				background-color: rgba(107, 91, 149, 0.4);
+				// background-color: rgba(26, 26, 26, 0.5);
+				backdrop-filter: blur(calc((1vw + 1vh) / 2));
+				// backdrop-filter: grayscale(1) contrast(0.5) blur(1vw);
 			}
 			.hero_text {
 				background: url('./main_screen/ms.jpg') no-repeat center center fixed;
@@ -96,13 +115,13 @@
 				color: transparent;
 				background-clip: text;
 				z-index: 2;
-				-webkit-text-stroke: 0.25px #fafafa;
+				-webkit-text-stroke: 1px #fafafa;
 				transition: all 0.3s cubic-bezier(0, 0, 0, 1);
 				line-height: 1.2;
 				text-align: center;
 				&:hover {
 					.letter {
-						-webkit-text-fill-color: #2c2c2c;
+						-webkit-text-fill-color: #1a1a1a;
 						&:hover {
 							-webkit-text-fill-color: transparent;
 						}
