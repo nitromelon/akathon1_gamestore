@@ -17,15 +17,15 @@
 <div class="menu" bind:this={ms_menu}>
 	<a
 		class="desktop_menu_link"
-		href="#about"
+		href="#home"
 		on:click|preventDefault={() => {
 			frame_collection.update((n) => {
-				if (!n.includes('about')) {
+				if (!n.includes('home')) {
 					const pos = n.indexOf(null);
 					if (pos === -1) {
-						n.push('about');
+						n.push('home');
 					} else {
-						n[pos] = 'about';
+						n[pos] = 'home';
 					}
 				}
 				return n;
@@ -34,12 +34,12 @@
 		}}
 	>
 		<div class="desktop_menu_link_group dmlg_group1">
-			{#each '#About' as char}
+			{#each '#Home' as char}
 				<p class="desktop_menu_link_char">{char}</p>
 			{/each}
 		</div>
 		<div class="desktop_menu_link_group dmlg_group2">
-			{#each '#About' as char}
+			{#each '#Home' as char}
 				<p class="desktop_menu_link_char">{char}</p>
 			{/each}
 		</div>

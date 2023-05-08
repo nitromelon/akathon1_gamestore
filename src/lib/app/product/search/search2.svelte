@@ -41,10 +41,12 @@
 			}
 
 			const objectized_kw = trimmed_kw
-				? Object.entries(trimmed_kw).map(([key, val]) => ({
-						key,
-						values: [...new Set(val)]
-				  }))
+				? Object.entries(trimmed_kw)
+						.map(([key, val]) => ({
+							key,
+							value: [...new Set(val)][0] // I put [0] because my backend only accepts one value per key for now
+						}))
+						.sort((a) => (a.key === 'name' ? -1 : a.key === 'genre' ? 1 : 0))
 				: null;
 
 			const jsonified_kw = objectized_kw
@@ -59,16 +61,15 @@
 			}
 			old_result = jsonified_kw;
 
-			let fetch_result = await fetch('http://localhost:3000/product/search', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: jsonified_kw
-			}).then((res) => res.json());
+			// let fetch_result = await fetch('http://localhost:3000/product/search', {
+			// 	method: 'POST',
+			// 	headers: {
+			// 		'Content-Type': 'application/json'
+			// 	},
+			// 	body: jsonified_kw
+			// }).then((res) => res.json());
 
-			console.log(fetch_result);
-
+			console.log(jsonified_kw);
 		}, 2500);
 	}
 </script>

@@ -1,5 +1,8 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+
 	export let id: number;
+	let text: string = 'Add to cart';
 	const result = {
 		ID: 7,
 		Genre: 'Action-Adventure',
@@ -19,8 +22,22 @@
 		if (!cart.includes(id)) {
 			cart.push(id);
 			localStorage.setItem('cart', JSON.stringify(cart));
+			text = 'Added';
+		} else {
+			cart = cart.filter((item: number) => item !== id);
+			localStorage.setItem('cart', JSON.stringify(cart));
+			text = 'Removed';
 		}
 	};
+
+	onMount(() => {
+		if (localStorage.getItem('cart') !== null) {
+			const cart = JSON.parse(localStorage.getItem('cart') as string);
+			if (cart.includes(id)) {
+				text = 'Added';
+			}
+		}
+	});
 </script>
 
 <div class="content">
@@ -42,8 +59,20 @@
 			on:click|preventDefault={() => {
 				handle_cart(id);
 			}}
+			on:mouseenter={() => {
+				if (text === 'Added') {
+					text = 'Remove';
+				}
+			}}
+			on:mouseleave={() => {
+				if (text === 'Remove') {
+					text = 'Added';
+				} else if (text === 'Removed') {
+					text = 'Add to cart';
+				}
+			}}
 		>
-			Add to cart
+			{text}
 		</button>
 		<div class="logo logo_detail_game_product" />
 		<div class="vertical_line" />

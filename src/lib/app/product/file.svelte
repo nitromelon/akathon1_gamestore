@@ -305,6 +305,18 @@
 			}
 		}
 	};
+
+	onMount(() => {
+		if (localStorage.getItem('cart') !== null) {
+			let cart: Array<number> = JSON.parse(localStorage.getItem('cart') as string);
+			for (let i = 0; i < cart.length; i++) {
+				const id = cart[i];
+				if (id !== undefined) {
+					result_array[id - 1] = `Added`;
+				}
+			}
+		}
+	})
 </script>
 
 <div class="product product_content_file" bind:this={product} on:wheel|passive={product_scroll}>

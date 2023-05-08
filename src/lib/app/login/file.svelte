@@ -153,6 +153,7 @@
 	}
 	.rightside {
 		width: 40%;
+		max-width: 640px;
 		height: 100%;
 		position: relative;
 		background: url('./app/login/background.jpg') no-repeat center center fixed;
