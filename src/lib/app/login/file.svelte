@@ -72,13 +72,22 @@
 			method="post"
 			class="login_form"
 			on:submit|preventDefault={async () => {
-				if (array_warning[0] === false && array_warning[1] === false) {
-					const json_data = JSON.stringify({
-						email_or_username,
-						password,
-						is_username
-					});
-					console.log(json_data);
+				if (array_warning[0] === false && array_warning[1] === false && is_username !== null) {
+					// const json_data = JSON.stringify({
+					// 	email_or_username,
+					// 	password,
+					// 	is_username
+					// });
+					// const response = await fetch('http://localhost:3000/signin', {
+					// 	method: 'POST',
+					// 	headers: {
+					// 		'Content-Type': 'application/json'
+					// 	},
+					// 	body: json_data
+					// });
+					// const data = await response.json();
+					// console.log(data);
+					// console.log(json_data);
 				}
 			}}
 			autocomplete="on"

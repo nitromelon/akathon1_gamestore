@@ -226,16 +226,26 @@
 				method="post"
 				on:submit|preventDefault={async () => {
 					if (warning.every((item) => item === false)) {
-						const post_json = JSON.stringify({
-							firstname,
-							lastname,
-							username,
-							password,
-							email,
-							phonenumber,
-							address
-						});
-						console.log(post_json);
+						// const post_json = JSON.stringify({
+						// 	firstname,
+						// 	lastname,
+						// 	username,
+						// 	password,
+						// 	email,
+						// 	phonenumber,
+						// 	address
+						// });
+
+						// const res = await fetch('http://localhost:3000/signup', {
+						// 	method: 'POST',
+						// 	headers: {
+						// 		'Content-Type': 'application/json'
+						// 	},
+						// 	body: post_json
+						// });
+
+						// const data = await res.json();
+						// console.log(data);
 					}
 				}}
 				bind:this={form}

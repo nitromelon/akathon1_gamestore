@@ -6,7 +6,7 @@
 	import Search2 from './search/search2.svelte';
 	// export let parent: string;
 	type App = {
-		ID: number;
+		Game_ID: number;
 		Genre: string;
 		Price: number;
 		Rate: number;
@@ -17,142 +17,139 @@
 	};
 	const test: Array<App> = [
 		{
-			ID: 6,
-			Genre: 'Action',
+			Genre: 'Action-Adventure',
+			Game_ID: 1,
+			Description:
+				'In The Last of Us players control Joel - a smuggler tasked with escorting a teenage girl Ellie across a post-apocalyptic United States.',
+			Image_path: './app/products/the-last-of-us',
+			Name: 'The Last of Us',
 			Price: 59.99,
 			Rate: 4.5,
-			Description:
-				"Assassin's Creed Odyssey is an action role-playing video game developed by Ubisoft Quebec and published by Ubisoft. Set in the year 431 BCE the plot tells a fictional history of the Peloponnesian War between Athens and Sparta.",
-			Image_path: './main_screen/products/assassins-creed-odyssey.jpg',
-			Name: "Assassin's Creed Odyssey",
-			Subtitle: 'Choose your fate and become a legendary Spartan hero.'
+			Subtitle: 'A story of survival in a post-apocalyptic world.'
 		},
 		{
-			ID: 11,
-			Genre: 'Platformer',
-			Price: 59.99,
-			Rate: 4.800000190734863,
-			Description:
-				"Super Mario Odyssey is a platform game developed and published by Nintendo. It's the 19th title in the Super Mario series and follows Mario and Cappy - a sentient hat that allows Mario to control other characters and objects on a quest to save Princess Peach from Bowser's wedding plans.",
-			Image_path: './main_screen/products/super-mario-odyssey.jpg',
-			Name: 'Super Mario Odyssey',
-			Subtitle: 'Join Mario on a massive, globe-trotting 3D adventure!'
-		},
-		{
-			ID: 2,
 			Genre: 'Battle Royale',
-			Price: 0,
-			Rate: 4.5,
+			Game_ID: 2,
 			Description:
 				'Fortnite is a free-to-play battle royale game where players fight to be the last person or team standing on a shrinking island.',
-			Image_path: './main_screen/products/fortnite.jpg',
+			Image_path: './app/products/fortnite',
 			Name: 'Fortnite',
+			Price: 0,
+			Rate: 4.5,
 			Subtitle: 'Last one standing wins in this multiplayer game.'
 		},
 		{
-			ID: 3,
 			Genre: 'Sandbox',
-			Price: 26.95,
-			Rate: 4,
+			Game_ID: 3,
 			Description:
 				'Minecraft is a sandbox game where players can build structures and explore a randomly generated world made up of blocks of various materials.',
-			Image_path: './main_screen/products/minecraft.jpg',
+			Image_path: './app/products/minecraft',
 			Name: 'Minecraft',
+			Price: 26.95,
+			Rate: 4,
 			Subtitle: 'Build and explore in this block-based world.'
 		},
 		{
-			ID: 5,
+			Genre: 'First-Person Shooter',
+			Game_ID: 4,
+			Description:
+				'Overwatch is a team-based first-person shooter game where players work together to achieve objectives while battling against the enemy team.',
+			Image_path: './app/products/overwatch',
+			Name: 'Overwatch',
+			Price: 39.99,
+			Rate: 4.5,
+			Subtitle: 'Fight for the future in this team-based shooter.'
+		},
+		{
 			Genre: 'Multiplayer Online Battle Arena',
-			Price: 0,
-			Rate: 4,
+			Game_ID: 5,
 			Description:
 				'League of Legends is a free-to-play multiplayer online battle arena game where players compete as champions with unique abilities and strategic styles.',
-			Image_path: './main_screen/products/league-of-legends.jpg',
+			Image_path: './app/products/league-of-legends',
 			Name: 'League of Legends',
+			Price: 0,
+			Rate: 4,
 			Subtitle: 'A strategic team-based game with global appeal.'
 		},
 		{
-			ID: 12,
 			Genre: 'Action-Adventure',
-			Price: 19.99,
-			Rate: 4.900000095367432,
+			Game_ID: 6,
 			Description:
-				"God of War is an action-adventure game developed by Santa Monica Studio and published by Sony Interactive Entertainment. It's the eighth installment in the God of War series and a soft reboot for the franchise. The game follows Kratos - a former Greek God of War - and his young son Atreus as they venture into the Norse wilds in order to fulfill a promise.",
-			Image_path: './main_screen/products/god-of-war.jpg',
-			Name: 'God of War',
-			Subtitle: "Kratos is back and he's now accompanied by his son Atreus."
+				"Assassin's Creed Odyssey is an action role-playing video game developed by Ubisoft Quebec and published by Ubisoft. Set in the year 431 BCE the plot tells a fictional history of the Peloponnesian War between Athens and Sparta.",
+			Image_path: './app/products/assassins-creed-odyssey',
+			Name: "Assassin's Creed Odyssey",
+			Price: 59.99,
+			Rate: 4.5,
+			Subtitle: 'Choose your fate and become a legendary Spartan hero.'
 		},
 		{
-			ID: 8,
 			Genre: 'Action-Adventure',
-			Price: 29.99,
-			Rate: 4.699999809265137,
+			Game_ID: 7,
+			Description:
+				"The Legend of Zelda: Breath of the Wild is an action-adventure game developed and published by Nintendo. It's the 19th main installment in The Legend of Zelda series. The game takes place in a large open world environment and features nonlinear gameplay which allows players to explore and progress through the story at their own pace.",
+			Image_path: './app/products/breath-of-the-wild',
+			Name: 'The Legend of Zelda: Breath of the Wild',
+			Price: 59.99,
+			Rate: 4.800000190734863,
+			Subtitle: 'Discover a world as never before!'
+		},
+		{
+			Genre: 'Action-Adventure',
+			Game_ID: 8,
 			Description:
 				'Grand Theft Auto V is an action-adventure game developed by Rockstar North and published by Rockstar Games. The game is set in the fictional state of San Andreas - based on Southern California and follows three criminals and their efforts to commit heists while under pressure from a government agency.',
-			Image_path: './main_screen/products/gta-v.jpg',
+			Image_path: './app/products/gta-v',
 			Name: 'Grand Theft Auto V',
+			Price: 29.99,
+			Rate: 4.699999809265137,
 			Subtitle:
 				'Explore the stunning world of Los Santos and Blaine County in the ultimate Grand Theft Auto V experience.'
 		},
 		{
-			ID: 4,
-			Genre: 'First-Person Shooter',
-			Price: 39.99,
-			Rate: 4.5,
-			Description:
-				'Overwatch is a team-based first-person shooter game where players work together to achieve objectives while battling against the enemy team.',
-			Image_path: './main_screen/products/overwatch.jpg',
-			Name: 'Overwatch',
-			Subtitle: 'Fight for the future in this team-based shooter.'
-		},
-		{
-			ID: 1,
 			Genre: 'Action-Adventure',
-			Price: 59.99,
-			Rate: 4.5,
-			Description:
-				'In The Last of Us players control Joel - a smuggler tasked with escorting a teenage girl Ellie across a post-apocalyptic United States.',
-			Image_path: './main_screen/products/tlu.jpg',
-			Name: 'The Last of Us',
-			Subtitle: 'A story of survival in a post-apocalyptic world.'
-		},
-		{
-			ID: 9,
-			Genre: 'Action-Adventure',
-			Price: 59.99,
-			Rate: 4.900000095367432,
+			Game_ID: 9,
 			Description:
 				"Red Dead Redemption 2 is an action-adventure game developed and published by Rockstar Games. It's the third entry in the Red Dead series and a prequel to the 2010 game Red Dead Redemption. The game is set in a fictionalized version of the American Old West in 1899 and follows outlaw Arthur Morgan - a member of the Van der Linde gang.",
-			Image_path: './main_screen/products/red-dead-redemption-2.jpg',
+			Image_path: './app/products/red-dead-redemption-2',
 			Name: 'Red Dead Redemption 2',
+			Price: 59.99,
+			Rate: 4.900000095367432,
 			Subtitle: 'Live the life of an outlaw in the Wild West.'
 		},
 		{
-			ID: 10,
 			Genre: 'Action-Adventure',
-			Price: 19.99,
-			Rate: 4.800000190734863,
+			Game_ID: 10,
 			Description:
 				'Horizon Zero Dawn is an action role-playing game developed by Guerrilla Games and published by Sony Interactive Entertainment. The game is set in a post-apocalyptic world where humans live in tribes and hunt robotic creatures for resources. The player controls Aloy - a young hunter who sets out to uncover her past.',
-			Image_path: './main_screen/products/horizon-zero-dawn.jpg',
+			Image_path: './app/products/horizon-zero-dawn',
 			Name: 'Horizon Zero Dawn',
+			Price: 19.99,
+			Rate: 4.800000190734863,
 			Subtitle: 'Unleash devastating tactical attacks against unique Machines and rival tribes.'
 		},
 		{
-			ID: 7,
-			Genre: 'Action-Adventure',
+			Genre: 'Platformer',
+			Game_ID: 11,
+			Description:
+				"Super Mario Odyssey is a platform game developed and published by Nintendo. It's the 19th title in the Super Mario series and follows Mario and Cappy - a sentient hat that allows Mario to control other characters and objects on a quest to save Princess Peach from Bowser's wedding plans.",
+			Image_path: './app/products/super-mario-odyssey',
+			Name: 'Super Mario Odyssey',
 			Price: 59.99,
 			Rate: 4.800000190734863,
+			Subtitle: 'Join Mario on a massive, globe-trotting 3D adventure!'
+		},
+		{
+			Genre: 'Action-Adventure',
+			Game_ID: 12,
 			Description:
-				"The Legend of Zelda: Breath of the Wild is an action-adventure game developed and published by Nintendo. It's the 19th main installment in The Legend of Zelda series. The game takes place in a large open world environment and features nonlinear gameplay which allows players to explore and progress through the story at their own pace.",
-			Image_path: './main_screen/products/breath-of-the-wild.jpg',
-			Name: 'The Legend of Zelda: Breath of the Wild',
-			Subtitle: 'Discover a world as never before!'
+				"God of War is an action-adventure game developed by Santa Monica Studio and published by Sony Interactive Entertainment. It's the eighth installment in the God of War series and a soft reboot for the franchise. The game follows Kratos - a former Greek God of War - and his young son Atreus as they venture into the Norse wilds in order to fulfill a promise.",
+			Image_path: './app/products/god-of-war',
+			Name: 'God of War',
+			Price: 19.99,
+			Rate: 4.900000095367432,
+			Subtitle: "Kratos is back and he's now accompanied by his son Atreus."
 		}
-	].sort((a, b) => {
-		return a.ID - b.ID;
-	});
-
+	];
 	let product: HTMLElement | undefined = undefined;
 
 	onMount(() => {
@@ -290,7 +287,7 @@
 		result_array[i] = `Add to cart`;
 		if (localStorage.getItem('cart') !== null) {
 			let cart: Array<number> = JSON.parse(localStorage.getItem('cart') as string);
-			if (cart.includes(a.ID)) {
+			if (cart.includes(a.Game_ID)) {
 				result_array[i] = `Purchase`;
 			}
 		}
@@ -300,7 +297,7 @@
 		result_array[i] = a.Price === 0 ? `Free` : `$${a.Price.toFixed(2)}`;
 		if (localStorage.getItem('cart') !== null) {
 			let cart: Array<number> = JSON.parse(localStorage.getItem('cart') as string);
-			if (cart.includes(a.ID)) {
+			if (cart.includes(a.Game_ID)) {
 				result_array[i] = `Added`;
 			}
 		}
@@ -316,17 +313,21 @@
 				}
 			}
 		}
-	})
+	});
 </script>
 
 <div class="product product_content_file" bind:this={product} on:wheel|passive={product_scroll}>
 	<div class="the_end"><Search2 /></div>
 	{#each test as a, i}
-		<div class="product_container product_not_visible" id="product_list_game{a.ID}">
-			<div class="wallpaper" />
+		<div class="product_container product_not_visible" id="product_list_game{a.Game_ID}">
+			<div
+				class="wallpaper"
+				style="background-image: url('{a.Image_path}/background/{Math.floor(Math.random() * 5) +
+					1}.jpg');"
+			/>
 			<div class="info">
 				<h1 class="genre">#{a.Genre} | {a.Rate.toFixed(2).replace(/\.?0+$/, '')} / 5</h1>
-				<div class="logo" />
+				<div class="logo" style="background-image: url('{a.Image_path}/logo/1.jpg');" />
 				<div class="title_subtitle">
 					<h1 class="title">{a.Name}</h1>
 					<h2 class="subtitle">{a.Subtitle}</h2>
@@ -335,23 +336,22 @@
 							class="learnmore"
 							on:click|preventDefault={() => {
 								frame_collection.update((n) => {
-									if (!n.includes(`product / ${a.Name}-${a.ID}`)) {
+									if (!n.includes(`product / ${a.Name}-${a.Game_ID}`)) {
 										const pos = n.indexOf(null);
 										if (pos === -1) {
-											n.push(`product / ${a.Name}-${a.ID}`);
+											n.push(`product / ${a.Name}-${a.Game_ID}`);
 										} else {
-											n[pos] = `product / ${a.Name}-${a.ID}`;
+											n[pos] = `product / ${a.Name}-${a.Game_ID}`;
 										}
 									}
 									return n;
 								});
 							}}>Learn More</button
 						>
-						<!-- Todo: hover: if not in cart -> change text to add to cart -> Added. If yes -> change text to Ctrl + Z -> fee -->
 						<button
 							class="price"
 							on:click|preventDefault={() => {
-								handle_cart(a.ID);
+								handle_cart(a.Game_ID);
 							}}
 							on:mouseenter|preventDefault={() => {
 								mouseenter_btn(i, a);
@@ -410,7 +410,8 @@
 				left: 0;
 				width: 100%;
 				height: 100%;
-				background: url('./main_screen/ms.jpg') no-repeat center fixed; // test demo
+				// background: url('./main_screen/ms.jpg') no-repeat center fixed;
+				background: no-repeat center center fixed;
 				background-size: cover;
 				// filter: grayscale(100%);
 				transition: 0.3s cubic-bezier(0, 0, 0, 1);
@@ -422,7 +423,7 @@
 					width: 100%;
 					height: 100%;
 					// backdrop-filter: contrast(0.5);
-					background-color: rgba(26, 26, 26, 0.7);
+					background-color: rgba(26, 26, 26, 0.5);
 					// background-color: rgba(107, 91, 149, 0.7);
 					transition: 0.3s cubic-bezier(0, 0, 0, 1);
 				}
@@ -432,7 +433,7 @@
 					// filter: grayscale(0%);
 					&::before {
 						// backdrop-filter: contrast(1);
-						background-color: rgba(26, 26, 26, 0.5);
+						backdrop-filter: blur(calc((1vw + 1vh) / 2));
 					}
 				}
 			}
@@ -458,7 +459,8 @@
 					transform: translateY(calc(-100% - 4px)) translateX(64px);
 					width: 128px;
 					height: 128px;
-					background-color: #6e6e6e;
+					background: no-repeat center center fixed;
+					background-size: cover;
 					border-radius: 6px;
 					transition: transform 0.3s cubic-bezier(0, 0, 0, 1) 0.5s;
 				}

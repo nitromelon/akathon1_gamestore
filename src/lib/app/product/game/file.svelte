@@ -4,15 +4,15 @@
 	export let id: number;
 	let text: string = 'Add to cart';
 	const result = {
-		ID: 7,
 		Genre: 'Action-Adventure',
-		Price: 59.99,
-		Rate: 4.800000190734863,
+		Game_ID: 1,
 		Description:
-			"The Legend of Zelda: Breath of the Wild is an action-adventure game developed and published by Nintendo. It's the 19th main installment in The Legend of Zelda series. The game takes place in a large open world environment and features nonlinear gameplay which allows players to explore and progress through the story at their own pace.",
-		Image_path: './main_screen/products/breath-of-the-wild.jpg',
-		Name: 'The Legend of Zelda: Breath of the Wild',
-		Subtitle: 'Discover a world as never before!'
+			'In The Last of Us players control Joel - a smuggler tasked with escorting a teenage girl Ellie across a post-apocalyptic United States.',
+		Image_path: './app/products/the-last-of-us',
+		Name: 'The Last of Us',
+		Price: 59.99,
+		Rate: 4.5,
+		Subtitle: 'A story of survival in a post-apocalyptic world.'
 	};
 	const handle_cart = (id: number) => {
 		if (localStorage.getItem('cart') === null) {
@@ -41,15 +41,23 @@
 </script>
 
 <div class="content">
-	<div class="fixed_background">
+	<div
+		class="fixed_background"
+		style="background-image: url('{result.Image_path}/background/{Math.floor(Math.random() * 5) +
+			1}.jpg');"
+	>
 		<div class="filter" />
-		<h1 class="hero_text">
+		<h1
+			class="hero_text"
+			style="background-image: url('{result.Image_path}/background/{Math.floor(Math.random() * 5) +
+				1}.jpg');"
+		>
 			{#each result.Name.split(' ') as p}
 				<span class="letter">{p} </span>
 			{/each}
 		</h1>
 		<p class="subtitle">"{result.Subtitle}""</p>
-		<p class="id">ID: {result.ID}</p>
+		<p class="id">ID: {result.Game_ID}</p>
 		<div class="line" />
 	</div>
 	<section class="page2">
@@ -74,7 +82,9 @@
 		>
 			{text}
 		</button>
-		<div class="logo logo_detail_game_product" />
+		<div class="logo logo_detail_game_product" 
+			style="background-image: url('{result.Image_path}/logo/1.jpg');"
+		/>
 		<div class="vertical_line" />
 		<div class="des">
 			<h2 class="des_intro">Description:</h2>
@@ -120,7 +130,7 @@
 			flex-direction: column;
 			row-gap: 18px;
 			padding: 32px;
-			background: url('./main_screen/ms.jpg') no-repeat center center fixed;
+			background: no-repeat center center fixed;
 			background-size: cover;
 			.filter {
 				position: absolute;
@@ -128,13 +138,13 @@
 				left: 0;
 				height: 100%;
 				width: 100%;
-				background-color: rgba(107, 91, 149, 0.4);
+				background-color: rgba(26, 26, 26, 0.5);
 				// background-color: rgba(26, 26, 26, 0.5);
 				backdrop-filter: blur(calc((1vw + 1vh) / 2));
 				// backdrop-filter: grayscale(1) contrast(0.5) blur(1vw);
 			}
 			.hero_text {
-				background: url('./main_screen/ms.jpg') no-repeat center center fixed;
+				background: no-repeat center center fixed;
 				background-size: cover;
 				-webkit-background-clip: text;
 				-webkit-text-fill-color: transparent;
@@ -260,7 +270,7 @@
 				position: relative;
 				min-width: 224px;
 				height: 224px;
-				background: grey no-repeat center fixed;
+				background: no-repeat center fixed;
 				background-size: cover;
 				border-radius: 6px;
 				&:hover {
