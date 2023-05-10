@@ -12,6 +12,11 @@
 			}
 		}
 	}
+
+	let login_logout: string = 'Log in';
+	let login_logout_link: string = 'login';
+	let signup_user: string = 'Sign up';
+	let signup_user_link: string = 'signup';
 </script>
 
 <div class="menu" bind:this={ms_menu}>
@@ -120,15 +125,15 @@
 	<!-- Todo: also, frame_collection must not have 2 old page  -->
 	<a
 		class="desktop_menu_link"
-		href="#login"
+		href="#{login_logout_link}"
 		on:click|preventDefault={() => {
 			frame_collection.update((n) => {
-				if (!n.includes('login')) {
+				if (!n.includes(login_logout_link)) {
 					const pos = n.indexOf(null);
 					if (pos === -1) {
-						n.push('login');
+						n.push(login_logout_link);
 					} else {
-						n[pos] = 'login';
+						n[pos] = login_logout_link;
 					}
 				}
 				return n;
@@ -137,7 +142,8 @@
 		}}
 	>
 		<div class="desktop_menu_link_group dmlg_group1">
-			{#each '#Log in' as char}
+			<!-- {#each '#Log in' as char} -->
+			{#each `#${login_logout}` as char}
 				{#if char === ' '}
 					<p class="desktop_menu_link_char">&nbsp;</p>
 				{:else}
@@ -146,7 +152,7 @@
 			{/each}
 		</div>
 		<div class="desktop_menu_link_group dmlg_group2">
-			{#each '#Log in' as char}
+			{#each `#${login_logout}` as char}
 				{#if char === ' '}
 					<p class="desktop_menu_link_char">&nbsp;</p>
 				{:else}
@@ -157,15 +163,15 @@
 	</a>
 	<a
 		class="desktop_menu_link"
-		href="#signup"
+		href="#{signup_user_link}"
 		on:click|preventDefault={() => {
 			frame_collection.update((n) => {
-				if (!n.includes('signup')) {
+				if (!n.includes(signup_user_link)) {
 					const pos = n.indexOf(null);
 					if (pos === -1) {
-						n.push('signup');
+						n.push(signup_user_link);
 					} else {
-						n[pos] = 'signup';
+						n[pos] = signup_user_link;
 					}
 				}
 				return n;
@@ -174,7 +180,7 @@
 		}}
 	>
 		<div class="desktop_menu_link_group dmlg_group1">
-			{#each '#Sign up' as char}
+			{#each `#${signup_user}` as char}
 				{#if char === ' '}
 					<p class="desktop_menu_link_char">&nbsp;</p>
 				{:else}
@@ -183,7 +189,7 @@
 			{/each}
 		</div>
 		<div class="desktop_menu_link_group dmlg_group2">
-			{#each '#Sign up' as char}
+			{#each `#${signup_user}` as char}
 				{#if char === ' '}
 					<p class="desktop_menu_link_char">&nbsp;</p>
 				{:else}

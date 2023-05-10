@@ -61,30 +61,33 @@
 		<div class="line" />
 	</div>
 	<section class="page2">
-		<h1 class="gamename">{result.Name}</h1>
-		<button
-			class="buy"
-			on:click|preventDefault={() => {
-				handle_cart(id);
-			}}
-			on:mouseenter={() => {
-				if (text === 'Added') {
-					text = 'Remove';
-				}
-			}}
-			on:mouseleave={() => {
-				if (text === 'Remove') {
-					text = 'Added';
-				} else if (text === 'Removed') {
-					text = 'Add to cart';
-				}
-			}}
-		>
-			{text}
-		</button>
-		<div class="logo logo_detail_game_product" 
-			style="background-image: url('{result.Image_path}/logo/1.jpg');"
-		/>
+		<div class="part1">
+			<h1 class="gamename">{result.Name}</h1>
+			<div
+				class="logo logo_detail_game_product"
+				style="background-image: url('{result.Image_path}/logo/1.jpg');"
+			/>
+			<button
+				class="buy"
+				on:click|preventDefault={() => {
+					handle_cart(id);
+				}}
+				on:mouseenter={() => {
+					if (text === 'Added') {
+						text = 'Remove';
+					}
+				}}
+				on:mouseleave={() => {
+					if (text === 'Remove') {
+						text = 'Added';
+					} else if (text === 'Removed') {
+						text = 'Add to cart';
+					}
+				}}
+			>
+				{text}
+			</button>
+		</div>
 		<div class="vertical_line" />
 		<div class="des">
 			<h2 class="des_intro">Description:</h2>
@@ -93,7 +96,7 @@
 			<p class="description">{result.Genre}</p>
 			<h2 class="des_intro">Price:</h2>
 			<p class="description">{result.Price === 0 ? 'Free' : '$' + result.Price.toString()}</p>
-			<h2 class="des_intro">Rate:</h2>
+			<h2 class="des_intro">Overall rate:</h2>
 			<p class="description bonus">{result.Rate.toFixed(2).replace(/\.?0+$/, '')} / 5</p>
 			<p class="description star" style="--offset_width: calc({(result.Rate / 5) * 100}%)">
 				{#each '⭐⭐⭐⭐⭐' as _}
@@ -225,57 +228,64 @@
 			outline: 1px solid #fafafa;
 			display: flex;
 			align-items: center;
-			justify-content: center;
+			// justify-content: center;
 			gap: 32px;
-			.gamename {
-				position: absolute;
-				top: 32px;
-				left: 32px;
-				width: 224px;
-				font-size: 12px;
-				color: #fafafa;
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				text-align: center;
-			}
-			.buy {
-				all: unset;
-				position: absolute;
-				bottom: 32px;
-				left: calc(32px + 224px / 2 - 100px / 2);
-				width: 100px;
-				padding: 8px 0;
-				border-radius: 6px;
-				border: 1px solid #fafafa;
-				color: #fafafa;
-				font-size: 14px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				transition: all 0.3s cubic-bezier(0, 0, 0, 1);
-				&:hover {
-					background-color: #fafafa;
-					border: 1px solid #1a1a1a;
-					color: #1a1a1a;
-				}
-				&:active {
-					width: 90px;
-					left: calc(32px + 224px / 2 - 90px / 2);
-					transform: scale(0.975);
-					transition: all 0.3s cubic-bezier(0, 1, 0, 1);
-				}
-			}
-			.logo {
+			.part1 {
+				flex: 0.5;
 				position: relative;
-				min-width: 224px;
-				height: 224px;
-				background: no-repeat center fixed;
-				background-size: cover;
-				border-radius: 6px;
-				&:hover {
-					outline: 1px solid #fafafa;
-					transition: outline 0.3s cubic-bezier(0, 0, 0, 1);
+				height: 100%;
+				width: 240px;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: space-between;
+				.gamename {
+					position: relative;
+					width: 224px;
+					font-size: 12px;
+					color: #fafafa;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					text-align: center;
+					margin-top: 32px;
+				}
+				.buy {
+					all: unset;
+					margin-bottom: 32px;
+					position: relative;
+					width: 100px;
+					padding: 8px 0;
+					border-radius: 6px;
+					border: 1px solid #fafafa;
+					color: #fafafa;
+					font-size: 14px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					transition: all 0.3s cubic-bezier(0, 0, 0, 1);
+					&:hover {
+						background-color: #fafafa;
+						border: 1px solid #1a1a1a;
+						color: #1a1a1a;
+					}
+					&:active {
+						width: 90px;
+						transform: scale(0.975);
+						transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+					}
+				}
+				.logo {
+					position: relative;
+					width: 224px;
+					height: 224px;
+					background: no-repeat center fixed;
+					background-size: cover;
+					border-radius: 6px;
+					&:hover {
+						outline: 1px solid #fafafa;
+						transition: outline 0.3s cubic-bezier(0, 0, 0, 1);
+					}
 				}
 			}
 			.vertical_line {
@@ -284,6 +294,7 @@
 				background-color: #fafafa;
 			}
 			.des {
+				flex: 1;
 				position: relative;
 				height: calc(100% - 64px);
 				overflow: hidden;

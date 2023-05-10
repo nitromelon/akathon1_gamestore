@@ -127,6 +127,7 @@
 	}
 
 	$: {
+		// reference: https://www.regular-expressions.info/creditcard.html
 		const card_number_mmm: string = card_number.replace(/\s+/g, '');
 		if (card_number_mmm.length === 0) {
 			typeof_card = '';
@@ -419,8 +420,39 @@
 				action="#"
 				method="post"
 				class="payment_form"
-				on:submit|preventDefault={() => {
-					if (warning.every((i) => i === false)) {
+				on:submit|preventDefault={async () => {
+					if (
+						warning.every(
+							(i) =>
+								i === false &&
+								typeof_card !== '' &&
+								typeof_card !== `We don't support this card type yet.`
+						)
+					) {
+						const _card_number = parseInt(card_number.replace(/ /g, ''));
+						const _cvv = parseInt(cvv);
+						const price = yeet_uwu.reduce((acc, cur) => acc + cur.Price, 0);
+						const data = {
+							data: {
+								card_name,
+								_card_number,
+								typeof_card,
+								_cvv,
+								exp_date,
+								items: JSON.parse(localStorage['cart']),
+								price
+							},
+							user_id: 'test abc',
+							token: 'test xyz'
+						};
+						// const res = await fetch('/api/payment', {
+						// 	method: 'POST',
+						// 	headers: {
+						// 		'Content-Type': 'application/json'
+						// 	},
+						// 	body: JSON.stringify(data)
+						// });
+						console.log(data);
 						part2 = false;
 						localStorage['cart'] = JSON.stringify([]);
 					}
