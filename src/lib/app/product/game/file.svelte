@@ -38,6 +38,13 @@
 			}
 		}
 	});
+
+	let current_star: number = 0;
+	let pinned_star: number | null = null;
+	let old_star: number = 0;
+	$: if (pinned_star !== null) {
+		old_star = pinned_star;
+	}
 </script>
 
 <div class="content">
@@ -103,6 +110,114 @@
 					<p class="star_icon">⭐</p>
 				{/each}
 			</p>
+			<h2 class="des_intro">Ratings and reviews:</h2>
+			<div class="rating_n_review">
+				{#each [1, 1, 1, 1, 1, 1] as _}
+					<div class="rnr_container">
+						<div class="p1">
+							<div class="logo" />
+							<div class="name_n_rate">
+								<p class="name">
+									UserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUser
+								</p>
+								<p class="rate" style="--user_rate_offset: calc({(result.Rate / 5) * 100})">
+									{#each '...' as _}
+										<p class="star_icon">⭐</p>
+									{/each}
+								</p>
+							</div>
+						</div>
+						<p class="p2">
+							"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae amet officia
+							aspernatur corrupti ipsam voluptates quasi eius, voluptas repudiandae deserunt dolorum
+							ut sequi ab obcaecati dignissimos a accusantium doloribus animi? "
+						</p>
+					</div>
+				{/each}
+				<div class="next_back">
+					<button class="back">
+						<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960" width="24">
+							<path
+								d="M543 780 368 605q-7-7-10-15t-3-15q0-8 3-15.5t10-14.5l175-175q10-10 19-10t19 10q10 10 10 19t-10 19L414 575l167 167q10 10 10 19t-10 19q-10 10-19 10t-19-10Z"
+							/>
+						</svg>
+					</button>
+					<p>1/5</p>
+					<button class="next">
+						<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960" width="24">
+							<path
+								d="M357 780q-9-9-9-19t9-19l167-167-167-167q-9-9-9-19t9-19q9-9 19-9t19 9l175 175q7 7 10 14.5t3 15.5q0 8-3 15.5T570 605L395 780q-9 9-19 9t-19-9Z"
+							/>
+						</svg>
+					</button>
+				</div>
+			</div>
+			<form
+				class="my_rnr"
+				action="#"
+				method="post"
+				on:submit|preventDefault={() => {
+					// handle_review(id);
+				}}
+			>
+				<div class="p1">
+					<div class="logo" />
+					<div class="n_r">
+						<p class="name">
+							My_user_nameMy_user_nameMy_user_nameMy_user_nameMy_user_nameMy_user_nameMy_user_name
+						</p>
+						<div
+							class="rate"
+							on:mouseout={() => {
+								current_star = 0;
+							}}
+							on:blur={() => {
+								current_star = 0;
+							}}
+						>
+							{#each '⭐⭐⭐⭐⭐' as _, i}
+								<button
+									class="star_icon
+									{pinned_star !== null ? (pinned_star > i ? 'pinned_star' : '') : ''}
+									"
+									on:mouseenter|preventDefault={() => {
+										current_star = i + 1;
+										pinned_star = null;
+									}}
+									on:click|preventDefault={() => {
+										pinned_star = i + 1;
+									}}
+									on:mouseout={() => {
+										if (pinned_star === null) {
+											pinned_star = old_star;
+										}
+									}}
+									on:blur={() => {
+										if (pinned_star === null) {
+											pinned_star = old_star;
+										}
+									}}
+									style="filter: grayscale({current_star <= i ? 100 : 0}%)"
+								>
+									⭐
+								</button>
+							{/each}
+						</div>
+					</div>
+				</div>
+				<div class="p2">
+					<textarea
+						name="review"
+						id="review"
+						cols="30"
+						rows="10"
+						placeholder="Write your review here..."
+						class="text_area"
+						maxlength="2000"
+					/>
+					<input type="submit" value="Submit" class="submit" />
+				</div>
+			</form>
 		</div>
 	</section>
 </div>
@@ -346,8 +461,212 @@
 						width: calc(100% - var(--offset_width));
 					}
 				}
+				.rating_n_review {
+					position: relative;
+					width: 100%;
+					height: fit-content;
+					// background-color: red;
+					margin-bottom: 32px;
+					margin-top: 16px;
+					.next_back {
+						position: relative;
+						width: 100%;
+						height: 32px;
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+						button {
+							all: unset;
+							position: relative;
+							box-sizing: border-box;
+							height: 100%;
+							width: 48px;
+							border: 1px solid #fafafa;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							border-radius: 100px;
+							transition: all 0.3s cubic-bezier(0, 0, 0, 1);
+							svg {
+								fill: #fafafa;
+								transition: 0.3s cubic-bezier(0, 0, 0, 1);
+							}
+							&:hover {
+								background-color: #fafafa;
+								border: 1px solid #1a1a1a;
+								color: #1a1a1a;
+								svg {
+									fill: #1a1a1a;
+								}
+							}
+							&:active {
+								transform: scale(0.9);
+								transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+							}
+						}
+					}
+				}
+				.rnr_container {
+					width: 100%;
+					position: relative;
+					height: fit-content;
+					margin-bottom: 16px;
+					.p1 {
+						position: relative;
+						width: 100%;
+						height: 48px;
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+						margin-bottom: 8px;
+						.logo {
+							height: 100%;
+							min-width: 48px;
+							border: 1px solid #fafafa;
+							border-radius: 50%;
+							margin-right: 16px;
+						}
+						.name_n_rate {
+							height: 100%;
+							width: calc(100% - 64px);
+							position: relative;
+							display: flex;
+							flex-direction: column;
+							justify-content: space-evenly;
+							.name {
+								font-size: 16px;
+								color: #fafafa;
+								width: 100%;
+								overflow: hidden;
+								text-overflow: ellipsis;
+								white-space: nowrap;
+							}
+							.rate {
+								position: relative;
+								font-size: 14px;
+								color: #747c88;
+								.star_icon {
+									display: inline;
+									margin-left: 1px;
+								}
+							}
+						}
+					}
+					.p2 {
+						line-height: 1.2;
+						font-size: 14px;
+					}
+				}
+				.my_rnr {
+					width: 100%;
+					position: relative;
+					height: fit-content;
+					margin-bottom: 32px;
+					.p1,
+					.p2 {
+						width: 100%;
+						position: relative;
+					}
+					.p1 {
+						display: flex;
+						height: 48px;
+						margin-bottom: 16px;
+						.logo {
+							height: 100%;
+							min-width: 48px;
+							border: 1px solid #fafafa;
+							border-radius: 50%;
+							margin-right: 16px;
+						}
+						.n_r {
+							height: 100%;
+							width: calc(100% - 64px);
+							position: relative;
+							display: flex;
+							flex-direction: column;
+							justify-content: space-evenly;
+							.name {
+								font-size: 16px;
+								color: #fafafa;
+								width: 100%;
+								overflow: hidden;
+								text-overflow: ellipsis;
+								white-space: nowrap;
+							}
+							.rate {
+								position: relative;
+								font-size: 14px;
+								color: #747c88;
+								.star_icon {
+									background: transparent;
+									cursor: none;
+									display: inline;
+									margin-left: 1px;
+									cursor: none;
+									transition: 0.3s cubic-bezier(0, 0, 0, 1);
+								}
+							}
+						}
+					}
+					.p2 {
+						.text_area {
+							all: unset;
+							border: 1px solid #747c88;
+							box-sizing: border-box;
+							padding: 8px;
+							border-radius: 6px;
+							width: 100%;
+							color: #747c88;
+							transition: all 0.3s cubic-bezier(0, 0, 0, 1);
+							overflow-wrap: break-word;
+							line-height: 1.2;
+							font-size: 14px;
+							scrollbar-width: thin;
+							scrollbar-color: #fafafa #1a1a1a;
+							&::-webkit-scrollbar {
+								width: 8px;
+								border: 1px solid #1a1a1a;
+								border-radius: 100px;
+							}
+							&::-webkit-scrollbar-thumb {
+								border: 1px solid #fafafa;
+								border-radius: 100px;
+							}
+							&:focus {
+								border: 1px solid #fafafa;
+								color: #fafafa;
+							}
+						}
+						.submit {
+							all: unset;
+							border: 1px solid #fafafa;
+							box-sizing: border-box;
+							padding: 8px;
+							border-radius: 6px;
+							margin-top: 8px;
+							transition: all 0.3s cubic-bezier(0, 0, 0, 1), transform 0.3s cubic-bezier(0, 1, 0, 1);
+
+							&:hover {
+								background-color: #fafafa;
+								color: #1a1a1a;
+							}
+							&:active {
+								transform: scale(0.9);
+							}
+						}
+					}
+				}
 			}
 		}
+	}
+
+	.pinned_star {
+		filter: none !important;
+	}
+
+	*::selection {
+		background: #fafafa;
+		color: #1a1a1a;
 	}
 
 	@keyframes slide {
