@@ -3,17 +3,17 @@
 
 	export let id: number;
 	let text: string = 'Add to cart';
-	const result = {
-		Genre: 'Action-Adventure',
-		Game_ID: 1,
-		Description:
-			'In The Last of Us players control Joel - a smuggler tasked with escorting a teenage girl Ellie across a post-apocalyptic United States.',
-		Image_path: './app/products/the-last-of-us',
-		Name: 'The Last of Us',
-		Price: 59.99,
-		Rate: 4.5,
-		Subtitle: 'A story of survival in a post-apocalyptic world.'
+	type App = {
+		Genre: string;
+		Game_ID: number;
+		Description: string;
+		Image_path: string;
+		Name: string;
+		Price: number;
+		Rate: number;
+		Subtitle: string;
 	};
+	let result: App | undefined = undefined;
 	const handle_cart = (id: number) => {
 		if (localStorage.getItem('cart') === null) {
 			localStorage.setItem('cart', JSON.stringify([]));
@@ -31,6 +31,11 @@
 	};
 
 	onMount(() => {
+		fetch(`http://localhost:3000/get/${id}`).then((res) => {
+			res.json().then((data) => {
+				result = data.data;
+			});
+		});
 		if (localStorage.getItem('cart') !== null) {
 			const cart = JSON.parse(localStorage.getItem('cart') as string);
 			if (cart.includes(id)) {
@@ -45,181 +50,211 @@
 	$: if (pinned_star !== null) {
 		old_star = pinned_star;
 	}
+	let my_review: string = '';
+
+	// const test_string_time = '2023-05-10T19:23:14.628Z';
+	// const test_string = test_string_time.replace(/[-T.:Z]/g, ' ').split(' ').slice(0, -3); // 2023 05 10 19 23
+	// console.table(
+	// 	{
+	// 		"year": test_string[0],
+	// 		"month": test_string[1],
+	// 		"day": test_string[2],
+	// 		"hour": test_string[3],
+	// 		"minute": test_string[4]
+	// 	}
+	// );
 </script>
 
 <div class="content">
-	<div
-		class="fixed_background"
-		style="background-image: url('{result.Image_path}/background/{Math.floor(Math.random() * 5) +
-			1}.jpg');"
-	>
-		<div class="filter" />
-		<h1
-			class="hero_text"
+	{#if result !== undefined}
+		<div
+			class="fixed_background"
 			style="background-image: url('{result.Image_path}/background/{Math.floor(Math.random() * 5) +
 				1}.jpg');"
 		>
-			{#each result.Name.split(' ') as p}
-				<span class="letter">{p} </span>
-			{/each}
-		</h1>
-		<p class="subtitle">"{result.Subtitle}""</p>
-		<p class="id">ID: {result.Game_ID}</p>
-		<div class="line" />
-	</div>
-	<section class="page2">
-		<div class="part1">
-			<h1 class="gamename">{result.Name}</h1>
-			<div
-				class="logo logo_detail_game_product"
-				style="background-image: url('{result.Image_path}/logo/1.jpg');"
-			/>
-			<button
-				class="buy"
-				on:click|preventDefault={() => {
-					handle_cart(id);
-				}}
-				on:mouseenter={() => {
-					if (text === 'Added') {
-						text = 'Remove';
-					}
-				}}
-				on:mouseleave={() => {
-					if (text === 'Remove') {
-						text = 'Added';
-					} else if (text === 'Removed') {
-						text = 'Add to cart';
-					}
-				}}
+			<div class="filter" />
+			<h1
+				class="hero_text"
+				style="background-image: url('{result.Image_path}/background/{Math.floor(
+					Math.random() * 5
+				) + 1}.jpg');"
 			>
-				{text}
-			</button>
+				{#each result.Name.split(' ') as p}
+					<span class="letter">{p} </span>
+				{/each}
+			</h1>
+			<p class="subtitle">"{result.Subtitle}""</p>
+			<p class="id">ID: {result.Game_ID}</p>
+			<div class="line" />
 		</div>
-		<div class="vertical_line" />
-		<div class="des">
-			<h2 class="des_intro">Description:</h2>
-			<p class="description description_detail_game_product">"{result.Description}"</p>
-			<h2 class="des_intro">Genre:</h2>
-			<p class="description">{result.Genre}</p>
-			<h2 class="des_intro">Price:</h2>
-			<p class="description">{result.Price === 0 ? 'Free' : '$' + result.Price.toString()}</p>
-			<h2 class="des_intro">Overall rate:</h2>
-			<p class="description bonus">{result.Rate.toFixed(2).replace(/\.?0+$/, '')} / 5</p>
-			<p class="description star" style="--offset_width: calc({(result.Rate / 5) * 100}%)">
-				{#each '⭐⭐⭐⭐⭐' as _}
-					<p class="star_icon">⭐</p>
-				{/each}
-			</p>
-			<h2 class="des_intro">Ratings and reviews:</h2>
-			<div class="rating_n_review">
-				{#each [1, 1, 1, 1, 1, 1] as _}
-					<div class="rnr_container">
-						<div class="p1">
-							<div class="logo" />
-							<div class="name_n_rate">
-								<p class="name">
-									UserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUser
-								</p>
-								<p class="rate" style="--user_rate_offset: calc({(result.Rate / 5) * 100})">
-									{#each '...' as _}
-										<p class="star_icon">⭐</p>
-									{/each}
-								</p>
-							</div>
-						</div>
-						<p class="p2">
-							"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae amet officia
-							aspernatur corrupti ipsam voluptates quasi eius, voluptas repudiandae deserunt dolorum
-							ut sequi ab obcaecati dignissimos a accusantium doloribus animi? "
-						</p>
-					</div>
-				{/each}
-				<div class="next_back">
-					<button class="back">
-						<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960" width="24">
-							<path
-								d="M543 780 368 605q-7-7-10-15t-3-15q0-8 3-15.5t10-14.5l175-175q10-10 19-10t19 10q10 10 10 19t-10 19L414 575l167 167q10 10 10 19t-10 19q-10 10-19 10t-19-10Z"
-							/>
-						</svg>
-					</button>
-					<p>1/5</p>
-					<button class="next">
-						<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960" width="24">
-							<path
-								d="M357 780q-9-9-9-19t9-19l167-167-167-167q-9-9-9-19t9-19q9-9 19-9t19 9l175 175q7 7 10 14.5t3 15.5q0 8-3 15.5T570 605L395 780q-9 9-19 9t-19-9Z"
-							/>
-						</svg>
-					</button>
-				</div>
+		<section class="page2">
+			<div class="part1">
+				<h1 class="gamename">{result.Name}</h1>
+				<div
+					class="logo logo_detail_game_product"
+					style="background-image: url('{result.Image_path}/logo/1.jpg');"
+				/>
+				<button
+					class="buy"
+					on:click|preventDefault={() => {
+						handle_cart(id);
+					}}
+					on:mouseenter={() => {
+						if (text === 'Added') {
+							text = 'Remove';
+						}
+					}}
+					on:mouseleave={() => {
+						if (text === 'Remove') {
+							text = 'Added';
+						} else if (text === 'Removed') {
+							text = 'Add to cart';
+						}
+					}}
+				>
+					{text}
+				</button>
 			</div>
-			<form
-				class="my_rnr"
-				action="#"
-				method="post"
-				on:submit|preventDefault={() => {
-					// handle_review(id);
-				}}
-			>
-				<div class="p1">
-					<div class="logo" />
-					<div class="n_r">
-						<p class="name">
-							My_user_nameMy_user_nameMy_user_nameMy_user_nameMy_user_nameMy_user_nameMy_user_name
-						</p>
-						<div
-							class="rate"
-							on:mouseout={() => {
-								current_star = 0;
-							}}
-							on:blur={() => {
-								current_star = 0;
-							}}
-						>
-							{#each '⭐⭐⭐⭐⭐' as _, i}
-								<button
-									class="star_icon
+			<div class="vertical_line" />
+			<div class="des">
+				<h2 class="des_intro">Description:</h2>
+				<p class="description description_detail_game_product">"{result.Description}"</p>
+				<h2 class="des_intro">Genre:</h2>
+				<p class="description">{result.Genre}</p>
+				<h2 class="des_intro">Price:</h2>
+				<p class="description">{result.Price === 0 ? 'Free' : '$' + result.Price.toString()}</p>
+				<h2 class="des_intro">Overall rate:</h2>
+				<p class="description bonus">{result.Rate.toFixed(2).replace(/\.?0+$/, '')} / 5</p>
+				<p class="description star" style="--offset_width: calc({(result.Rate / 5) * 100}%)">
+					{#each '⭐⭐⭐⭐⭐' as _}
+						<p class="star_icon">⭐</p>
+					{/each}
+				</p>
+				<h2 class="des_intro">Ratings and reviews:</h2>
+				<div class="rating_n_review">
+					{#each [1, 1, 1, 1, 1, 1] as _}
+						<div class="rnr_container">
+							<div class="p1">
+								<div class="logo" />
+								<div class="name_n_rate">
+									<p class="name">Anonymous</p>
+									<p class="rate">
+										{#each [1, 1, 1, 0, 0] as a}
+											<p
+												class="
+												star_icon
+												{a === 0 ? 'not_pinned_star' : ''}
+											"
+											>
+												⭐
+											</p>
+										{/each}
+									</p>
+								</div>
+							</div>
+							<p class="p2">
+								"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae amet officia
+								aspernatur corrupti ipsam voluptates quasi eius, voluptas repudiandae deserunt
+								dolorum ut sequi ab obcaecati dignissimos a accusantium doloribus animi? "
+							</p>
+							<p class="timeline">10:30 35/02/2077</p>
+						</div>
+					{/each}
+					<div class="next_back">
+						<button class="back">
+							<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960" width="24">
+								<path
+									d="M543 780 368 605q-7-7-10-15t-3-15q0-8 3-15.5t10-14.5l175-175q10-10 19-10t19 10q10 10 10 19t-10 19L414 575l167 167q10 10 10 19t-10 19q-10 10-19 10t-19-10Z"
+								/>
+							</svg>
+						</button>
+						<p>1/5</p>
+						<button class="next">
+							<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960" width="24">
+								<path
+									d="M357 780q-9-9-9-19t9-19l167-167-167-167q-9-9-9-19t9-19q9-9 19-9t19 9l175 175q7 7 10 14.5t3 15.5q0 8-3 15.5T570 605L395 780q-9 9-19 9t-19-9Z"
+								/>
+							</svg>
+						</button>
+					</div>
+				</div>
+				<form
+					class="my_rnr"
+					action="#"
+					method="post"
+					on:submit|preventDefault={() => {
+						// handle_review(id);
+						if (old_star === 0) return;
+						alert(my_review);
+						alert(old_star);
+					}}
+				>
+					<div class="p1">
+						<div class="logo" />
+						<div class="n_r">
+							<p class="name">
+								My_user_nameMy_user_nameMy_user_nameMy_user_nameMy_user_nameMy_user_nameMy_user_name
+							</p>
+							<div
+								class="rate"
+								on:mouseout={() => {
+									current_star = 0;
+								}}
+								on:blur={() => {
+									current_star = 0;
+								}}
+							>
+								{#each '⭐⭐⭐⭐⭐' as _, i}
+									<button
+										class="star_icon
 									{pinned_star !== null ? (pinned_star > i ? 'pinned_star' : '') : ''}
 									"
-									on:mouseenter|preventDefault={() => {
-										current_star = i + 1;
-										pinned_star = null;
-									}}
-									on:click|preventDefault={() => {
-										pinned_star = i + 1;
-									}}
-									on:mouseout={() => {
-										if (pinned_star === null) {
-											pinned_star = old_star;
-										}
-									}}
-									on:blur={() => {
-										if (pinned_star === null) {
-											pinned_star = old_star;
-										}
-									}}
-									style="filter: grayscale({current_star <= i ? 100 : 0}%)"
-								>
-									⭐
-								</button>
-							{/each}
+										on:mouseenter|preventDefault={() => {
+											current_star = i + 1;
+											pinned_star = null;
+										}}
+										on:click|preventDefault={() => {
+											pinned_star = i + 1;
+										}}
+										on:mouseout={() => {
+											if (pinned_star === null) {
+												pinned_star = old_star;
+											}
+										}}
+										on:blur={() => {
+											if (pinned_star === null) {
+												pinned_star = old_star;
+											}
+										}}
+										on:dblclick|preventDefault={() => {
+											pinned_star = null;
+											old_star = 0;
+										}}
+										style="filter: grayscale({current_star <= i ? 100 : 0}%)"
+									>
+										⭐
+									</button>
+								{/each}
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="p2">
-					<textarea
-						name="review"
-						id="review"
-						cols="30"
-						rows="10"
-						placeholder="Write your review here..."
-						class="text_area"
-						maxlength="2000"
-					/>
-					<input type="submit" value="Submit" class="submit" />
-				</div>
-			</form>
-		</div>
-	</section>
+					<div class="p2">
+						<textarea
+							name="review"
+							id="review"
+							cols="30"
+							rows="10"
+							placeholder="Write your review here..."
+							class="text_area"
+							maxlength="2000"
+							bind:value={my_review}
+						/>
+						<input type="submit" value="Submit" class="submit" />
+					</div>
+				</form>
+			</div>
+		</section>
+	{/if}
 </div>
 
 <style lang="scss">
@@ -510,7 +545,7 @@
 					width: 100%;
 					position: relative;
 					height: fit-content;
-					margin-bottom: 16px;
+					margin-bottom: 32px;
 					.p1 {
 						position: relative;
 						width: 100%;
@@ -555,6 +590,11 @@
 					.p2 {
 						line-height: 1.2;
 						font-size: 14px;
+					}
+					.timeline {
+						font-size: 12px;
+						margin-top: 8px;
+						color: #747c88;
 					}
 				}
 				.my_rnr {
@@ -662,6 +702,9 @@
 
 	.pinned_star {
 		filter: none !important;
+	}
+	.not_pinned_star {
+		filter: grayscale(100%) !important;
 	}
 
 	*::selection {

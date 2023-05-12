@@ -1,155 +1,22 @@
 <script lang="ts">
 	// import { are_there_maximized_app } from '$lib/main_screen/are_there_maximized_app/script';
 	import { frame_collection } from '$lib/main_screen/collection/window';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import Search from './search/file.svelte';
 	import Search2 from './search/search2.svelte';
+	import { product_arr } from './product';
 	// export let parent: string;
 	type App = {
 		Game_ID: number;
 		Genre: string;
 		Price: number;
 		Rate: number;
-		Description: string;
 		Image_path: string;
 		Name: string;
 		Subtitle: string;
 	};
-	const test: Array<App> = [
-		{
-			Genre: 'Action-Adventure',
-			Game_ID: 1,
-			Description:
-				'In The Last of Us players control Joel - a smuggler tasked with escorting a teenage girl Ellie across a post-apocalyptic United States.',
-			Image_path: './app/products/the-last-of-us',
-			Name: 'The Last of Us',
-			Price: 59.99,
-			Rate: 4.5,
-			Subtitle: 'A story of survival in a post-apocalyptic world.'
-		},
-		{
-			Genre: 'Battle Royale',
-			Game_ID: 2,
-			Description:
-				'Fortnite is a free-to-play battle royale game where players fight to be the last person or team standing on a shrinking island.',
-			Image_path: './app/products/fortnite',
-			Name: 'Fortnite',
-			Price: 0,
-			Rate: 4.5,
-			Subtitle: 'Last one standing wins in this multiplayer game.'
-		},
-		{
-			Genre: 'Sandbox',
-			Game_ID: 3,
-			Description:
-				'Minecraft is a sandbox game where players can build structures and explore a randomly generated world made up of blocks of various materials.',
-			Image_path: './app/products/minecraft',
-			Name: 'Minecraft',
-			Price: 26.95,
-			Rate: 4,
-			Subtitle: 'Build and explore in this block-based world.'
-		},
-		{
-			Genre: 'First-Person Shooter',
-			Game_ID: 4,
-			Description:
-				'Overwatch is a team-based first-person shooter game where players work together to achieve objectives while battling against the enemy team.',
-			Image_path: './app/products/overwatch',
-			Name: 'Overwatch',
-			Price: 39.99,
-			Rate: 4.5,
-			Subtitle: 'Fight for the future in this team-based shooter.'
-		},
-		{
-			Genre: 'Multiplayer Online Battle Arena',
-			Game_ID: 5,
-			Description:
-				'League of Legends is a free-to-play multiplayer online battle arena game where players compete as champions with unique abilities and strategic styles.',
-			Image_path: './app/products/league-of-legends',
-			Name: 'League of Legends',
-			Price: 0,
-			Rate: 4,
-			Subtitle: 'A strategic team-based game with global appeal.'
-		},
-		{
-			Genre: 'Action-Adventure',
-			Game_ID: 6,
-			Description:
-				"Assassin's Creed Odyssey is an action role-playing video game developed by Ubisoft Quebec and published by Ubisoft. Set in the year 431 BCE the plot tells a fictional history of the Peloponnesian War between Athens and Sparta.",
-			Image_path: './app/products/assassins-creed-odyssey',
-			Name: "Assassin's Creed Odyssey",
-			Price: 59.99,
-			Rate: 4.5,
-			Subtitle: 'Choose your fate and become a legendary Spartan hero.'
-		},
-		{
-			Genre: 'Action-Adventure',
-			Game_ID: 7,
-			Description:
-				"The Legend of Zelda: Breath of the Wild is an action-adventure game developed and published by Nintendo. It's the 19th main installment in The Legend of Zelda series. The game takes place in a large open world environment and features nonlinear gameplay which allows players to explore and progress through the story at their own pace.",
-			Image_path: './app/products/breath-of-the-wild',
-			Name: 'The Legend of Zelda: Breath of the Wild',
-			Price: 59.99,
-			Rate: 4.800000190734863,
-			Subtitle: 'Discover a world as never before!'
-		},
-		{
-			Genre: 'Action-Adventure',
-			Game_ID: 8,
-			Description:
-				'Grand Theft Auto V is an action-adventure game developed by Rockstar North and published by Rockstar Games. The game is set in the fictional state of San Andreas - based on Southern California and follows three criminals and their efforts to commit heists while under pressure from a government agency.',
-			Image_path: './app/products/gta-v',
-			Name: 'Grand Theft Auto V',
-			Price: 29.99,
-			Rate: 4.699999809265137,
-			Subtitle:
-				'Explore the stunning world of Los Santos and Blaine County in the ultimate Grand Theft Auto V experience.'
-		},
-		{
-			Genre: 'Action-Adventure',
-			Game_ID: 9,
-			Description:
-				"Red Dead Redemption 2 is an action-adventure game developed and published by Rockstar Games. It's the third entry in the Red Dead series and a prequel to the 2010 game Red Dead Redemption. The game is set in a fictionalized version of the American Old West in 1899 and follows outlaw Arthur Morgan - a member of the Van der Linde gang.",
-			Image_path: './app/products/red-dead-redemption-2',
-			Name: 'Red Dead Redemption 2',
-			Price: 59.99,
-			Rate: 4.900000095367432,
-			Subtitle: 'Live the life of an outlaw in the Wild West.'
-		},
-		{
-			Genre: 'Action-Adventure',
-			Game_ID: 10,
-			Description:
-				'Horizon Zero Dawn is an action role-playing game developed by Guerrilla Games and published by Sony Interactive Entertainment. The game is set in a post-apocalyptic world where humans live in tribes and hunt robotic creatures for resources. The player controls Aloy - a young hunter who sets out to uncover her past.',
-			Image_path: './app/products/horizon-zero-dawn',
-			Name: 'Horizon Zero Dawn',
-			Price: 19.99,
-			Rate: 4.800000190734863,
-			Subtitle: 'Unleash devastating tactical attacks against unique Machines and rival tribes.'
-		},
-		{
-			Genre: 'Platformer',
-			Game_ID: 11,
-			Description:
-				"Super Mario Odyssey is a platform game developed and published by Nintendo. It's the 19th title in the Super Mario series and follows Mario and Cappy - a sentient hat that allows Mario to control other characters and objects on a quest to save Princess Peach from Bowser's wedding plans.",
-			Image_path: './app/products/super-mario-odyssey',
-			Name: 'Super Mario Odyssey',
-			Price: 59.99,
-			Rate: 4.800000190734863,
-			Subtitle: 'Join Mario on a massive, globe-trotting 3D adventure!'
-		},
-		{
-			Genre: 'Action-Adventure',
-			Game_ID: 12,
-			Description:
-				"God of War is an action-adventure game developed by Santa Monica Studio and published by Sony Interactive Entertainment. It's the eighth installment in the God of War series and a soft reboot for the franchise. The game follows Kratos - a former Greek God of War - and his young son Atreus as they venture into the Norse wilds in order to fulfill a promise.",
-			Image_path: './app/products/god-of-war',
-			Name: 'God of War',
-			Price: 19.99,
-			Rate: 4.900000095367432,
-			Subtitle: "Kratos is back and he's now accompanied by his son Atreus."
-		}
-	];
+
+	$: test = $product_arr;
 	let product: HTMLElement | undefined = undefined;
 
 	onMount(() => {
@@ -185,6 +52,12 @@
 			}
 		});
 		observer.observe(product as HTMLDivElement);
+
+		fetch('http://localhost:3000/get?startIndex=1')
+			.then((res) => res.json())
+			.then((res) => {
+				$product_arr = res.data;
+			});
 
 		return () => {
 			observer.disconnect();
@@ -255,8 +128,8 @@
 	// 		}
 	// 	}
 	// }
-	const result_array = test.map((a) => {
-		return a.Price === 0 ? `Free` : `$${a.Price.toFixed(2)}`;
+	$: result_array = test.map((a) => {
+		return a.Price === 0 ? `Free` : `$${a.Price?.toFixed(2)}`;
 	});
 
 	const handle_cart = (id: number) => {
@@ -313,6 +186,10 @@
 				}
 			}
 		}
+	});
+
+	onDestroy(() => {
+		$product_arr = [];
 	});
 </script>
 

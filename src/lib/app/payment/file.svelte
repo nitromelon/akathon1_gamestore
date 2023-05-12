@@ -12,49 +12,67 @@
 	const current_year = parseInt(new Date().getFullYear().toString().slice(2));
 	const current_month = new Date().getMonth() + 1;
 
+	let form: HTMLFormElement;
+
+	type App = {
+		Game_ID: number;
+		Image_path: string;
+		Name: string;
+		Price: number;
+	};
+
 	// fetch result will be done by checking local storage
-	const fetch_result = [
-		{
-			Game_ID: 1,
-			Image_path: './app/products/the-last-of-us',
-			Name: 'The Last of Us',
-			Price: 59.99
-		},
-		{
-			Game_ID: 2,
-			Image_path: './app/products/fortnite',
-			Name: 'Fortnite',
-			Price: 0
-		},
-		{
-			Game_ID: 3,
-			Image_path: './app/products/minecraft',
-			Name: 'Minecraft',
-			Price: 26.95
-		},
-		{
-			Game_ID: 4,
-			Image_path: './app/products/overwatch',
-			Name: 'Overwatch',
-			Price: 39.99
-		}
-	];
+	let fetch_result: Array<App> = [];
 
 	let id_collection: Array<number> = []; // for caching stuff
 	$: yeet_uwu = fetch_result.filter((item) => id_collection?.includes(item.Game_ID));
+	let nap_lan_dau = true;
 
 	onMount(() => {
+		const cart = localStorage.getItem('cart');
+		if (cart !== null) {
+			fetch('http://localhost:3000/get/payment', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					data: JSON.parse(cart)
+				}),
+			}).then((res) => {
+				if (res.ok) {
+					res.json().then((data) => {
+						fetch_result = data.data;
+						id_collection = JSON.parse(cart);
+						nap_lan_dau = false;
+					});
+				} else {
+					console.log('Network response was not ok.');
+				}
+			});
+		}
 		let old_value: string | null = null;
 		const fake_reactive = setInterval(() => {
+			if (nap_lan_dau) return;
 			const cart = localStorage.getItem('cart');
 			if (cart === old_value || cart === null) return;
 			old_value = cart;
 			const new_cart: Array<number> = JSON.parse(cart);
 			if (new_cart.length > id_collection.length) {
 				const new_item = new_cart.filter((item: number) => !id_collection?.includes(item));
-				console.log(new_item[0]);
+				fetch(`http://localhost:3000/get/${new_item[0]}/payment`).then((res) => {
+					if (res.ok) {
+						res.json().then((data) => {
+							fetch_result.push(data.data);
+							id_collection = new_cart;
+						});
+					} else {
+						console.log('Network response was not ok.');
+					}
+				});
 				id_collection = new_cart;
 			} else {
+				fetch_result = fetch_result.filter((item) => new_cart.includes(item.Game_ID));
 				id_collection = new_cart;
 			}
 		}, 100);
@@ -320,8 +338,8 @@
 						{#each yeet_uwu as item}
 							<!-- <p>{JSON.stringify(item)}</p> -->
 							<div class="added_game">
-								<div class="image" />
-								<p class="name">ID {item.Game_ID}: {item.Name}</p>
+								<div class="image" style="background-image: url('{item.Image_path}/logo/1.jpg')" />
+								<p class="name">{item.Name}</p>
 								<p class="fee">{item.Price === 0 ? 'Free' : `$${item.Price}`}</p>
 								<button
 									class="remove"
@@ -420,6 +438,7 @@
 				action="#"
 				method="post"
 				class="payment_form"
+				bind:this={form}
 				on:submit|preventDefault={async () => {
 					if (
 						warning.every(
@@ -442,16 +461,25 @@
 								items: JSON.parse(localStorage['cart']),
 								price
 							},
-							user_id: 'test abc',
-							token: 'test xyz'
+							user_id: 'test abc'
 						};
-						// const res = await fetch('/api/payment', {
-						// 	method: 'POST',
-						// 	headers: {
-						// 		'Content-Type': 'application/json'
-						// 	},
-						// 	body: JSON.stringify(data)
-						// });
+						const res = await fetch('http://localhost:3000/order', {
+							method: 'POST',
+							credentials: 'include',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify(data)
+						});
+						res
+							.json()
+							.then((data) => {
+								console.log(data);
+							})
+							.catch((err) => {
+								console.log(err);
+							});
+						form.reset();
 						console.log(data);
 						part2 = false;
 						localStorage['cart'] = JSON.stringify([]);
@@ -677,7 +705,8 @@
 								height: 48px;
 								width: 48px;
 								border-radius: 6px;
-								background: #fafafa;
+								background: no-repeat center center fixed;
+								background-size: cover;
 							}
 							.name {
 								flex: 1;

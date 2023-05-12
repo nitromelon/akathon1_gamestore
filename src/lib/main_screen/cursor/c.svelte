@@ -106,7 +106,7 @@
 			);
 			Array.from(document.getElementsByClassName('logo_detail_game_product')).forEach((link, i) => {
 				c_img_logo_detail_des(cursor, link as HTMLDivElement, i);
-			});
+			}); // cursor will not work due to delay after creating frame. Fix it later
 		}
 	}
 

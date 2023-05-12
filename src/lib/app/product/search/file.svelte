@@ -1,4 +1,11 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+
+	let total: number = 0;
+	let result = [];
+	onMount(() => {
+		total = 0;
+	});
 </script>
 
 <div class="search">
