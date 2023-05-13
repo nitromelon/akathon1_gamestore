@@ -448,16 +448,14 @@
 								typeof_card !== `We don't support this card type yet.`
 						)
 					) {
-						const _card_number = parseInt(card_number.replace(/ /g, ''));
-						const _cvv = parseInt(cvv);
 						let price = yeet_uwu.reduce((acc, cur) => acc + cur.Price, 0);
 						price = Number.isInteger(price) ? price : parseFloat(price.toFixed(2));
 						const data = {
 							data: {
 								card_name,
-								_card_number,
+								card_number: card_number.replace(/ /g, ''),
 								typeof_card,
-								_cvv,
+								cvv: parseInt(cvv),
 								exp_date,
 								game_id: JSON.parse(localStorage['cart']),
 								price
