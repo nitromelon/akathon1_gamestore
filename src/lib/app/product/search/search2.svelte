@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
+	import { is_search_keyword, search_keyword } from '../product';
+
 	// let tip_display = 'none';
 	let height = '0px';
 	let keywords: string | null = null;
@@ -10,8 +13,12 @@
 		}
 		timeout = setTimeout(async () => {
 			if (keywords === null || keywords.trim() === '') {
+				if (keywords?.trim() === '') {
+					$is_search_keyword = false;
+				}
 				return;
 			}
+			$is_search_keyword = true;
 			keywords = keywords.trim();
 			// todo: move to writeable store to access globally
 			const trimmed_kw = keywords
@@ -51,8 +58,7 @@
 
 			const jsonified_kw = objectized_kw
 				? JSON.stringify({
-						data: objectized_kw,
-						Game_ID: null
+						data: objectized_kw
 				  })
 				: null;
 
@@ -60,18 +66,27 @@
 				return;
 			}
 			old_result = jsonified_kw;
+			$search_keyword = jsonified_kw;
 
-			// let fetch_result = await fetch('http://localhost:3000/product/search', {
-			// 	method: 'POST',
-			// 	headers: {
-			// 		'Content-Type': 'application/json'
-			// 	},
-			// 	body: jsonified_kw
-			// }).then((res) => res.json());
-
-			console.log(jsonified_kw);
-		}, 2500);
+			fetch('http://localhost:3000/search', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: jsonified_kw
+			}).then((res) => res.json()).then(
+				res => console.log(res)
+			);
+		}, 1000);
 	}
+
+	onDestroy(() => {
+		if (timeout !== null) {
+			clearTimeout(timeout);
+		}
+		$is_search_keyword = false;
+		$search_keyword = '';
+	});
 </script>
 
 <div class="search">

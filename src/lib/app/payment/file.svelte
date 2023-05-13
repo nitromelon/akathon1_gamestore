@@ -34,11 +34,11 @@
 			fetch('http://localhost:3000/get/payment', {
 				method: 'POST',
 				headers: {
-					'Content-Type': 'application/json',
+					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
 					data: JSON.parse(cart)
-				}),
+				})
 			}).then((res) => {
 				if (res.ok) {
 					res.json().then((data) => {
@@ -340,7 +340,7 @@
 							<div class="added_game">
 								<div class="image" style="background-image: url('{item.Image_path}/logo/1.jpg')" />
 								<p class="name">{item.Name}</p>
-								<p class="fee">{item.Price === 0 ? 'Free' : `$${item.Price}`}</p>
+								<p class="fee">{item.Price === 0 ? 'Free' : `$${item.Price.toFixed(2)}`}</p>
 								<button
 									class="remove"
 									title="Remove from cart"
@@ -386,7 +386,7 @@
 				: `${
 						yeet_uwu.reduce((acc, cur) => acc + cur.Price, 0) === 0
 							? 'Free'
-							: `$${yeet_uwu.reduce((acc, cur) => acc + cur.Price, 0)}`
+							: `$${yeet_uwu.reduce((acc, cur) => acc + cur.Price, 0).toFixed(2)}`
 				  }`}
 		</div>
 	</div>
@@ -450,7 +450,8 @@
 					) {
 						const _card_number = parseInt(card_number.replace(/ /g, ''));
 						const _cvv = parseInt(cvv);
-						const price = yeet_uwu.reduce((acc, cur) => acc + cur.Price, 0);
+						let price = yeet_uwu.reduce((acc, cur) => acc + cur.Price, 0);
+						price = Number.isInteger(price) ? price : parseFloat(price.toFixed(2));
 						const data = {
 							data: {
 								card_name,
@@ -458,10 +459,9 @@
 								typeof_card,
 								_cvv,
 								exp_date,
-								items: JSON.parse(localStorage['cart']),
+								game_id: JSON.parse(localStorage['cart']),
 								price
 							},
-							user_id: 'test abc'
 						};
 						const res = await fetch('http://localhost:3000/order', {
 							method: 'POST',

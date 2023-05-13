@@ -1,11 +1,17 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-
-	let total: number = 0;
-	let result = [];
+	import { is_search_keyword, num_total_games, product_arr } from '../product';
 	onMount(() => {
-		total = 0;
+		fetch('http://localhost:3000/getgame/number')
+			.then((r) => r.json())
+			.then((r) => ($num_total_games = r.data.count))
+			.catch((e) => console.log(e));
 	});
+
+	// $: console.table(total_game, test);
+	$: lg = $product_arr[$product_arr.length - 1]?.Game_ID;
+	$: page_th = (arg: number | undefined) =>
+		arg !== undefined ? (arg - (arg % 4)) / 4 + (arg % 4) : '#';
 </script>
 
 <div class="search">
@@ -17,14 +23,62 @@
 	</p>
 	<div class="game_list">
 		<!-- todo: Hiện kết quả của 1 trên 4 -->
+		{#each $product_arr as owo}
+			<div class="game">
+				<div class="logo" style="background-image: url('{owo.Image_path}/logo/1.jpg');" />
+				<p class="name">
+					{owo.Name}
+				</p>
+			</div>
+		{/each}
+		<p class="pof">
+			Page {$is_search_keyword === false ? page_th(lg) : '##'} out of {$is_search_keyword === false
+				? page_th($num_total_games)
+				: '###'}
+		</p>
 		<div class="buttons">
-			<button class="btn" title="Have the game that was previously displayed.">Go back</button>
-			<button class="btn" title="Go refreshing this current list">Go forward</button>
+			<button
+				class="btn"
+				title="Have the game that was previously displayed."
+				on:click={() => {
+					if ($is_search_keyword === false && lg !== undefined && parseInt((page_th(lg)).toString()) > 1) {
+						fetch(`http://localhost:3000/get?startIndex=${lg - 7}`)
+							.then((res) => res.json())
+							.then((res) => {
+								$product_arr = res.data;
+							});
+					}
+				}}
+			>
+				Go back
+			</button>
+			<button
+				class="btn"
+				title="Go refreshing this current list"
+				on:click={() => {
+					if (
+						$is_search_keyword === false &&
+						lg !== undefined &&
+						parseInt(page_th(lg).toString()) < parseInt(page_th($num_total_games).toString())
+					) {
+						fetch(`http://localhost:3000/get?startIndex=${lg + 1}`)
+							.then((res) => res.json())
+							.then((res) => {
+								$product_arr = res.data;
+							});
+					}
+				}}
+			>
+				Go forward
+			</button>
 		</div>
 	</div>
 </div>
 
 <style lang="scss">
+	* {
+		color: #fafafa;
+	}
 	.search {
 		width: 100%;
 		height: 100%;
@@ -47,7 +101,7 @@
 			top: 92px;
 			left: 32px;
 			font-size: 12px;
-			color: #fafafa;
+			color: #747c88;
 		}
 		.game_list {
 			position: absolute;
@@ -61,10 +115,43 @@
 			&::-webkit-scrollbar {
 				display: none;
 			}
+			.game {
+				position: relative;
+				display: flex;
+				height: 48px;
+				width: 100%;
+				align-items: center;
+				gap: 16px;
+				&:hover {
+					.name {
+						color: #747c88;
+					}
+					.logo {
+						transform: rotate(360deg);
+						border-radius: 100px;
+					}
+				}
+				.logo {
+					position: relative;
+					height: 32px;
+					width: 32px;
+					background: no-repeat center center fixed;
+					background-size: cover;
+					border-radius: 6px;
+					transition: 0.3s cubic-bezier(1, 0, 0, 1);
+				}
+				.name {
+					transition: 0.3s cubic-bezier(0, 0, 0, 1);
+				}
+			}
+			.pof {
+				margin-top: 24px;
+			}
 			.buttons {
 				position: relative;
 				height: 32px;
 				width: 100%;
+				margin-top: 16px;
 				.btn {
 					all: unset;
 					padding: 0 16px;

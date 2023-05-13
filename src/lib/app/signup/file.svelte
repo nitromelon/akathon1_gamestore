@@ -30,7 +30,7 @@
 		timeout_id = setTimeout(() => {
 			firstname = firstname.trim();
 			lastname = lastname.trim();
-			username = username.trim();
+			username = username.replace(/\s/g, '_');
 			password = password.trim();
 			email = email.trim();
 			phonenumber = phonenumber.trim();
@@ -229,7 +229,7 @@
 						const post_json = JSON.stringify({
 							firstname,
 							lastname,
-							username,
+							username: username.replace(/\s/g, '_'),
 							password,
 							email,
 							phonenumber,
@@ -321,7 +321,7 @@
 					bind:value={address}
 					placeholder="Address"
 					style="display: {current_input === 6 ? 'inline-block' : 'none'};"
-					on:keydown={(event) => {
+					on:keydown={async (event) => {
 						if (event.key === 'Enter') {
 							event.preventDefault();
 							if (
@@ -329,8 +329,27 @@
 								form !== null &&
 								warning[6] === false
 							) {
-								// form.submit();
-								// Todo
+								const post_json = JSON.stringify({
+									firstname,
+									lastname,
+									username: username.replace(/\s/g, '_'),
+									password,
+									email,
+									phonenumber,
+									address
+								});
+
+								const res = await fetch('http://localhost:3000/signup', {
+									method: 'POST',
+									credentials: 'include',
+									headers: {
+										'Content-Type': 'application/json'
+									},
+									body: post_json
+								});
+
+								const data = await res.json();
+								console.log(data);
 							}
 						}
 					}}
