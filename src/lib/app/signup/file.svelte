@@ -1,7 +1,14 @@
 <script lang="ts">
 	import { frame_collection } from '$lib/main_screen/collection/window';
+	import {
+		login_logout,
+		login_logout_link,
+		signup_user,
+		signup_user_link
+	} from '$lib/main_screen/navigation/change_text';
 
 	const cheatcode: string = 'CownyJummyWuvwySweatyGeometwySausagy';
+	let signup: HTMLDivElement;
 	let form: HTMLFormElement | null = null;
 	let warning: Array<string | false> = ['', '', '', '', '', '', ''];
 	let firstname: string = '';
@@ -30,7 +37,7 @@
 		timeout_id = setTimeout(() => {
 			firstname = firstname.trim();
 			lastname = lastname.trim();
-			username = username.replace(/\s/g, '_');
+			username = username.trim().replace(/\s/g, '_');
 			password = password.trim();
 			email = email.trim();
 			phonenumber = phonenumber.trim();
@@ -147,9 +154,75 @@
 			}
 		}
 	};
+
+	const submit_n_get_stuff = async () => {
+		const post_json = JSON.stringify({
+			firstname: firstname.trim(),
+			lastname: lastname.trim(),
+			username: username.trim().replace(/\s/g, '_'),
+			password,
+			email: email.trim(),
+			phonenumber: phonenumber.trim(),
+			address: address.trim()
+		});
+
+		const res = await fetch('http://localhost:3000/signup', {
+			method: 'POST',
+			credentials: 'include',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: post_json
+		});
+
+		const data = await res.json();
+		switch (data.result) {
+			case true:
+				signup.parentElement?.previousElementSibling?.childNodes[0]?.childNodes[0]?.dispatchEvent(
+					new MouseEvent('click')
+				);
+				$login_logout = 'Log out';
+				$login_logout_link = 'logout';
+				$signup_user = 'User';
+				$signup_user_link = 'user';
+				frame_collection.update((n) => {
+					if (!n.includes($signup_user_link)) {
+						const pos = n.indexOf(null);
+						if (pos === -1) {
+							n.push($signup_user_link);
+						} else {
+							n[pos] = $signup_user_link;
+						}
+					}
+					return n;
+				});
+				break;
+			case false:
+				switch (data.code) {
+					case 0:
+						// error when inserting to database
+						alert('Signup failed');
+						break;
+					case 1:
+						warning[2] = 'Username already exists';
+						break;
+					case 2:
+						warning[4] = 'Email already exists';
+						break;
+					case 3:
+						warning[2] = 'Username already exists';
+						warning[4] = 'Email already exists';
+						break;
+					default:
+						alert('Unknown error');
+						break;
+				}
+				break;
+		}
+	};
 </script>
 
-<div class="signup">
+<div class="signup" bind:this={signup}>
 	<div class="showinfo">
 		<h1 class="header_txt">
 			{firstname !== 'Hawwywuvdebug'
@@ -226,27 +299,8 @@
 				method="post"
 				on:submit|preventDefault={async () => {
 					if (warning.every((item) => item === false)) {
-						const post_json = JSON.stringify({
-							firstname,
-							lastname,
-							username: username.replace(/\s/g, '_'),
-							password,
-							email,
-							phonenumber,
-							address
-						});
-
-						const res = await fetch('http://localhost:3000/signup', {
-							method: 'POST',
-							credentials: 'include',
-							headers: {
-								'Content-Type': 'application/json'
-							},
-							body: post_json
-						});
-
-						const data = await res.json();
-						console.log(data);
+						// console.log(data);
+						await submit_n_get_stuff();
 					}
 				}}
 				bind:this={form}
@@ -329,27 +383,7 @@
 								form !== null &&
 								warning[6] === false
 							) {
-								const post_json = JSON.stringify({
-									firstname,
-									lastname,
-									username: username.replace(/\s/g, '_'),
-									password,
-									email,
-									phonenumber,
-									address
-								});
-
-								const res = await fetch('http://localhost:3000/signup', {
-									method: 'POST',
-									credentials: 'include',
-									headers: {
-										'Content-Type': 'application/json'
-									},
-									body: post_json
-								});
-
-								const data = await res.json();
-								console.log(data);
+								await submit_n_get_stuff();
 							}
 						}
 					}}
@@ -738,7 +772,7 @@
 					display: flex;
 					flex-direction: column;
 					align-items: center;
-					gap: 16px;
+					// gap: 16px;
 					&::-webkit-scrollbar {
 						display: none;
 						width: 8px;
@@ -750,10 +784,11 @@
 						border-radius: 100px;
 					}
 					.elemment {
+						padding-top: 8px;
+						padding-bottom: 8px;
 						width: 120px;
 						transition: opacity 0.3s cubic-bezier(0, 0, 0, 1),
 							transform 0.3s cubic-bezier(0, 1, 0, 1);
-						transition-delay: 100ms;
 						a {
 							position: relative;
 							color: #fafafa;
@@ -804,6 +839,7 @@
 						margin-top: 16px;
 						width: 120px;
 						font-size: 24px;
+						margin-bottom: 8px;
 					}
 					&:hover {
 						scrollbar-width: thin;
@@ -812,13 +848,12 @@
 						}
 						.elemment {
 							opacity: 0.5;
-							transform: scale(0.9);
 							&:hover {
 								opacity: 1;
-								transform: scale(1);
 							}
 							&:active {
 								transform: scale(0.9);
+								transform-origin: left;
 							}
 						}
 					}

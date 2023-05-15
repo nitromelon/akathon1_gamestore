@@ -3,53 +3,102 @@
 	import { notionists } from '@dicebear/collection';
 	import { onMount } from 'svelte';
 	import { frame_collection } from '$lib/main_screen/collection/window';
-	const result = [
-		{
-			// user_id: 'aab3c6f3-7ef1-4131-b72e-91f22d28ef51',
-			address: '4 Pwivet Dwive, W-Wittwe Whinging, Suwwey',
-			email: 'hawwy.pottew@hogwawts.edu',
-			firstname: 'Hawwywuvdebug',
-			games: null,
-			lastname: 'Pottew',
-			// password: '$2a$10$uNjNHWRRR2No63jkB1ZJROW6zZMvkKfd6FnTD2C8PP.3wr40w14cu',
-			phone: '+44123456789',
-			username: 'Avada_Kedavwa_uwu'
-		}
-	][0];
 
-	const result_game = [
-		{
-			Game_ID: 1,
-			Image_path: './app/products/the-last-of-us',
-			Name: 'The Last of Us'
-		},
-		{
-			Game_ID: 2,
-			Image_path: './app/products/fortnite',
-			Name: 'Fortnite'
-		},
-		{
-			Game_ID: 3,
-			Image_path: './app/products/minecraft',
-			Name: 'Minecraft'
-		},
-		{
-			Game_ID: 4,
-			Image_path: './app/products/overwatch',
-			Name: 'Overwatch'
-		}
+	type App = {
+		address: string;
+		email: string;
+		firstname: string;
+		games: null | Array<number>;
+		lastname: string;
+		phone: string;
+		username: string;
+	};
+
+	type Game = {
+		Game_ID: number;
+		Image_path: string;
+		Name: string;
+	};
+
+	let result: App | undefined = undefined;
+
+	let result_game: Array<Game> = [
+		// {
+		// 	Game_ID: 1,
+		// 	Image_path: './app/products/the-last-of-us',
+		// 	Name: 'The Last of Us'
+		// },
+		// {
+		// 	Game_ID: 2,
+		// 	Image_path: './app/products/fortnite',
+		// 	Name: 'Fortnite'
+		// },
+		// {
+		// 	Game_ID: 3,
+		// 	Image_path: './app/products/minecraft',
+		// 	Name: 'Minecraft'
+		// },
+		// {
+		// 	Game_ID: 4,
+		// 	Image_path: './app/products/overwatch',
+		// 	Name: 'Overwatch'
+		// }
 	];
 
 	let avatar: string | null = null;
 
-	onMount(() => {
+	$: {
 		if (result !== undefined) {
 			avatar = createAvatar(notionists, {
 				seed: result.username,
 				size: 256
 			}).toString();
 		}
+	}
+
+	onMount(() => {
+		get_stuff();
 	});
+
+	function get_stuff() {
+		fetch('http://localhost:3000/user', {
+			method: 'GET',
+			credentials: 'include'
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				if (data.result) {
+					result = data.data;
+					if (result !== undefined) {
+						result.games === null ? (result_game = []) : get_game(result);
+					}
+				} else {
+					console.log("Can't get user infomation");
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+
+		const get_game = (i: App) => {
+			console.log(i.games);
+			fetch('http://localhost:3000/library', {
+				method: 'GET',
+				credentials: 'include'
+			})
+				.then((res) => res.json())
+				.then((data) => {
+					if (data.result) {
+						result_game = data.data;
+					} else {
+						console.log("Can't get user infomation");
+					}
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		};
+	}
 </script>
 
 <!-- Todo: làm file user và file payment -->
@@ -58,46 +107,84 @@
 <!-- Todo: làm xong nữa thì làm tiếp manager -->
 <div class="user">
 	<div class="side1">
-		<div class="logo">
-			{@html avatar !== null ? avatar : 'loading...'}
-		</div>
-		<hr />
-		<h1 class="fl_name">{result?.firstname} {result?.lastname}</h1>
-		<p class="username">"{result?.username}"</p>
-		<h2 class="contact">User infomation:</h2>
-		<p class="phone">📱: {result?.phone}</p>
-		<p class="address">🏠: {result?.address}</p>
+		{#if result !== undefined}
+			<div class="logo">
+				{@html avatar !== null ? avatar : 'loading...'}
+			</div>
+			<hr />
+			<h1 class="fl_name">{result.firstname} {result.lastname}</h1>
+			<p class="username">"{result.username}"</p>
+			<h2 class="contact">User infomation:</h2>
+			<p class="phone">📱: {result.phone}</p>
+			<p class="address">🏠: {result.address}</p>
+		{/if}
 	</div>
 	<div class="side2">
 		<div class="part1">
 			<h1 class="header">Library</h1>
 			<div class="list">
-				{#each result_game as i}
-					<div class="game" style="background-image: url('{i.Image_path}/logo/1.jpg');">
+				{#if result_game.length === 0}
+					<div class="empty_game">
+						<h1>Hey</h1>
+						<p>Look like you don't have any game yet!</p>
+						<p>You can go to store, or click the button below to refresh list</p>
 						<button
-							class="go"
 							on:click={() => {
 								frame_collection.update((n) => {
-									if (!n.includes(`product / ${i.Name}-${i.Game_ID}`)) {
+									if (!n.includes('product')) {
 										const pos = n.indexOf(null);
 										if (pos === -1) {
-											n.push(`product / ${i.Name}-${i.Game_ID}`);
+											n.push('product');
 										} else {
-											n[pos] = `product / ${i.Name}-${i.Game_ID}`;
+											n[pos] = 'product';
 										}
 									}
 									return n;
 								});
 							}}
 						>
-							<svg xmlns="http://www.w3.org/2000/svg" height="40" viewBox="0 96 960 960" width="40">
-								<path
-									d="m670.833 362.333-408.5 406.334q-2.789 2.833-7.478 2.833-4.688 0-7.522-2.939-2.833-2.938-2.833-7.833t2.833-7.728l406.334-407.833H278q-5.267 0-8.217-2.998-2.95-2.997-2.95-8.333t2.95-8.586Q272.733 322 278 322h388q12.067 0 20.033 7.967Q694 337.933 694 350v388q0 5.267-3.414 8.217-3.413 2.95-8.75 2.95-5.336 0-8.169-2.95-2.834-2.95-2.834-8.217V362.333Z"
-								/>
-							</svg>
+							Go to store
+						</button>
+						<button
+							on:click={() => {
+								get_stuff();
+							}}
+							>Refresh library
 						</button>
 					</div>
-				{/each}
+				{:else}
+					{#each result_game as i}
+						<div class="game" style="background-image: url('{i.Image_path}/logo/1.webp');">
+							<button
+								class="go"
+								on:click={() => {
+									frame_collection.update((n) => {
+										if (!n.includes(`product / ${i.Name}-${i.Game_ID}`)) {
+											const pos = n.indexOf(null);
+											if (pos === -1) {
+												n.push(`product / ${i.Name}-${i.Game_ID}`);
+											} else {
+												n[pos] = `product / ${i.Name}-${i.Game_ID}`;
+											}
+										}
+										return n;
+									});
+								}}
+							>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									height="40"
+									viewBox="0 96 960 960"
+									width="40"
+								>
+									<path
+										d="m670.833 362.333-408.5 406.334q-2.789 2.833-7.478 2.833-4.688 0-7.522-2.939-2.833-2.938-2.833-7.833t2.833-7.728l406.334-407.833H278q-5.267 0-8.217-2.998-2.95-2.997-2.95-8.333t2.95-8.586Q272.733 322 278 322h388q12.067 0 20.033 7.967Q694 337.933 694 350v388q0 5.267-3.414 8.217-3.413 2.95-8.75 2.95-5.336 0-8.169-2.95-2.834-2.95-2.834-8.217V362.333Z"
+									/>
+								</svg>
+							</button>
+						</div>
+					{/each}
+				{/if}
 			</div>
 		</div>
 	</div>
@@ -271,6 +358,49 @@
 									transform: translate(0, 0);
 									transition-delay: 0s;
 								}
+							}
+						}
+					}
+					.empty_game {
+						position: relative;
+						height: calc(100% - 32px);
+						width: 100%;
+						background: url('./app/user/bg.gif') center center no-repeat fixed;
+						background-size: cover;
+						border-radius: 6px;
+						border: 1px solid #fafafa;
+						display: flex;
+						flex-direction: column;
+						justify-content: center;
+						gap: 8px;
+						padding: 24px;
+						overflow: hidden;
+						h1 {
+							font-size: 24px;
+							font-weight: 900;
+							color: transparent;
+							-webkit-text-stroke: 1px #fafafa;
+							margin-bottom: 8px;
+						}
+						button {
+							position: relative;
+							background-color: transparent;
+							border: 1px solid #fafafa;
+							border-radius: 100px;
+							padding: 8px 16px;
+							width: fit-content;
+							color: #fafafa;
+							cursor: none;
+							transition: all 0.3s cubic-bezier(0, 0, 0, 1), transform 0.3s cubic-bezier(0, 1, 0, 1);
+							&:nth-child(4) {
+								margin-top: 8px;
+							}
+							&:hover {
+								background-color: #fafafa;
+								color: #1a1a1a;
+							}
+							&:active {
+								transform: scale(0.9);
 							}
 						}
 					}

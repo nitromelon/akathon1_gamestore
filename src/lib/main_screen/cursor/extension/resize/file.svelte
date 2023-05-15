@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cursor_direction, hold_cursor } from '$lib/main_screen/collection/window';
+	import { is_menu_open } from '$lib/main_screen/is_openmenu/i';
 	import { onMount } from 'svelte';
 
 	export let type: string;
@@ -35,6 +36,7 @@
 
 	onMount(() => {
 		document.addEventListener("mousedown", () => {
+			if ($is_menu_open) return;
 			cursor.classList.add("ex_move_animation");
 			hold_cursor.set(true);
 		});
@@ -46,7 +48,7 @@
 </script>
 
 <div bind:this={cursor} class="ex">
-	{#if type === 'resize'}
+	{#if type === 'resize' && !$is_menu_open}
 		<div class="rs" style="transform: rotate({deg}deg); display: {hide}">
 			<div class="l" />
 			<div class="r" />

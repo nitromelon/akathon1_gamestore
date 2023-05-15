@@ -1,5 +1,9 @@
 <script lang="ts">
 	import { frame_collection } from '$lib/main_screen/collection/window';
+	import { onDestroy } from 'svelte';
+	import { text_header } from './header';
+	import { is_user } from '../function/is_user';
+	import { signup_user_link } from '$lib/main_screen/navigation/change_text';
 	const cheatcode = 'CownyJummyWuvwySweatyGeometwySausagy_username';
 	const cheatcode2 = 'CownyJummyWuvwySweatyGeometwySausagy_email';
 	let email_or_username = '';
@@ -8,6 +12,7 @@
 	let is_username: boolean | null = null;
 	let current_input: number = 0;
 	let array_warning: Array<string | false> = ['', ''];
+	let login: HTMLDivElement;
 
 	$: if (email_or_username === cheatcode) {
 		email_or_username = 'WazySweepyCat';
@@ -62,11 +67,32 @@
 			}
 		}
 	}
+
+	onDestroy(() => {
+		if (timeout_id !== null) {
+			clearTimeout(timeout_id);
+		}
+		$text_header = 'Login page | Kirito';
+	});
+
+	$: if ($signup_user_link !== 'signup') {
+		frame_collection.update((n) => {
+			if (!n.includes($signup_user_link)) {
+				const pos = n.indexOf(null);
+				if (pos === -1) {
+					n.push($signup_user_link);
+				} else {
+					n[pos] = $signup_user_link;
+				}
+			}
+			return n;
+		});
+	}
 </script>
 
-<div class="login">
+<div class="login" bind:this={login}>
 	<div class="leftside">
-		<h1 class="herotxt">Login page | Kirito</h1>
+		<h1 class="herotxt">{$text_header}</h1>
 		<form
 			action="#"
 			method="post"
@@ -87,8 +113,23 @@
 						body: json_data
 					});
 					const data = await response.json();
-					console.log(data);
-					// console.log(json_data);
+					switch (data.result) {
+						case true:
+							is_user();
+							login.parentElement?.previousElementSibling?.childNodes[0]?.childNodes[0]?.dispatchEvent(
+								new MouseEvent('click')
+							);
+							break;
+						case false:
+							array_warning[0] = 'Username / email or password is incorrect';
+							array_warning[1] = 'Username / email or password is incorrect';
+							// TODO
+							break;
+						default:
+							console.log('Login failed, also something went wrong');
+							// TODO
+							break;
+					}
 				}
 			}}
 			autocomplete="on"

@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { bg } from '../bought_game';
+	import { bought_games } from '../product';
 
 	export let id: number;
 	let text: string = 'Add to cart';
@@ -42,6 +44,18 @@
 				text = 'Added';
 			}
 		}
+		bg();
+		// fetch(`http://localhost:3000/games/${id}/reviews`, {
+		// 	method: 'GET',
+		// 	credentials: 'include'
+		// })
+		// 	.then((res) => res.json())
+		// 	.then((data) => {
+		// 		console.log(data)
+		// 	})
+		// 	.catch((err) => {
+		// 		console.log(err);
+		// 	});
 	});
 
 	let current_star: number = 0;
@@ -70,14 +84,14 @@
 		<div
 			class="fixed_background"
 			style="background-image: url('{result.Image_path}/background/{Math.floor(Math.random() * 5) +
-				1}.jpg');"
+				1}.webp');"
 		>
 			<div class="filter" />
 			<h1
 				class="hero_text"
 				style="background-image: url('{result.Image_path}/background/{Math.floor(
 					Math.random() * 5
-				) + 1}.jpg');"
+				) + 1}.webp');"
 			>
 				{#each result.Name.split(' ') as p}
 					<span class="letter">{p} </span>
@@ -92,19 +106,29 @@
 				<h1 class="gamename">{result.Name}</h1>
 				<div
 					class="logo logo_detail_game_product"
-					style="background-image: url('{result.Image_path}/logo/1.jpg');"
+					style="background-image: url('{result.Image_path}/logo/1.webp');"
 				/>
 				<button
 					class="buy"
+					style="pointer-events: {$bought_games.has(id) ? 'none' : 'auto'};"
 					on:click|preventDefault={() => {
+						if ($bought_games.has(id)) {
+							return;
+						}
 						handle_cart(id);
 					}}
 					on:mouseenter={() => {
+						if ($bought_games.has(id)) {
+							return;
+						}
 						if (text === 'Added') {
 							text = 'Remove';
 						}
 					}}
 					on:mouseleave={() => {
+						if ($bought_games.has(id)) {
+							return;
+						}
 						if (text === 'Remove') {
 							text = 'Added';
 						} else if (text === 'Removed') {
@@ -112,7 +136,7 @@
 						}
 					}}
 				>
-					{text}
+					{$bought_games.has(id) ? 'Purchased' : text}
 				</button>
 			</div>
 			<div class="vertical_line" />
@@ -192,9 +216,7 @@
 					<div class="p1">
 						<div class="logo" />
 						<div class="n_r">
-							<p class="name">
-								My_user_nameMy_user_nameMy_user_nameMy_user_nameMy_user_nameMy_user_nameMy_user_name
-							</p>
+							<p class="name">UserName</p>
 							<div
 								class="rate"
 								on:mouseout={() => {
@@ -602,6 +624,7 @@
 					position: relative;
 					height: fit-content;
 					margin-bottom: 32px;
+					margin-top: 32px;
 					.p1,
 					.p2 {
 						width: 100%;

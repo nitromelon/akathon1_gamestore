@@ -4,7 +4,8 @@
 	import { onDestroy, onMount } from 'svelte';
 	import Search from './search/file.svelte';
 	import Search2 from './search/search2.svelte';
-	import { product_arr } from './product';
+	import { bought_games, product_arr } from './product';
+	import { bg } from './bought_game';
 	// export let parent: string;
 	type App = {
 		Game_ID: number;
@@ -59,9 +60,7 @@
 				$product_arr = res.data;
 			});
 
-		return () => {
-			observer.disconnect();
-		};
+		bg();
 	});
 	let timeout: string | number | NodeJS.Timeout | undefined;
 	const product_scroll = (e: WheelEvent) => {
@@ -133,6 +132,9 @@
 	});
 
 	const handle_cart = (id: number) => {
+		if ($bought_games.has(id)) {
+			return;
+		}
 		if (localStorage.getItem('cart') === null) {
 			localStorage.setItem('cart', JSON.stringify([]));
 		}
@@ -157,6 +159,9 @@
 	};
 
 	const mouseenter_btn = (i: number, a: App) => {
+		if ($bought_games.has(a.Game_ID)) {
+			return;
+		}
 		result_array[i] = `Add to cart`;
 		if (localStorage.getItem('cart') !== null) {
 			let cart: Array<number> = JSON.parse(localStorage.getItem('cart') as string);
@@ -167,6 +172,9 @@
 	};
 
 	const mouseleave_btn = (i: number, a: App) => {
+		if ($bought_games.has(a.Game_ID)) {
+			return;
+		}
 		result_array[i] = a.Price === 0 ? `Free` : `$${a.Price.toFixed(2)}`;
 		if (localStorage.getItem('cart') !== null) {
 			let cart: Array<number> = JSON.parse(localStorage.getItem('cart') as string);
@@ -200,11 +208,11 @@
 			<div
 				class="wallpaper"
 				style="background-image: url('{a.Image_path}/background/{Math.floor(Math.random() * 5) +
-					1}.jpg');"
+					1}.webp');"
 			/>
 			<div class="info">
 				<h1 class="genre">#{a.Genre} | {a.Rate.toFixed(2).replace(/\.?0+$/, '')} / 5</h1>
-				<div class="logo" style="background-image: url('{a.Image_path}/logo/1.jpg');" />
+				<div class="logo" style="background-image: url('{a.Image_path}/logo/1.webp');" />
 				<div class="title_subtitle">
 					<h1 class="title">{a.Name}</h1>
 					<h2 class="subtitle">{a.Subtitle}</h2>
@@ -227,6 +235,7 @@
 						>
 						<button
 							class="price"
+							style="pointer-events: {$bought_games.has(a.Game_ID) ? 'none' : 'auto'};"
 							on:click|preventDefault={() => {
 								handle_cart(a.Game_ID);
 							}}
@@ -238,8 +247,7 @@
 							}}
 						>
 							<p class="price" style="display:block">
-								<!-- {a.Price === 0 ? `Free` : `$${a.Price.toFixed(2)}`} -->
-								{result_array[i]}
+								{$bought_games.has(a.Game_ID) ? 'Purchased' : result_array[i]}
 							</p>
 						</button>
 					</div>
@@ -311,6 +319,7 @@
 					&::before {
 						// backdrop-filter: contrast(1);
 						backdrop-filter: blur(calc((1vw + 1vh) / 2));
+						transition-delay: 1s;
 					}
 				}
 			}

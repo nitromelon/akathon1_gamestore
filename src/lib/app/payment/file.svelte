@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { frame_collection } from '$lib/main_screen/collection/window';
 	import { onMount } from 'svelte';
+	import { text_header } from '../login/header';
+	import { bg } from '../product/bought_game';
+	import { bought_games } from '../product/product';
 
 	const cheatcode_visa = 'truck_god';
 	const cheatcode_mastercard = 'the_search_for_milk_crates';
@@ -26,24 +29,34 @@
 
 	let id_collection: Array<number> = []; // for caching stuff
 	$: yeet_uwu = fetch_result.filter((item) => id_collection?.includes(item.Game_ID));
-	let nap_lan_dau = true;
+	let nap_lan_dau = false;
 
 	onMount(() => {
+		form.reset();
+		bg();
 		const cart = localStorage.getItem('cart');
-		if (cart !== null) {
+		if (cart !== null && cart !== '[]') {
+			nap_lan_dau = true;
+			const data = JSON.parse(cart).filter((item: number) => !$bought_games.has(item));
+			localStorage.setItem('cart', JSON.stringify(data));
+			if (data.length === 0) {
+				nap_lan_dau = false;
+				return;
+			}
 			fetch('http://localhost:3000/get/payment', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
-					data: JSON.parse(cart)
+					data
 				})
 			}).then((res) => {
 				if (res.ok) {
 					res.json().then((data) => {
 						fetch_result = data.data;
 						id_collection = JSON.parse(cart);
+						console.log(fetch_result);
 						nap_lan_dau = false;
 					});
 				} else {
@@ -54,6 +67,14 @@
 		let old_value: string | null = null;
 		const fake_reactive = setInterval(() => {
 			if (nap_lan_dau) return;
+			localStorage.setItem(
+				'cart',
+				JSON.stringify(
+					JSON.parse(localStorage.getItem('cart') || '[]').filter(
+						(item: number) => !$bought_games.has(item)
+					)
+				)
+			);
 			const cart = localStorage.getItem('cart');
 			if (cart === old_value || cart === null) return;
 			old_value = cart;
@@ -298,6 +319,70 @@
 			}
 		}
 	}
+
+	const submit_stuff = async () => {
+		if (
+			warning.every(
+				(i) =>
+					i === false &&
+					typeof_card !== '' &&
+					typeof_card !== `We don't support this card type yet.`
+			)
+		) {
+			let price = yeet_uwu.reduce((acc, cur) => acc + cur.Price, 0);
+			price = Number.isInteger(price) ? price : parseFloat(price.toFixed(2));
+			const data = {
+				data: {
+					card_name,
+					card_number: card_number.replace(/ /g, ''),
+					typeof_card,
+					cvv: parseInt(cvv),
+					exp_date,
+					game_id: JSON.parse(localStorage['cart']).sort((a: number, b: number) => a - b),
+					price
+				}
+			};
+			const res = await fetch('http://localhost:3000/order', {
+				method: 'POST',
+				credentials: 'include',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			});
+			res
+				.json()
+				.then((data) => {
+					console.log(data);
+					// if data.result = false and data.code = 1, then redirect to login and a frame appear to tell user to login
+					if (data.result === false) {
+						if (data.code === 1) {
+							$text_header = "You haven't logged in yet";
+							frame_collection.update((n) => {
+								if (!n.includes('login')) {
+									const pos = n.indexOf(null);
+									if (pos === -1) {
+										n.push('login');
+									} else {
+										n[pos] = 'login';
+									}
+								}
+								return n;
+							});
+						}
+					} else {
+						bg();
+						form.reset();
+						typeof_card = '';
+						part2 = false;
+						localStorage['cart'] = JSON.stringify([]);
+					}
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		}
+	};
 </script>
 
 <div class="payment {part2 === true && yeet_uwu.length !== 0 ? 'payment_go_brr' : ''}">
@@ -338,7 +423,7 @@
 						{#each yeet_uwu as item}
 							<!-- <p>{JSON.stringify(item)}</p> -->
 							<div class="added_game">
-								<div class="image" style="background-image: url('{item.Image_path}/logo/1.jpg')" />
+								<div class="image" style="background-image: url('{item.Image_path}/logo/1.webp')" />
 								<p class="name">{item.Name}</p>
 								<p class="fee">{item.Price === 0 ? 'Free' : `$${item.Price.toFixed(2)}`}</p>
 								<button
@@ -440,48 +525,7 @@
 				class="payment_form"
 				bind:this={form}
 				on:submit|preventDefault={async () => {
-					if (
-						warning.every(
-							(i) =>
-								i === false &&
-								typeof_card !== '' &&
-								typeof_card !== `We don't support this card type yet.`
-						)
-					) {
-						let price = yeet_uwu.reduce((acc, cur) => acc + cur.Price, 0);
-						price = Number.isInteger(price) ? price : parseFloat(price.toFixed(2));
-						const data = {
-							data: {
-								card_name,
-								card_number: card_number.replace(/ /g, ''),
-								typeof_card,
-								cvv: parseInt(cvv),
-								exp_date,
-								game_id: JSON.parse(localStorage['cart']),
-								price
-							},
-						};
-						const res = await fetch('http://localhost:3000/order', {
-							method: 'POST',
-							credentials: 'include',
-							headers: {
-								'Content-Type': 'application/json'
-							},
-							body: JSON.stringify(data)
-						});
-						res
-							.json()
-							.then((data) => {
-								console.log(data);
-							})
-							.catch((err) => {
-								console.log(err);
-							});
-						form.reset();
-						console.log(data);
-						part2 = false;
-						localStorage['cart'] = JSON.stringify([]);
-					}
+					await submit_stuff();
 				}}
 			>
 				<input

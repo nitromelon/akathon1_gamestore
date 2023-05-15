@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
+	import { is_user } from '$lib/app/function/is_user';
+	import { onDestroy, onMount } from 'svelte';
 
 	const text = 'Kirito | Gamestore';
 
@@ -37,13 +39,25 @@
 			}
 		};
 		c(0);
+
+		if (!localStorage.getItem('cart')) {
+			localStorage.setItem('cart', JSON.stringify([]));
+		}
+		
+		is_user();
+	});
+
+	onDestroy(() => {
+		if (browser) {
+			document.title = text;
+		}
 	});
 </script>
 
 <!-- <h1>Welcome to SvelteKit</h1>
 <p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p> -->
 <svelte:head>
-	<title />
+	<title>Kirito | Game store</title>
 	<meta name="description" content="Game store, Made by FullHD group" />
 	<!-- <meta name="viewport" content="width=device-width,initial-scale=1" /> -->
 </svelte:head>

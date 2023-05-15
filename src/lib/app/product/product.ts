@@ -14,3 +14,5 @@ export const product_arr: Writable<Array<App>> = writable([]);
 export const num_total_games: Writable<number> = writable(0);
 export const is_search_keyword: Writable<boolean> = writable(false);
 export const search_keyword: Writable<string> = writable("");
+
+export const bought_games: Writable<Set<number>> = writable(new Set());

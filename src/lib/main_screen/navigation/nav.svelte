@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { frame_collection } from '../collection/window';
 	import { is_menu_open } from '../is_openmenu/i';
+	import { login_logout, login_logout_link, signup_user, signup_user_link } from './change_text';
 
 	let ms_menu: HTMLDivElement | null = null;
 	$: {
@@ -13,10 +14,10 @@
 		}
 	}
 
-	let login_logout: string = 'Log in';
-	let login_logout_link: string = 'login';
-	let signup_user: string = 'Sign up';
-	let signup_user_link: string = 'signup';
+	// let login_logout: string = 'Log in';
+	// let login_logout_link: string = 'login';
+	// let signup_user: string = 'Sign up';
+	// let signup_user_link: string = 'signup';
 </script>
 
 <div class="menu" bind:this={ms_menu}>
@@ -107,33 +108,41 @@
 			{/each}
 		</div>
 	</a>
-	<!-- <a
-		rel="noopener noreferrer"
-		target="_blank"
-		class="desktop_menu_link"
-		href="https://mercury.swin.edu.au/cos10026/s104182520/assign2/enhancements2.php"
-	>
-		{#each '#Legacy enhancement' as char}
-			{#if char === ' '}
-				<p class="desktop_menu_link_char">&nbsp;</p>
-			{:else}
-				<p class="desktop_menu_link_char">{char}</p>
-			{/if}
-		{/each}
-	</a> -->
 	<!-- Todo: When done signing in / up. If admin (will require 2nd password), login -> logout | signup -> manager page. User: login -> logout | signup -> username -->
 	<!-- Todo: also, frame_collection must not have 2 old page  -->
 	<a
 		class="desktop_menu_link"
-		href="#{login_logout_link}"
+		href="#{$login_logout_link}"
 		on:click|preventDefault={() => {
+			if (
+				$login_logout === 'Log out' &&
+				$login_logout_link === 'logout' &&
+				confirm('Are you sure you want to log out?')
+			) {
+				fetch('http://localhost:3000/signout', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					credentials: 'include',
+				}).then((res) => {
+					if (res.status === 200) {
+						localStorage.clear();
+						window.location.reload();
+					} else {
+						console.log('Error logging out');
+					}
+				})				
+				;
+				return;
+			}
 			frame_collection.update((n) => {
-				if (!n.includes(login_logout_link)) {
+				if (!n.includes($login_logout_link)) {
 					const pos = n.indexOf(null);
 					if (pos === -1) {
-						n.push(login_logout_link);
+						n.push($login_logout_link);
 					} else {
-						n[pos] = login_logout_link;
+						n[pos] = $login_logout_link;
 					}
 				}
 				return n;
@@ -143,7 +152,7 @@
 	>
 		<div class="desktop_menu_link_group dmlg_group1">
 			<!-- {#each '#Log in' as char} -->
-			{#each `#${login_logout}` as char}
+			{#each `#${$login_logout}` as char}
 				{#if char === ' '}
 					<p class="desktop_menu_link_char">&nbsp;</p>
 				{:else}
@@ -152,7 +161,7 @@
 			{/each}
 		</div>
 		<div class="desktop_menu_link_group dmlg_group2">
-			{#each `#${login_logout}` as char}
+			{#each `#${$login_logout}` as char}
 				{#if char === ' '}
 					<p class="desktop_menu_link_char">&nbsp;</p>
 				{:else}
@@ -163,15 +172,15 @@
 	</a>
 	<a
 		class="desktop_menu_link"
-		href="#{signup_user_link}"
+		href="#{$signup_user_link}"
 		on:click|preventDefault={() => {
 			frame_collection.update((n) => {
-				if (!n.includes(signup_user_link)) {
+				if (!n.includes($signup_user_link)) {
 					const pos = n.indexOf(null);
 					if (pos === -1) {
-						n.push(signup_user_link);
+						n.push($signup_user_link);
 					} else {
-						n[pos] = signup_user_link;
+						n[pos] = $signup_user_link;
 					}
 				}
 				return n;
@@ -180,7 +189,7 @@
 		}}
 	>
 		<div class="desktop_menu_link_group dmlg_group1">
-			{#each `#${signup_user}` as char}
+			{#each `#${$signup_user}` as char}
 				{#if char === ' '}
 					<p class="desktop_menu_link_char">&nbsp;</p>
 				{:else}
@@ -189,7 +198,7 @@
 			{/each}
 		</div>
 		<div class="desktop_menu_link_group dmlg_group2">
-			{#each `#${signup_user}` as char}
+			{#each `#${$signup_user}` as char}
 				{#if char === ' '}
 					<p class="desktop_menu_link_char">&nbsp;</p>
 				{:else}

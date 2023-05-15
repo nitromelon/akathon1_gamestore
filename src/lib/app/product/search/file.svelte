@@ -25,7 +25,7 @@
 		<!-- todo: Hiện kết quả của 1 trên 4 -->
 		{#each $product_arr as owo}
 			<div class="game">
-				<div class="logo" style="background-image: url('{owo.Image_path}/logo/1.jpg');" />
+				<div class="logo" style="background-image: url('{owo.Image_path}/logo/1.webp');" />
 				<p class="name">
 					{owo.Name}
 				</p>

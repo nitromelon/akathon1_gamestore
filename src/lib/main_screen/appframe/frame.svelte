@@ -15,6 +15,7 @@
 	import Login from '$lib/app/login/file.svelte';
 	import User from '$lib/app/user/file.svelte';
 	import Payment from '$lib/app/payment/file.svelte';
+	import { is_menu_open } from '../is_openmenu/i';
 
 	export let title: string;
 	const temp_title = title;
@@ -332,7 +333,7 @@
 	{id}
 	bind:this={daframe}
 	on:mousedown={change_z_order}
-	style="top: {y}px; left: {x}px; height: {height}px; width: {width}px; box-shadow: {box_shadow_pref};"
+	style="top: {y}px; left: {x}px; height: {height}px; width: {width}px; box-shadow: {box_shadow_pref}; pointer-events: {$is_menu_open ? "none": "auto"};"
 	on:mousemove={detect_mouse_type}
 >
 	<div class="titlebar">
@@ -398,7 +399,7 @@
 	.frame {
 		position: absolute;
 		border: 1px solid #fafafa;
-		backdrop-filter: blur(calc((2vw + 2vh) / 2));
+		backdrop-filter: blur(calc((5vw + 5vh) / 2));
 		background: $background_noise center;
 		border-radius: 6px;
 		// min-height: 480px;
