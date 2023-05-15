@@ -3,10 +3,20 @@
 	import { bg } from '../bought_game';
 	import { bought_games } from '../product';
 	import { signup_user } from '$lib/main_screen/navigation/change_text';
+	import { createAvatar } from '@dicebear/core';
+	import { notionists } from '@dicebear/collection';
+	import { frame_collection } from '$lib/main_screen/collection/window';
+	import { text_header } from '$lib/app/login/header';
+	import { page_th } from '../search/split_by_4';
 
 	export let id: number;
+
+	const OFFSETHOUR = new Date().getTimezoneOffset() / 60;
 	let text: string = 'Add to cart';
 	let array_comments: Array<Comment> = [];
+	$: last_comment_id = array_comments[array_comments.length - 1]?.comment_id;
+	let username = 'Anonymous';
+	let total_comment: number = 0;
 	type App = {
 		Genre: string;
 		Game_ID: number;
@@ -18,8 +28,10 @@
 		Subtitle: string;
 	};
 	type Comment = {
+		comment_id: number;
 		rating: number;
 		review: string;
+		review_time: string;
 	};
 	let result: App | undefined = undefined;
 	const handle_cart = (id: number) => {
@@ -37,6 +49,22 @@
 			text = 'Removed';
 		}
 	};
+
+	$: if (last_comment_id) {
+		fetch(`http://localhost:3000/games/${id}/reviews/count`, {
+			method: 'GET',
+			credentials: 'include'
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				if (data.result) {
+					total_comment = data.data;
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}
 
 	onMount(() => {
 		fetch(`http://localhost:3000/get/${id}`).then((res) => {
@@ -58,8 +86,22 @@
 			.then((res) => res.json())
 			.then((data) => {
 				if (data.result) {
-					// array_comments = data.data;
-					console.log(array_comments);
+					array_comments = data.data;
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+		fetch('http://localhost:3000/user/username', {
+			method: 'GET',
+			credentials: 'include'
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				if (data.result) {
+					username = data.data.username;
+				} else {
+					console.log("Can't get user infomation");
 				}
 			})
 			.catch((err) => {
@@ -75,20 +117,21 @@
 	}
 	let my_review: string = '';
 
-	// const test_string_time = '2023-05-10T19:23:14.628Z';
-	// const test_string = test_string_time.replace(/[-T.:Z]/g, ' ').split(' ').slice(0, -3); // 2023 05 10 19 23
-	// console.table(
-	// 	{
-	// 		"year": test_string[0],
-	// 		"month": test_string[1],
-	// 		"day": test_string[2],
-	// 		"hour": test_string[3],
-	// 		"minute": test_string[4]
-	// 	}
-	// );
+	const handle_review_time = (str: string) => {
+		const process = str
+			.replace(/[-T.:Z]/g, ' ')
+			.split(' ')
+			.slice(0, -3);
+		const to_offset = Number(process[3]) - OFFSETHOUR;
+		const localized_hour = to_offset >= 24 ? to_offset - 24 : to_offset;
+		return `${localized_hour}:${process[4]} ${process[2]}/${process[1]}/${process[0]}`;
+	};
+
+	let content: HTMLDivElement | undefined = undefined;
+	let form: HTMLFormElement | undefined = undefined;
 </script>
 
-<div class="content">
+<div class="content" bind:this={content}>
 	{#if result !== undefined}
 		<div
 			class="fixed_background"
@@ -173,7 +216,12 @@
 					{#each array_comments as r}
 						<div class="rnr_container">
 							<div class="p1">
-								<div class="logo" />
+								<div class="logo">
+									{@html createAvatar(notionists, {
+										seed: Math.random().toString(),
+										size: 48
+									}).toString()}
+								</div>
 								<div class="name_n_rate">
 									<p class="name">Anonymous</p>
 									<p class="rate">
@@ -195,19 +243,61 @@
 							<p class="p2">
 								{r.review}
 							</p>
-							<p class="timeline">10:30 35/02/2077</p>
+							<p class="timeline">{handle_review_time(r.review_time)}</p>
 						</div>
 					{/each}
 					<div class="next_back">
-						<button class="back">
+						<button
+							class="back"
+							on:click|preventDefault={() => {
+								if (
+									(Number.isNaN(Number(page_th(last_comment_id))) ||
+										Number(page_th(last_comment_id)) <= 1) &&
+									last_comment_id !== undefined
+								)
+									return;
+								const lg = last_comment_id ?? 4;
+								console.log(lg % 4 > 0 ? lg + 4 - (lg % 4) - 7 : lg - 7)
+								fetch(
+									`http://localhost:3000/games/${id}/reviews?comment_id=${
+										lg % 4 > 0 ? lg + 4 - (lg % 4) - 8 : lg - 8
+									}`
+								)
+									.then((res) => res.json())
+									.then((res) => {
+										if (res.result) {
+											array_comments = res.data;
+										}
+									});
+							}}
+						>
 							<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960" width="24">
 								<path
 									d="M543 780 368 605q-7-7-10-15t-3-15q0-8 3-15.5t10-14.5l175-175q10-10 19-10t19 10q10 10 10 19t-10 19L414 575l167 167q10 10 10 19t-10 19q-10 10-19 10t-19-10Z"
 								/>
 							</svg>
 						</button>
-						<p>1/5</p>
-						<button class="next">
+						<p>{page_th(last_comment_id)}/{page_th(total_comment)}</p>
+						<button
+							class="next"
+							on:click|preventDefault={() => {
+								if (
+									Number.isNaN(Number(page_th(last_comment_id))) ||
+									Number(page_th(last_comment_id)) >= Number(page_th(total_comment))
+								)
+									return;
+
+									console.log(last_comment_id);
+								const lg = last_comment_id ?? 4;
+								fetch(`http://localhost:3000/games/${id}/reviews?comment_id=${lg}`)
+									.then((res) => res.json())
+									.then((res) => {
+										if (res.result) {
+											array_comments = res.data;
+										}
+									});
+							}}
+						>
 							<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960" width="24">
 								<path
 									d="M357 780q-9-9-9-19t9-19l167-167-167-167q-9-9-9-19t9-19q9-9 19-9t19 9l175 175q7 7 10 14.5t3 15.5q0 8-3 15.5T570 605L395 780q-9 9-19 9t-19-9Z"
@@ -221,17 +311,67 @@
 						class="my_rnr"
 						action="#"
 						method="post"
-						on:submit|preventDefault={() => {
-							// handle_review(id);
+						bind:this={form}
+						on:submit|preventDefault={async () => {
 							if (old_star === 0) return;
-							alert(my_review);
-							alert(old_star);
+							if ($signup_user === 'Sign up') {
+								frame_collection.update((n) => {
+									if (!n.includes('login')) {
+										const pos = n.indexOf(null);
+										if (pos === -1) {
+											n.push('login');
+										} else {
+											n[pos] = 'login';
+										}
+									}
+									return n;
+								});
+								$text_header = 'Please login in order to review this game.';
+								content?.parentElement?.previousElementSibling?.childNodes[0]?.childNodes[0]?.dispatchEvent(
+									new MouseEvent('click')
+								);
+								return;
+							}
+							try {
+								await fetch(`http://localhost:3000/games/${id}/reviews`, {
+									method: 'POST',
+									headers: {
+										'Content-Type': 'application/json'
+									},
+									credentials: 'include',
+									body: JSON.stringify({
+										rating: old_star,
+										review: my_review
+									})
+								});
+								form?.reset();
+								fetch(`http://localhost:3000/games/${id}/reviews?comment_id=${(last_comment_id ?? 1)}`, {
+									method: 'GET',
+									credentials: 'include'
+								})
+									.then((res) => res.json())
+									.then((data) => {
+										if (data.result) {
+											array_comments = data.data;
+										}
+									})
+									.catch((err) => {
+										console.log(err);
+									});
+							} catch (e) {
+								console.log(e);
+							}
 						}}
 					>
 						<div class="p1">
-							<div class="logo" />
+							<div class="logo">
+								{@html createAvatar(notionists, {
+									seed: username,
+									size: 48
+								}).toString()}
+							</div>
 							<div class="n_r">
-								<p class="name">UserName</p>
+								<p class="name">{username}</p>
 								<div
 									class="rate"
 									on:mouseout={() => {
@@ -281,7 +421,9 @@
 								id="review"
 								cols="30"
 								rows="10"
-								placeholder="Write your review here..."
+								placeholder={array_comments.length === 0
+									? 'Be the first one to write a review!!!'
+									: 'Write your review here...'}
 								class="text_area"
 								maxlength="2000"
 								bind:value={my_review}
@@ -598,6 +740,10 @@
 							border: 1px solid #fafafa;
 							border-radius: 50%;
 							margin-right: 16px;
+							overflow: hidden;
+							display: flex;
+							align-items: center;
+							justify-content: center;
 						}
 						.name_n_rate {
 							height: 100%;
@@ -656,6 +802,10 @@
 							border: 1px solid #fafafa;
 							border-radius: 50%;
 							margin-right: 16px;
+							overflow: hidden;
+							display: flex;
+							align-items: center;
+							justify-content: center;
 						}
 						.n_r {
 							height: 100%;

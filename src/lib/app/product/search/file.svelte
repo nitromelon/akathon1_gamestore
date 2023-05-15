@@ -2,14 +2,15 @@
 	import { onMount } from 'svelte';
 	import { is_search_keyword, num_total_games, product_arr } from '../product';
 	import { total_games } from '$lib/app/function/total_games';
+	import { page_th } from './split_by_4';
 	onMount(() => {
 		total_games();
 	});
 
 	// $: console.table(total_game, test);
 	$: lg = $product_arr[$product_arr.length - 1]?.Game_ID;
-	$: page_th = (a: number | undefined) =>
-		void 0 === a ? '#' : a % 4 > 0 ? (a - (a % 4)) / 4 + 1 : a / 4;
+	// const page_th = (a: number | undefined) =>
+	// 	void 0 === a ? '#' : a % 4 > 0 ? (a - (a % 4)) / 4 + 1 : a / 4;
 </script>
 
 <div class="search">
@@ -44,7 +45,9 @@
 						lg !== undefined &&
 						parseInt(page_th(lg).toString()) > 1
 					) {
-						fetch(`http://localhost:3000/get?startIndex=${lg % 4 > 0 ? lg + 4 - (lg % 4) - 7 : lg - 7}`)
+						fetch(
+							`http://localhost:3000/get?startIndex=${lg % 4 > 0 ? lg + 4 - (lg % 4) - 7 : lg - 7}`
+						)
 							.then((res) => res.json())
 							.then((res) => {
 								$product_arr = res.data;
