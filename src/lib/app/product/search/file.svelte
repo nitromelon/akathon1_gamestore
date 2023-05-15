@@ -1,17 +1,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { is_search_keyword, num_total_games, product_arr } from '../product';
+	import { total_games } from '$lib/app/function/total_games';
 	onMount(() => {
-		fetch('http://localhost:3000/getgame/number')
-			.then((r) => r.json())
-			.then((r) => ($num_total_games = r.data.count))
-			.catch((e) => console.log(e));
+		total_games();
 	});
 
 	// $: console.table(total_game, test);
 	$: lg = $product_arr[$product_arr.length - 1]?.Game_ID;
-	$: page_th = (arg: number | undefined) =>
-		arg !== undefined ? (arg - (arg % 4)) / 4 + (arg % 4) : '#';
+	$: page_th = (a: number | undefined) =>
+		void 0 === a ? '#' : a % 4 > 0 ? (a - (a % 4)) / 4 + 1 : a / 4;
 </script>
 
 <div class="search">
@@ -41,8 +39,12 @@
 				class="btn"
 				title="Have the game that was previously displayed."
 				on:click={() => {
-					if ($is_search_keyword === false && lg !== undefined && parseInt((page_th(lg)).toString()) > 1) {
-						fetch(`http://localhost:3000/get?startIndex=${lg - 7}`)
+					if (
+						$is_search_keyword === false &&
+						lg !== undefined &&
+						parseInt(page_th(lg).toString()) > 1
+					) {
+						fetch(`http://localhost:3000/get?startIndex=${lg % 4 > 0 ? lg + 4 - (lg % 4) - 7 : lg - 7}`)
 							.then((res) => res.json())
 							.then((res) => {
 								$product_arr = res.data;

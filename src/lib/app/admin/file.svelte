@@ -1,4 +1,6 @@
-<div class="admin"></div>
+<div class="admin">
+	hello admin
+</div>
 <style lang="scss">
 	.admin {
 		position: relative;

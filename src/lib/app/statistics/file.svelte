@@ -1,8 +1,26 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { num_total_games } from '../product/product';
+	import { total_games } from '../function/total_games';
 	let user_number: number = 0;
 	let comment_number: number = 0;
 	let profit: number = 0.0;
+	let star: Array<number> = [0, 0, 0, 0, 0];
+	let height: Array<number> = [0, 0, 0, 0, 0];
+	let game_name: string = '###';
+	let current: number = 1;
+
+	$: {
+		const max = Math.max(...star);
+		if (max !== 0) {
+			for (let i = 0; i < star.length; i++) {
+				height[i] = ((star[i] as number) / max) * 100;
+			}
+		} else {
+			height = [0, 0, 0, 0, 0];
+		}
+	}
+
 	const async_timeout = (ms: number) => {
 		return new Promise((resolve) => setTimeout(resolve, ms));
 	};
@@ -37,6 +55,7 @@
 	};
 
 	onMount(async () => {
+		total_games();
 		try {
 			const result = await fetch('http://localhost:3000/statistics', {
 				method: 'GET',
@@ -54,41 +73,82 @@
 		} catch (error) {
 			console.log(error);
 		}
+
+		get_star_game();
 	});
+
+	const get_star_game = async (i: number = 1) => {
+		try {
+			const result = await fetch(`http://localhost:3000/statistics/star/${i}`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				credentials: 'include'
+			});
+			const data = await result.json();
+			if (data.result) {
+				game_name = data.data2;
+				for (const [k, v] of Object.entries(data.data)) {
+					star[parseInt(k) - 1] = v as number;
+				}
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
 </script>
 
 <div class="statistics">
 	<div class="part1 part">
 		<div class="p1 p">
 			<div class="chart">
-				<p class="game_name">{'The last of us'}</p>
+				<p class="game_name">{game_name}</p>
 				<div class="box">
 					<div class="1star star">
-						<div class="line" />
-						<p>{1}⭐</p>
+						<div class="line" style="height: {height[0]}%;" />
+						<p>{star[0]}⭐</p>
 					</div>
 					<div class="2star star">
-						<div class="line" />
-						<p>{1}⭐⭐</p>
+						<div class="line" style="height: {height[1]}%;" />
+						<p>{star[1]}⭐⭐</p>
 					</div>
 					<div class="3star star">
-						<div class="line" />
-						<p>{1}⭐⭐⭐</p>
+						<div class="line" style="height: {height[2]}%;" />
+						<p>{star[2]}⭐⭐⭐</p>
 					</div>
 					<div class="4star star">
-						<div class="line" />
-						<p>{1}⭐⭐⭐⭐</p>
+						<div class="line" style="height: {height[3]}%;" />
+						<p>{star[3]}⭐⭐⭐⭐</p>
 					</div>
 					<div class="5star star">
-						<div class="line" />
-						<p>{1}⭐⭐⭐⭐⭐</p>
+						<div class="line" style="height: {height[4]}%;" />
+						<p>{star[4]}⭐⭐⭐⭐⭐</p>
 					</div>
 				</div>
 			</div>
 			<div class="des des_rate">
-				<button>Back</button>
+				<button
+					on:click={() => {
+						if (current > 1) {
+							current--;
+							get_star_game(current);
+						}
+					}}
+				>
+					Back
+				</button>
 				<p>Total ratings</p>
-				<button>Forward</button>
+				<button
+					on:click={() => {
+						if (current < $num_total_games) {
+							current++;
+							get_star_game(current);
+						}
+					}}
+				>
+					Next
+				</button>
 			</div>
 		</div>
 		<hr />
@@ -185,7 +245,7 @@
 			transform: rotate(180deg);
 			.line {
 				position: relative;
-				height: 100%;
+				height: 0%;
 				width: 100%;
 				border: 1px solid #fafafa;
 				border-top: none;

@@ -6,6 +6,7 @@
 
 	export let id: number;
 	let text: string = 'Add to cart';
+	let array_comments: Array<Comment> = [];
 	type App = {
 		Genre: string;
 		Game_ID: number;
@@ -15,6 +16,10 @@
 		Price: number;
 		Rate: number;
 		Subtitle: string;
+	};
+	type Comment = {
+		rating: number;
+		review: string;
 	};
 	let result: App | undefined = undefined;
 	const handle_cart = (id: number) => {
@@ -46,17 +51,20 @@
 			}
 		}
 		bg();
-		// fetch(`http://localhost:3000/games/${id}/reviews`, {
-		// 	method: 'GET',
-		// 	credentials: 'include'
-		// })
-		// 	.then((res) => res.json())
-		// 	.then((data) => {
-		// 		console.log(data)
-		// 	})
-		// 	.catch((err) => {
-		// 		console.log(err);
-		// 	});
+		fetch(`http://localhost:3000/games/${id}/reviews`, {
+			method: 'GET',
+			credentials: 'include'
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				if (data.result) {
+					// array_comments = data.data;
+					console.log(array_comments);
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	});
 
 	let current_star: number = 0;
@@ -162,14 +170,16 @@
 				</p>
 				<h2 class="des_intro">Ratings and reviews:</h2>
 				<div class="rating_n_review">
-					{#each [1, 1, 1, 1, 1, 1] as _}
+					{#each array_comments as r}
 						<div class="rnr_container">
 							<div class="p1">
 								<div class="logo" />
 								<div class="name_n_rate">
 									<p class="name">Anonymous</p>
 									<p class="rate">
-										{#each [1, 1, 1, 0, 0] as a}
+										{#each Array(5)
+											.fill(0)
+											.map((_, i) => (i < r.rating ? 1 : 0)) as a}
 											<p
 												class="
 												star_icon
@@ -183,9 +193,7 @@
 								</div>
 							</div>
 							<p class="p2">
-								"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae amet officia
-								aspernatur corrupti ipsam voluptates quasi eius, voluptas repudiandae deserunt
-								dolorum ut sequi ab obcaecati dignissimos a accusantium doloribus animi? "
+								{r.review}
 							</p>
 							<p class="timeline">10:30 35/02/2077</p>
 						</div>
