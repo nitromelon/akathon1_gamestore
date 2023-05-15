@@ -6,6 +6,7 @@
 	import Search2 from './search/search2.svelte';
 	import { bought_games, product_arr } from './product';
 	import { bg } from './bought_game';
+	import { signup_user } from '$lib/main_screen/navigation/change_text';
 	// export let parent: string;
 	type App = {
 		Game_ID: number;
@@ -62,7 +63,7 @@
 
 		bg();
 	});
-	let timeout: string | number | NodeJS.Timeout | undefined;
+	let timeout: ReturnType<typeof setTimeout> | undefined = undefined;
 	const product_scroll = (e: WheelEvent) => {
 		const product = e.currentTarget as HTMLDivElement;
 		if (e.target === document.getElementById('product_search_protip')) {
@@ -233,23 +234,25 @@
 								});
 							}}>Learn More</button
 						>
-						<button
-							class="price"
-							style="pointer-events: {$bought_games.has(a.Game_ID) ? 'none' : 'auto'};"
-							on:click|preventDefault={() => {
-								handle_cart(a.Game_ID);
-							}}
-							on:mouseenter|preventDefault={() => {
-								mouseenter_btn(i, a);
-							}}
-							on:mouseleave|preventDefault={() => {
-								mouseleave_btn(i, a);
-							}}
-						>
-							<p class="price" style="display:block">
-								{$bought_games.has(a.Game_ID) ? 'Purchased' : result_array[i]}
-							</p>
-						</button>
+						{#if $signup_user !== 'Admin'}
+							<button
+								class="price"
+								style="pointer-events: {$bought_games.has(a.Game_ID) ? 'none' : 'auto'};"
+								on:click|preventDefault={() => {
+									handle_cart(a.Game_ID);
+								}}
+								on:mouseenter|preventDefault={() => {
+									mouseenter_btn(i, a);
+								}}
+								on:mouseleave|preventDefault={() => {
+									mouseleave_btn(i, a);
+								}}
+							>
+								<p class="price" style="display:block">
+									{$bought_games.has(a.Game_ID) ? 'Purchased' : result_array[i]}
+								</p>
+							</button>
+						{/if}
 					</div>
 				</div>
 			</div>

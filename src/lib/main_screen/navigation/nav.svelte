@@ -18,6 +18,14 @@
 	// let login_logout_link: string = 'login';
 	// let signup_user: string = 'Sign up';
 	// let signup_user_link: string = 'signup';
+	let payment_statistics: string = 'Payment';
+	let payment_statistics_link: string = 'payment';
+	$: {
+		if ($signup_user === "Admin") {
+			payment_statistics = 'Statistics'
+			payment_statistics_link = 'statistics'
+		}
+	}
 </script>
 
 <div class="menu" bind:this={ms_menu}>
@@ -40,12 +48,12 @@
 		}}
 	>
 		<div class="desktop_menu_link_group dmlg_group1">
-			{#each '#Home' as char}
+			{#each 'Home' as char}
 				<p class="desktop_menu_link_char">{char}</p>
 			{/each}
 		</div>
 		<div class="desktop_menu_link_group dmlg_group2">
-			{#each '#Home' as char}
+			{#each 'Home' as char}
 				<p class="desktop_menu_link_char">{char}</p>
 			{/each}
 		</div>
@@ -69,27 +77,27 @@
 		}}
 	>
 		<div class="desktop_menu_link_group dmlg_group1">
-			{#each '#Product' as char}
+			{#each 'Product' as char}
 				<p class="desktop_menu_link_char">{char}</p>
 			{/each}
 		</div>
 		<div class="desktop_menu_link_group dmlg_group2">
-			{#each '#Product' as char}
+			{#each 'Product' as char}
 				<p class="desktop_menu_link_char">{char}</p>
 			{/each}
 		</div>
 	</a>
 	<a
 		class="desktop_menu_link"
-		href="#payment"
+		href="#{payment_statistics_link}"
 		on:click|preventDefault={() => {
 			frame_collection.update((n) => {
-				if (!n.includes('payment')) {
+				if (!n.includes(payment_statistics_link)) {
 					const pos = n.indexOf(null);
 					if (pos === -1) {
-						n.push('payment');
+						n.push(payment_statistics_link);
 					} else {
-						n[pos] = 'payment';
+						n[pos] = payment_statistics_link;
 					}
 				}
 				return n;
@@ -98,12 +106,12 @@
 		}}
 	>
 		<div class="desktop_menu_link_group dmlg_group1">
-			{#each '#Payment' as char}
+			{#each `${payment_statistics}` as char}
 				<p class="desktop_menu_link_char">{char}</p>
 			{/each}
 		</div>
 		<div class="desktop_menu_link_group dmlg_group2">
-			{#each '#Payment' as char}
+			{#each `${payment_statistics}` as char}
 				<p class="desktop_menu_link_char">{char}</p>
 			{/each}
 		</div>
@@ -152,7 +160,7 @@
 	>
 		<div class="desktop_menu_link_group dmlg_group1">
 			<!-- {#each '#Log in' as char} -->
-			{#each `#${$login_logout}` as char}
+			{#each `${$login_logout}` as char}
 				{#if char === ' '}
 					<p class="desktop_menu_link_char">&nbsp;</p>
 				{:else}
@@ -161,7 +169,7 @@
 			{/each}
 		</div>
 		<div class="desktop_menu_link_group dmlg_group2">
-			{#each `#${$login_logout}` as char}
+			{#each `${$login_logout}` as char}
 				{#if char === ' '}
 					<p class="desktop_menu_link_char">&nbsp;</p>
 				{:else}
@@ -189,7 +197,7 @@
 		}}
 	>
 		<div class="desktop_menu_link_group dmlg_group1">
-			{#each `#${$signup_user}` as char}
+			{#each `${$signup_user}` as char}
 				{#if char === ' '}
 					<p class="desktop_menu_link_char">&nbsp;</p>
 				{:else}
@@ -198,7 +206,7 @@
 			{/each}
 		</div>
 		<div class="desktop_menu_link_group dmlg_group2">
-			{#each `#${$signup_user}` as char}
+			{#each `${$signup_user}` as char}
 				{#if char === ' '}
 					<p class="desktop_menu_link_char">&nbsp;</p>
 				{:else}
@@ -273,7 +281,7 @@
 			}
 			.dmlg_group1,
 			.dmlg_group2 {
-				@for $i from 1 through 10 {
+				@for $i from 1 through 11 {
 					p:nth-child(#{$i}) {
 						transition: transform 0.1s * $i cubic-bezier(1, 0, 0, 1),
 							opacity 0.1s * $i cubic-bezier(1, 0, 0, 1);

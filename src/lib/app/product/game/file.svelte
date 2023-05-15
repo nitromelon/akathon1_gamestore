@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { bg } from '../bought_game';
 	import { bought_games } from '../product';
+	import { signup_user } from '$lib/main_screen/navigation/change_text';
 
 	export let id: number;
 	let text: string = 'Add to cart';
@@ -108,36 +109,41 @@
 					class="logo logo_detail_game_product"
 					style="background-image: url('{result.Image_path}/logo/1.webp');"
 				/>
-				<button
-					class="buy"
-					style="pointer-events: {$bought_games.has(id) ? 'none' : 'auto'};"
-					on:click|preventDefault={() => {
-						if ($bought_games.has(id)) {
-							return;
-						}
-						handle_cart(id);
-					}}
-					on:mouseenter={() => {
-						if ($bought_games.has(id)) {
-							return;
-						}
-						if (text === 'Added') {
-							text = 'Remove';
-						}
-					}}
-					on:mouseleave={() => {
-						if ($bought_games.has(id)) {
-							return;
-						}
-						if (text === 'Remove') {
-							text = 'Added';
-						} else if (text === 'Removed') {
-							text = 'Add to cart';
-						}
-					}}
-				>
-					{$bought_games.has(id) ? 'Purchased' : text}
-				</button>
+				{#if $signup_user !== 'Admin'}
+					<button
+						class="buy"
+						style="pointer-events: {$bought_games.has(id) ? 'none' : 'auto'};"
+						on:click|preventDefault={() => {
+							if ($bought_games.has(id)) {
+								return;
+							}
+							handle_cart(id);
+						}}
+						on:mouseenter={() => {
+							if ($bought_games.has(id)) {
+								return;
+							}
+							if (text === 'Added') {
+								text = 'Remove';
+							}
+						}}
+						on:mouseleave={() => {
+							if ($bought_games.has(id)) {
+								return;
+							}
+							if (text === 'Remove') {
+								text = 'Added';
+							} else if (text === 'Removed') {
+								text = 'Add to cart';
+							}
+						}}
+					>
+						{$bought_games.has(id) ? 'Purchased' : text}
+					</button>
+				{:else}
+					<br />
+					<!-- Cheap hack due to display flex -->
+				{/if}
 			</div>
 			<div class="vertical_line" />
 			<div class="des">
@@ -202,78 +208,80 @@
 						</button>
 					</div>
 				</div>
-				<form
-					class="my_rnr"
-					action="#"
-					method="post"
-					on:submit|preventDefault={() => {
-						// handle_review(id);
-						if (old_star === 0) return;
-						alert(my_review);
-						alert(old_star);
-					}}
-				>
-					<div class="p1">
-						<div class="logo" />
-						<div class="n_r">
-							<p class="name">UserName</p>
-							<div
-								class="rate"
-								on:mouseout={() => {
-									current_star = 0;
-								}}
-								on:blur={() => {
-									current_star = 0;
-								}}
-							>
-								{#each '⭐⭐⭐⭐⭐' as _, i}
-									<button
-										class="star_icon
+				{#if $signup_user !== 'Admin'}
+					<form
+						class="my_rnr"
+						action="#"
+						method="post"
+						on:submit|preventDefault={() => {
+							// handle_review(id);
+							if (old_star === 0) return;
+							alert(my_review);
+							alert(old_star);
+						}}
+					>
+						<div class="p1">
+							<div class="logo" />
+							<div class="n_r">
+								<p class="name">UserName</p>
+								<div
+									class="rate"
+									on:mouseout={() => {
+										current_star = 0;
+									}}
+									on:blur={() => {
+										current_star = 0;
+									}}
+								>
+									{#each '⭐⭐⭐⭐⭐' as _, i}
+										<button
+											class="star_icon
 									{pinned_star !== null ? (pinned_star > i ? 'pinned_star' : '') : ''}
 									"
-										on:mouseenter|preventDefault={() => {
-											current_star = i + 1;
-											pinned_star = null;
-										}}
-										on:click|preventDefault={() => {
-											pinned_star = i + 1;
-										}}
-										on:mouseout={() => {
-											if (pinned_star === null) {
-												pinned_star = old_star;
-											}
-										}}
-										on:blur={() => {
-											if (pinned_star === null) {
-												pinned_star = old_star;
-											}
-										}}
-										on:dblclick|preventDefault={() => {
-											pinned_star = null;
-											old_star = 0;
-										}}
-										style="filter: grayscale({current_star <= i ? 100 : 0}%)"
-									>
-										⭐
-									</button>
-								{/each}
+											on:mouseenter|preventDefault={() => {
+												current_star = i + 1;
+												pinned_star = null;
+											}}
+											on:click|preventDefault={() => {
+												pinned_star = i + 1;
+											}}
+											on:mouseout={() => {
+												if (pinned_star === null) {
+													pinned_star = old_star;
+												}
+											}}
+											on:blur={() => {
+												if (pinned_star === null) {
+													pinned_star = old_star;
+												}
+											}}
+											on:dblclick|preventDefault={() => {
+												pinned_star = null;
+												old_star = 0;
+											}}
+											style="filter: grayscale({current_star <= i ? 100 : 0}%)"
+										>
+											⭐
+										</button>
+									{/each}
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="p2">
-						<textarea
-							name="review"
-							id="review"
-							cols="30"
-							rows="10"
-							placeholder="Write your review here..."
-							class="text_area"
-							maxlength="2000"
-							bind:value={my_review}
-						/>
-						<input type="submit" value="Submit" class="submit" />
-					</div>
-				</form>
+						<div class="p2">
+							<textarea
+								name="review"
+								id="review"
+								cols="30"
+								rows="10"
+								placeholder="Write your review here..."
+								class="text_area"
+								maxlength="2000"
+								bind:value={my_review}
+							/>
+							<input type="submit" value="Submit" class="submit" />
+						</div>
+					</form>
+				{/if}
 			</div>
 		</section>
 	{/if}

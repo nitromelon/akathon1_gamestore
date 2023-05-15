@@ -15,6 +15,8 @@
 	import Login from '$lib/app/login/file.svelte';
 	import User from '$lib/app/user/file.svelte';
 	import Payment from '$lib/app/payment/file.svelte';
+	import Statistics from '$lib/app/statistics/file.svelte';
+	import Admin from '$lib/app/admin/file.svelte';
 	import { is_menu_open } from '../is_openmenu/i';
 
 	export let title: string;
@@ -333,7 +335,9 @@
 	{id}
 	bind:this={daframe}
 	on:mousedown={change_z_order}
-	style="top: {y}px; left: {x}px; height: {height}px; width: {width}px; box-shadow: {box_shadow_pref}; pointer-events: {$is_menu_open ? "none": "auto"};"
+	style="top: {y}px; left: {x}px; height: {height}px; width: {width}px; box-shadow: {box_shadow_pref}; pointer-events: {$is_menu_open
+		? 'none'
+		: 'auto'};"
 	on:mousemove={detect_mouse_type}
 >
 	<div class="titlebar">
@@ -391,6 +395,12 @@
 		{/if}
 		{#if title === 'payment'}
 			<Payment />
+		{/if}
+		{#if title === 'statistics'}
+			<Statistics />
+		{/if}
+		{#if title === 'admin'}
+			<Admin />
 		{/if}
 	</div>
 </div>

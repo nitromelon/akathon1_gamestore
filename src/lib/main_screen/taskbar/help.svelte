@@ -27,6 +27,7 @@
 <button
 	id="ms_help"
 	style="height: {height}px; bottom: {bottom}px;"
+	title="Get help"
 	on:click={() => {
 		help_button.classList.toggle('rotate_ms_extended_help');
 		setTimeout(() => {

@@ -4,6 +4,7 @@
 	import { text_header } from '../login/header';
 	import { bg } from '../product/bought_game';
 	import { bought_games } from '../product/product';
+	import { signup_user } from '$lib/main_screen/navigation/change_text';
 
 	const cheatcode_visa = 'truck_god';
 	const cheatcode_mastercard = 'the_search_for_milk_crates';
@@ -16,6 +17,7 @@
 	const current_month = new Date().getMonth() + 1;
 
 	let form: HTMLFormElement;
+	let payment: HTMLDivElement | undefined = undefined;
 
 	type App = {
 		Game_ID: number;
@@ -30,6 +32,23 @@
 	let id_collection: Array<number> = []; // for caching stuff
 	$: yeet_uwu = fetch_result.filter((item) => id_collection?.includes(item.Game_ID));
 	let nap_lan_dau = false;
+
+	$: if ($signup_user === 'Admin' && payment !== undefined) {
+		frame_collection.update((n) => {
+			if (!n.includes('statistics')) {
+				const pos = n.indexOf(null);
+				if (pos === -1) {
+					n.push('statistics');
+				} else {
+					n[pos] = 'statistics';
+				}
+			}
+			return n;
+		});
+		payment.parentElement?.previousElementSibling?.childNodes[0]?.childNodes[0]?.dispatchEvent(
+			new MouseEvent('click')
+		);
+	}
 
 	onMount(() => {
 		form.reset();
@@ -385,7 +404,10 @@
 	};
 </script>
 
-<div class="payment {part2 === true && yeet_uwu.length !== 0 ? 'payment_go_brr' : ''}">
+<div
+	class="payment {part2 === true && yeet_uwu.length !== 0 ? 'payment_go_brr' : ''}"
+	bind:this={payment}
+>
 	<div class="page1">
 		<div class="cart">
 			<h1
