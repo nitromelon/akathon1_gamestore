@@ -50,22 +50,6 @@
 		}
 	};
 
-	$: if (last_comment_id) {
-		fetch(`http://localhost:3000/games/${id}/reviews/count`, {
-			method: 'GET',
-			credentials: 'include'
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				if (data.result) {
-					total_comment = data.data;
-				}
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	}
-
 	onMount(() => {
 		fetch(`http://localhost:3000/get/${id}`).then((res) => {
 			res.json().then((data) => {
@@ -79,6 +63,21 @@
 			}
 		}
 		bg();
+
+		fetch(`http://localhost:3000/games/${id}/reviews/count`, {
+			method: 'GET',
+			credentials: 'include'
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				if (data.result) {
+					total_comment = data.data;
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+
 		fetch(`http://localhost:3000/games/${id}/reviews`, {
 			method: 'GET',
 			credentials: 'include'
@@ -92,6 +91,7 @@
 			.catch((err) => {
 				console.log(err);
 			});
+
 		fetch('http://localhost:3000/user/username', {
 			method: 'GET',
 			credentials: 'include'
@@ -257,7 +257,7 @@
 								)
 									return;
 								const lg = last_comment_id ?? 4;
-								console.log(lg % 4 > 0 ? lg + 4 - (lg % 4) - 7 : lg - 7)
+								console.log(lg % 4 > 0 ? lg + 4 - (lg % 4) - 7 : lg - 7);
 								fetch(
 									`http://localhost:3000/games/${id}/reviews?comment_id=${
 										lg % 4 > 0 ? lg + 4 - (lg % 4) - 8 : lg - 8
@@ -287,7 +287,7 @@
 								)
 									return;
 
-									console.log(last_comment_id);
+								console.log(last_comment_id, total_comment);
 								const lg = last_comment_id ?? 4;
 								fetch(`http://localhost:3000/games/${id}/reviews?comment_id=${lg}`)
 									.then((res) => res.json())
@@ -345,10 +345,30 @@
 									})
 								});
 								form?.reset();
-								fetch(`http://localhost:3000/games/${id}/reviews?comment_id=${(last_comment_id ?? 1)}`, {
+								old_star = 0;
+								pinned_star = 0;
+								current_star = 0;
+								fetch(`http://localhost:3000/games/${id}/reviews/count`, {
 									method: 'GET',
 									credentials: 'include'
 								})
+									.then((res) => res.json())
+									.then((data) => {
+										if (data.result) {
+											total_comment = data.data;
+										}
+									})
+									.catch((err) => {
+										console.log(err);
+									});
+								const stuff = total_comment - (total_comment % 4);
+								fetch(
+									`http://localhost:3000/games/${id}/reviews?comment_id=${stuff}`,
+									{
+										method: 'GET',
+										credentials: 'include'
+									}
+								)
 									.then((res) => res.json())
 									.then((data) => {
 										if (data.result) {
