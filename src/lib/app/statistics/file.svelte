@@ -31,6 +31,7 @@
 			await async_timeout(time < 10 ? 10 : time);
 			user_number+=range;
 		}
+		await async_timeout(time);
 		user_number = num;
 	};
 
@@ -41,6 +42,7 @@
 			await async_timeout(time < 10 ? 10 : time);
 			comment_number+=range;
 		}
+		await async_timeout(time);
 		comment_number = num;
 	};
 
@@ -51,6 +53,7 @@
 			await async_timeout(time < 10 ? 10 : time);
 			profit+=range;
 		}
+		await async_timeout(time);
 		profit = num;
 		await async_timeout(time);
 		while (profit < data) {
@@ -71,7 +74,7 @@
 				credentials: 'include'
 			});
 			const data = await result.json();
-			const users_num = parseInt(data.users);
+			const users_num = parseInt(data.users) - 1;
 			const comments_num = parseInt(data.comments);
 			ascent_async_user(users_num, 1000 / users_num === Infinity ? 0 : 1000 / users_num);
 			ascent_async_comment(

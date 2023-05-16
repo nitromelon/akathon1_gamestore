@@ -341,14 +341,15 @@
 				top: 32px;
 				left: 32px;
 				font-weight: 900;
-				font-size: 32px;
+				font-size: 20px;
 				width: calc(100% - 64px);
 				overflow: hidden;
 				white-space: nowrap;
 				text-overflow: ellipsis;
-				color: transparent;
-				-webkit-text-stroke: 2px #d0342c;
 				text-align: center;
+				&:hover {
+					color: #d0342c;
+				}
 			}
 			button {
 				background: transparent;

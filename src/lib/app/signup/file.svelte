@@ -437,6 +437,9 @@
 							}
 							return n;
 						});
+						signup.parentElement?.previousElementSibling?.childNodes[0]?.childNodes[0]?.dispatchEvent(
+							new MouseEvent('click')
+						);
 					}}
 				>
 					Already our member?

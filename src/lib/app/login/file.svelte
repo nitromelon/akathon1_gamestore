@@ -169,6 +169,9 @@
 						}
 						return n;
 					});
+					login.parentElement?.previousElementSibling?.childNodes[0]?.childNodes[0]?.dispatchEvent(
+						new MouseEvent('click')
+					);
 				}}
 			>
 				New member? Want to join us?
