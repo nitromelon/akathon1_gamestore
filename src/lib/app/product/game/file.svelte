@@ -50,8 +50,8 @@
 		}
 	};
 
-	onMount(() => {
-		fetch(`http://localhost:3000/get/${id}`).then((res) => {
+	onMount(async () => {
+		await fetch(`http://localhost:3000/get/${id}`).then((res) => {
 			res.json().then((data) => {
 				result = data.data;
 			});
@@ -102,6 +102,21 @@
 					username = data.data.username;
 				} else {
 					console.log("Can't get user infomation");
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+
+		fetch(`http://localhost:3000/rating/avg?game_id=${id}`, {
+			method: 'GET',
+			credentials: 'include'
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				if (data.result) {
+					if (result === undefined) return;
+					result.Rate = data.data;
 				}
 			})
 			.catch((err) => {
@@ -213,7 +228,12 @@
 						<p class="star_icon">⭐</p>
 					{/each}
 				</p>
-				<h2 class="des_intro">Ratings and reviews:</h2>
+				<h2
+					class="des_intro"
+					style="display: {Number(page_th(total_comment)) <= 0 ? 'none' : 'block'};"
+				>
+					Ratings and reviews:
+				</h2>
 				<div class="rating_n_review">
 					{#each array_comments as r}
 						<div class="rnr_container">
@@ -248,7 +268,10 @@
 							<p class="timeline">{handle_review_time(r.review_time)}</p>
 						</div>
 					{/each}
-					<div class="next_back">
+					<div
+						class="next_back"
+						style="display: {Number(page_th(total_comment)) <= 0 ? 'none' : 'flex'};"
+					>
 						<button
 							class="back"
 							on:click|preventDefault={() => {
@@ -375,6 +398,20 @@
 									.then((data) => {
 										if (data.result) {
 											array_comments = data.data;
+										}
+									})
+									.catch((err) => {
+										console.log(err);
+									});
+								fetch(`http://localhost:3000/rating/avg?game_id=${id}`, {
+									method: 'GET',
+									credentials: 'include'
+								})
+									.then((res) => res.json())
+									.then((data) => {
+										if (data.result) {
+											if (result === undefined) return;
+											result.Rate = data.data;
 										}
 									})
 									.catch((err) => {

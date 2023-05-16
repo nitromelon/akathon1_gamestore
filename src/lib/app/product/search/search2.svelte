@@ -84,6 +84,8 @@
 	$: {
 		if ($is_search_keyword === false) {
 			getGame();
+		} else {
+			$product_arr = [];
 		}
 	}
 

@@ -213,7 +213,7 @@
 					1}.webp');"
 			/>
 			<div class="info">
-				<h1 class="genre">#{a.Genre} | {a.Rate.toFixed(2).replace(/\.?0+$/, '')} / 5</h1>
+				<h1 class="genre">#{a.Genre}</h1>
 				<div class="logo" style="background-image: url('{a.Image_path}/logo/1.webp');" />
 				<div class="title_subtitle">
 					<h1 class="title">{a.Name}</h1>
