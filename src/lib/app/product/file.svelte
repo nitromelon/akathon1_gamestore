@@ -66,7 +66,11 @@
 	let timeout: ReturnType<typeof setTimeout> | undefined = undefined;
 	const product_scroll = (e: WheelEvent) => {
 		const product = e.currentTarget as HTMLDivElement;
-		if (e.target === document.getElementById('product_search_protip')) {
+		if (
+			e.target === document.getElementById('product_search_protip') ||
+			(e.target instanceof HTMLElement &&
+				e.target.parentNode === document.getElementById('game_list_product_page'))
+		) {
 			return;
 		}
 		product.scrollLeft += e.deltaY;

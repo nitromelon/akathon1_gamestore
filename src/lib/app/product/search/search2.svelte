@@ -159,6 +159,7 @@
 					border: 1px solid #fafafa;
 					font-size: 14px;
 					transition: 0.3s cubic-bezier(0, 0, 0, 1), width 0.3s cubic-bezier(0, 1, 0, 1);
+					text-align: center;
 				}
 				input {
 					width: 200px;

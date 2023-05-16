@@ -329,6 +329,7 @@
 							.go {
 								opacity: 1;
 								backdrop-filter: blur(calc((1vw + 1vh) / 2));
+								background-color: rgba(26, 26, 26, 0.5);
 							}
 						}
 						&:active {
@@ -376,11 +377,15 @@
 						padding: 24px;
 						overflow: hidden;
 						h1 {
-							font-size: 24px;
+							font-size: 32px;
 							font-weight: 900;
 							color: transparent;
 							-webkit-text-stroke: 1px #fafafa;
 							margin-bottom: 8px;
+						}
+						p {
+							font-size: 18px;
+							font-weight: 700;
 						}
 						button {
 							position: relative;

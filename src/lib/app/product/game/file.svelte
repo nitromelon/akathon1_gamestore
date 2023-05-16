@@ -127,6 +127,8 @@
 		return `${localized_hour}:${process[4]} ${process[2]}/${process[1]}/${process[0]}`;
 	};
 
+	const stuff2 = (i: number) => i - (i % 4);
+
 	let content: HTMLDivElement | undefined = undefined;
 	let form: HTMLFormElement | undefined = undefined;
 </script>
@@ -333,7 +335,7 @@
 								return;
 							}
 							try {
-								await fetch(`http://localhost:3000/games/${id}/reviews`, {
+								const result = await fetch(`http://localhost:3000/games/${id}/reviews`, {
 									method: 'POST',
 									headers: {
 										'Content-Type': 'application/json'
@@ -343,7 +345,7 @@
 										rating: old_star,
 										review: my_review
 									})
-								});
+								}).then((res) => res.json());
 								form?.reset();
 								old_star = 0;
 								pinned_star = 0;
@@ -361,14 +363,14 @@
 									.catch((err) => {
 										console.log(err);
 									});
-								const stuff = total_comment - (total_comment % 4);
-								fetch(
-									`http://localhost:3000/games/${id}/reviews?comment_id=${stuff}`,
-									{
-										method: 'GET',
-										credentials: 'include'
-									}
-								)
+								//
+								console.log(result);
+								// const stuff = total_comment - (total_comment % 4);
+								const stuff = result.result ? stuff2(result.data - 1) : stuff2(total_comment);
+								fetch(`http://localhost:3000/games/${id}/reviews?comment_id=${stuff}`, {
+									method: 'GET',
+									credentials: 'include'
+								})
 									.then((res) => res.json())
 									.then((data) => {
 										if (data.result) {
@@ -492,9 +494,6 @@
 				height: 100%;
 				width: 100%;
 				background-color: rgba(26, 26, 26, 0.5);
-				// background-color: rgba(26, 26, 26, 0.5);
-				backdrop-filter: blur(calc((1vw + 1vh) / 2));
-				// backdrop-filter: grayscale(1) contrast(0.5) blur(1vw);
 			}
 			.hero_text {
 				background: no-repeat center center fixed;

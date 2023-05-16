@@ -21,9 +21,9 @@
 	let payment_statistics: string = 'Payment';
 	let payment_statistics_link: string = 'payment';
 	$: {
-		if ($signup_user === "Admin") {
-			payment_statistics = 'Statistics'
-			payment_statistics_link = 'statistics'
+		if ($signup_user === 'Admin') {
+			payment_statistics = 'Statistics';
+			payment_statistics_link = 'statistics';
 		}
 	}
 </script>
@@ -122,26 +122,23 @@
 		class="desktop_menu_link"
 		href="#{$login_logout_link}"
 		on:click|preventDefault={() => {
-			if (
-				$login_logout === 'Log out' &&
-				$login_logout_link === 'logout' &&
+			if ($login_logout === 'Log out' && $login_logout_link === 'logout') {
 				confirm('Are you sure you want to log out?')
-			) {
-				fetch('http://localhost:3000/signout', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					credentials: 'include',
-				}).then((res) => {
-					if (res.status === 200) {
-						localStorage.clear();
-						window.location.reload();
-					} else {
-						console.log('Error logging out');
-					}
-				})				
-				;
+					? fetch('http://localhost:3000/signout', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							credentials: 'include'
+					  }).then((res) => {
+							if (res.status === 200) {
+								localStorage.clear();
+								window.location.reload();
+							} else {
+								console.log('Error logging out');
+							}
+					  })
+					: is_menu_open.set(false);
 				return;
 			}
 			frame_collection.update((n) => {

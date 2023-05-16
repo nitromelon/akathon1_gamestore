@@ -26,26 +26,32 @@
 	};
 	const ascent_async_user = async (num: number, time: number) => {
 		user_number = 0;
-		while (user_number < num) {
-			await async_timeout(time);
-			user_number++;
+		const range = time < 10 ? Math.round((10 * num) / 1000): 1;
+		while (user_number < num - range) {
+			await async_timeout(time < 10 ? 10 : time);
+			user_number+=range;
 		}
+		user_number = num;
 	};
 
 	const ascent_async_comment = async (num: number, time: number) => {
 		comment_number = 0;
-		while (comment_number < num) {
-			await async_timeout(time);
-			comment_number++;
+		const range = time < 10 ? Math.round((10 * num) / 1000): 1;
+		while (comment_number < num - range) {
+			await async_timeout(time < 10 ? 10 : time);
+			comment_number+=range;
 		}
+		comment_number = num;
 	};
 
 	const ascent_async_money = async (num: number, time: number, data: number) => {
 		profit = 0;
-		while (profit < num) {
-			await async_timeout(time);
-			profit++;
+		const range = time < 10 ? Math.round((10 * num) / 1000): 1;
+		while (profit < num - range) {
+			await async_timeout(time < 10 ? 10 : time);
+			profit+=range;
 		}
+		profit = num;
 		await async_timeout(time);
 		while (profit < data) {
 			await async_timeout(10);
@@ -65,11 +71,20 @@
 				credentials: 'include'
 			});
 			const data = await result.json();
-			ascent_async_user(parseInt(data.users), 100);
-			ascent_async_comment(parseInt(data.comments), 100);
+			const users_num = parseInt(data.users);
+			const comments_num = parseInt(data.comments);
+			ascent_async_user(users_num, 1000 / users_num === Infinity ? 0 : 1000 / users_num);
+			ascent_async_comment(
+				comments_num,
+				1000 / comments_num === Infinity ? 0 : 1000 / comments_num
+			);
 			const money = data.money;
-			const integer_money = money.toString().split('.')[0];
-			ascent_async_money(integer_money, 5, money);
+			const integer_money = parseInt(money.toString().split('.')[0]);
+			ascent_async_money(
+				integer_money,
+				1000 / integer_money === Infinity ? 0 : 1000 / integer_money,
+				money
+			);
 		} catch (error) {
 			console.log(error);
 		}

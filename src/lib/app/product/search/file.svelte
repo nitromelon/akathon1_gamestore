@@ -20,7 +20,7 @@
 		These are the games listed at the moment, if you still don't like it, you can press buttons
 		below:
 	</p>
-	<div class="game_list">
+	<div class="game_list" id="game_list_product_page">
 		<!-- todo: Hiện kết quả của 1 trên 4 -->
 		{#each $product_arr as owo}
 			<div class="game">
@@ -116,9 +116,16 @@
 			width: calc(100% - 64px);
 			overflow-y: auto;
 			overflow-x: hidden;
-			scrollbar-width: none;
+			scrollbar-width: thin;
 			&::-webkit-scrollbar {
-				display: none;
+				// display: none;
+				width: 8px;
+				border: 1px solid #1a1a1a;
+				border-radius: 100px;
+			}
+			&::-webkit-scrollbar-thumb {
+				border: 1px solid #fafafa;
+				border-radius: 100px;
 			}
 			.game {
 				position: relative;
