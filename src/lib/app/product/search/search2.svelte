@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte';
-	import { is_search_keyword, search_keyword } from '../product';
+	import { is_search_keyword, product_arr, search_keyword } from '../product';
+	import { getGame } from '../getGame';
 
 	// let tip_display = 'none';
 	let height = '0px';
@@ -68,16 +69,22 @@
 			old_result = jsonified_kw;
 			$search_keyword = jsonified_kw;
 
-			fetch('http://localhost:3000/search', {
+			fetch('http://localhost:3000/searching', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
 				body: jsonified_kw
-			}).then((res) => res.json()).then(
-				res => console.log(res)
-			);
+			})
+				.then((res) => res.json())
+				.then((res) => (res.result ? ($product_arr = res.data) : console.log(res)));
 		}, 1000);
+	}
+
+	$: {
+		if ($is_search_keyword === false) {
+			getGame();
+		}
 	}
 
 	onDestroy(() => {

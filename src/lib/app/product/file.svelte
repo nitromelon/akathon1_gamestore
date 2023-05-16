@@ -7,6 +7,7 @@
 	import { bought_games, product_arr } from './product';
 	import { bg } from './bought_game';
 	import { signup_user } from '$lib/main_screen/navigation/change_text';
+	import { getGame } from './getGame';
 	// export let parent: string;
 	type App = {
 		Game_ID: number;
@@ -55,11 +56,7 @@
 		});
 		observer.observe(product as HTMLDivElement);
 
-		fetch('http://localhost:3000/get?startIndex=1')
-			.then((res) => res.json())
-			.then((res) => {
-				$product_arr = res.data;
-			});
+		getGame();
 
 		bg();
 	});

@@ -30,7 +30,7 @@
 				</p>
 			</div>
 		{/each}
-		<p class="pof">
+		<p class="pof" style="display: {$is_search_keyword === false ? 'inline-block' : 'none'};">
 			Page {$is_search_keyword === false ? page_th(lg) : '##'} out of {$is_search_keyword === false
 				? page_th($num_total_games)
 				: '###'}
@@ -39,6 +39,7 @@
 			<button
 				class="btn"
 				title="Have the game that was previously displayed."
+				style="display: {$is_search_keyword === false ? 'inline-block' : 'none'};"
 				on:click={() => {
 					if (
 						$is_search_keyword === false &&
@@ -60,6 +61,7 @@
 			<button
 				class="btn"
 				title="Go refreshing this current list"
+				style="display: {$is_search_keyword === false ? 'inline-block' : 'none'};"
 				on:click={() => {
 					if (
 						$is_search_keyword === false &&
