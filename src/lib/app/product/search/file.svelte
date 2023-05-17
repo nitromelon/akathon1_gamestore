@@ -21,13 +21,12 @@
 		below:
 	</p>
 	<div class="game_list" id="game_list_product_page">
-		<!-- todo: Hiện kết quả của 1 trên 4 -->
 		{#each $product_arr as owo}
 			<div class="game">
 				<div class="logo" style="background-image: url('{owo.Image_path}/logo/1.webp');" />
-				<p class="name">
+				<a class="name" href="#product_list_game{owo.Game_ID}">
 					{owo.Name}
-				</p>
+				</a>
 			</div>
 		{/each}
 		<p class="pof" style="display: {$is_search_keyword === false ? 'inline-block' : 'none'};">
@@ -155,6 +154,9 @@
 					transition: 0.3s cubic-bezier(1, 0, 0, 1);
 				}
 				.name {
+					text-decoration: none;
+					outline: none;
+					cursor: none;
 					transition: 0.3s cubic-bezier(0, 0, 0, 1);
 				}
 			}

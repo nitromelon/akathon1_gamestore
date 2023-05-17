@@ -80,8 +80,7 @@
 				console.error(err);
 			});
 
-		const get_game = (i: App) => {
-			console.error(i.games);
+		const get_game = (_i: App) => {
 			fetch('http://localhost:3000/library', {
 				method: 'GET',
 				credentials: 'include'
