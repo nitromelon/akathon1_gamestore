@@ -7,18 +7,18 @@
 		signup_user_link
 	} from '$lib/main_screen/navigation/change_text';
 
-	const cheatcode: string = 'CownyJummyWuvwySweatyGeometwySausagy';
+	const cheatcode = 'CownyJummyWuvwySweatyGeometwySausagy';
 	let signup: HTMLDivElement;
 	let form: HTMLFormElement | null = null;
 	let warning: Array<string | false> = ['', '', '', '', '', '', ''];
-	let firstname: string = '';
-	let lastname: string = '';
-	let username: string = '';
-	let password: string = '';
-	let email: string = '';
-	let phonenumber: string = '';
-	let address: string = '';
-	let current_input: number = 0;
+	let firstname = '';
+	let lastname = '';
+	let username = '';
+	let password = '';
+	let email = '';
+	let phonenumber = '';
+	let address = '';
+	let current_input = 0;
 	// 0 = firstname, 1 = lastname, 2 = username, 3 = password, 4 = email, 5 = phonenumber, 6 = address
 	let timeout_id: ReturnType<typeof setTimeout> | null = null;
 	$: if (firstname === cheatcode) {

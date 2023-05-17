@@ -5,7 +5,7 @@
 
 	export let type: string;
 	let hide = 'none';
-	let deg: number = 0;
+	let deg = 0;
 	let cursor: HTMLDivElement;
 	$: switch ($cursor_direction) {
 		case 'right':

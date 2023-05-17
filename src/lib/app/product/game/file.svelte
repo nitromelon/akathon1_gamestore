@@ -12,11 +12,11 @@
 	export let id: number;
 
 	const OFFSETHOUR = new Date().getTimezoneOffset() / 60;
-	let text: string = 'Add to cart';
+	let text = 'Add to cart';
 	let array_comments: Array<Comment> = [];
 	$: last_comment_id = array_comments[array_comments.length - 1]?.comment_id;
 	let username = 'Anonymous';
-	let total_comment: number = 0;
+	let total_comment = 0;
 	type App = {
 		Genre: string;
 		Game_ID: number;
@@ -124,13 +124,13 @@
 			});
 	});
 
-	let current_star: number = 0;
+	let current_star = 0;
 	let pinned_star: number | null = null;
-	let old_star: number = 0;
+	let old_star = 0;
 	$: if (pinned_star !== null) {
 		old_star = pinned_star;
 	}
-	let my_review: string = '';
+	let my_review = '';
 
 	const handle_review_time = (str: string) => {
 		const process = str

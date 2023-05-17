@@ -10,7 +10,7 @@
 	let timeout_id: ReturnType<typeof setTimeout> | null = null;
 	let password = '';
 	let is_username: boolean | null = null;
-	let current_input: number = 0;
+	let current_input = 0;
 	let array_warning: Array<string | false> = ['', ''];
 	let login: HTMLDivElement;
 

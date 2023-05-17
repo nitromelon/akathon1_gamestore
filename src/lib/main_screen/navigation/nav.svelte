@@ -14,12 +14,8 @@
 		}
 	}
 
-	// let login_logout: string = 'Log in';
-	// let login_logout_link: string = 'login';
-	// let signup_user: string = 'Sign up';
-	// let signup_user_link: string = 'signup';
-	let payment_statistics: string = 'Payment';
-	let payment_statistics_link: string = 'payment';
+	let payment_statistics = 'Payment';
+	let payment_statistics_link = 'payment';
 	$: {
 		if ($signup_user === 'Admin') {
 			payment_statistics = 'Statistics';

@@ -131,7 +131,7 @@
 		localStorage.setItem('cart', JSON.stringify(id_collection));
 	};
 
-	let warning: Array<String | false> = ['', '', '', ''];
+	let warning: Array<string | false> = ['', '', '', ''];
 	let current_box = 0;
 	let card_name = '';
 	let card_number = '';

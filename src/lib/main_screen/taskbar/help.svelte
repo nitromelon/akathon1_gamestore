@@ -3,10 +3,10 @@
 	import { is_extendedhelp } from '../is_extendedhelp/script';
 	import { is_menu_open } from '../is_openmenu/i';
 
-	let height: number = 64;
-	let bottom: number = 16;
-	let height_svg: number = 40;
-	let width_svg: number = 40;
+	let height = 64;
+	let bottom = 16;
+	let height_svg = 40;
+	let width_svg = 40;
 	let help_button: Element;
 
 	$: if ($are_there_maximized_app.size === 0 || $is_menu_open) {

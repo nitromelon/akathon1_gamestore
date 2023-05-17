@@ -33,7 +33,7 @@
 						.filter((kw) => kw !== '')
 				)
 				.filter((kw) => kw.length === 2)
-				.reduce((arr: { [key: string]: Array<String> }, [key, val]) => {
+				.reduce((arr: { [key: string]: Array<string> }, [key, val]) => {
 					if (key === undefined || val === undefined || (key !== 'name' && key !== 'genre'))
 						return arr;
 					const santinized_val = val.replace(/[^a-zA-Z0-9 ]/g, '');

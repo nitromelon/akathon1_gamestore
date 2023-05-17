@@ -5,8 +5,8 @@
 	let desktop_working_area: HTMLDivElement | null = null;
 	let line1: HTMLDivElement | null = null;
 	let line2: HTMLDivElement | null = null;
-	let height: number = 64;
-	let bottom: number = 16;
+	let height = 64;
+	let bottom = 16;
 
 	onMount(() => {
 		desktop_working_area = document.getElementById('desktop_working_area') as HTMLDivElement;

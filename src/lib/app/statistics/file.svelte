@@ -2,13 +2,13 @@
 	import { onMount } from 'svelte';
 	import { num_total_games } from '../product/product';
 	import { total_games } from '../function/total_games';
-	let user_number: number = 0;
-	let comment_number: number = 0;
-	let profit: number = 0.0;
+	let user_number = 0;
+	let comment_number = 0;
+	let profit = 0.0;
 	let star: Array<number> = [0, 0, 0, 0, 0];
 	let height: Array<number> = [0, 0, 0, 0, 0];
-	let game_name: string = '###';
-	let current: number = 1;
+	let game_name = '###';
+	let current = 1;
 
 	$: {
 		const max = Math.max(...star);
@@ -95,7 +95,7 @@
 		get_star_game();
 	});
 
-	const get_star_game = async (i: number = 1) => {
+	const get_star_game = async (i = 1) => {
 		try {
 			const result = await fetch(`http://localhost:3000/statistics/star/${i}`, {
 				method: 'GET',

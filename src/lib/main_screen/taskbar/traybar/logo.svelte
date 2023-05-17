@@ -14,7 +14,7 @@
 	let logo_component: HTMLButtonElement;
 	let app_for_logo: HTMLDivElement | null = null;
 	let id_app_for_logo: string;
-	let temporarily_remove_id_from_atma: boolean = false;
+	let temporarily_remove_id_from_atma = false;
 	const random_key =
 		Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 	onMount(() => {
