@@ -26,10 +26,10 @@
 	};
 	const ascent_async_user = async (num: number, time: number) => {
 		user_number = 0;
-		const range = time < 10 ? Math.round((10 * num) / 1000): 1;
+		const range = time < 10 ? Math.round((10 * num) / 1000) : 1;
 		while (user_number < num - range) {
 			await async_timeout(time < 10 ? 10 : time);
-			user_number+=range;
+			user_number += range;
 		}
 		await async_timeout(time);
 		user_number = num;
@@ -37,10 +37,10 @@
 
 	const ascent_async_comment = async (num: number, time: number) => {
 		comment_number = 0;
-		const range = time < 10 ? Math.round((10 * num) / 1000): 1;
+		const range = time < 10 ? Math.round((10 * num) / 1000) : 1;
 		while (comment_number < num - range) {
 			await async_timeout(time < 10 ? 10 : time);
-			comment_number+=range;
+			comment_number += range;
 		}
 		await async_timeout(time);
 		comment_number = num;
@@ -48,10 +48,10 @@
 
 	const ascent_async_money = async (num: number, time: number, data: number) => {
 		profit = 0;
-		const range = time < 10 ? Math.round((10 * num) / 1000): 1;
+		const range = time < 10 ? Math.round((10 * num) / 1000) : 1;
 		while (profit < num - range) {
 			await async_timeout(time < 10 ? 10 : time);
-			profit+=range;
+			profit += range;
 		}
 		await async_timeout(time);
 		profit = num;

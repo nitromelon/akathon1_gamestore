@@ -13,7 +13,7 @@
 	<div class="list_of_traybar_app" style="height: {inner_height}%">
 		{#each $frame_collection as app}
 			{#if app !== null}
-				<Logo name={app}/>
+				<Logo name={app} />
 			{/if}
 		{/each}
 	</div>

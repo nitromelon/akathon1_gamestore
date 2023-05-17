@@ -35,13 +35,13 @@
 	}
 
 	onMount(() => {
-		document.addEventListener("mousedown", () => {
+		document.addEventListener('mousedown', () => {
 			if ($is_menu_open) return;
-			cursor.classList.add("ex_move_animation");
+			cursor.classList.add('ex_move_animation');
 			hold_cursor.set(true);
 		});
-		document.addEventListener("mouseup", () => {
-			cursor.classList.remove("ex_move_animation");
+		document.addEventListener('mouseup', () => {
+			cursor.classList.remove('ex_move_animation');
 			hold_cursor.set(false);
 		});
 	});

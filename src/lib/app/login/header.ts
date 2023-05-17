@@ -1,3 +1,3 @@
-import { writable } from "svelte/store";
+import { writable } from 'svelte/store';
 
-export const text_header = writable("Login page | Kirito");
+export const text_header = writable('Login page | Kirito');

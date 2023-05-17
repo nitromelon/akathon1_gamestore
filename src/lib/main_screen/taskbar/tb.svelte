@@ -36,7 +36,7 @@
 	} else {
 		height = 40;
 		bottom = 5;
-	};
+	}
 </script>
 
 <button

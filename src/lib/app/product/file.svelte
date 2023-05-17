@@ -110,7 +110,7 @@
 			product.scrollLeft = product.scrollWidth;
 		}
 	};
-	
+
 	$: result_array = test.map((a) => {
 		return a.Price === 0 ? `Free` : `$${a.Price?.toFixed(2)}`;
 	});

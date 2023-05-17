@@ -1,4 +1,4 @@
-import { bought_games } from "./product";
+import { bought_games } from './product';
 
 export function bg() {
 	fetch('http://localhost:3000/user?only_games=1', {

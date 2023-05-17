@@ -1,4 +1,9 @@
-import { login_logout, login_logout_link, signup_user, signup_user_link } from "$lib/main_screen/navigation/change_text";
+import {
+	login_logout,
+	login_logout_link,
+	signup_user,
+	signup_user_link
+} from '$lib/main_screen/navigation/change_text';
 
 export function is_user() {
 	fetch('http://localhost:3000/isuser', {
