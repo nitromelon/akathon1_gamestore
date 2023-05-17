@@ -7,7 +7,7 @@
 	let bottom: number = 16;
 	let height_svg: number = 40;
 	let width_svg: number = 40;
-	let help_button: any;
+	let help_button: Element;
 
 	$: if ($are_there_maximized_app.size === 0 || $is_menu_open) {
 		height = 64;
