@@ -365,7 +365,7 @@
 						position: relative;
 						height: calc(100% - 32px);
 						width: 100%;
-						background: url('./app/user/bg.gif') center center no-repeat fixed;
+						background: url('/app/user/bg.gif') center center no-repeat fixed;
 						background-size: cover;
 						border-radius: 6px;
 						border: 1px solid #fafafa;

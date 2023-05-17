@@ -690,7 +690,7 @@
 						left: 0;
 						height: 100%;
 						width: 100%;
-						background: url('./app/payment/empty_cart.gif') no-repeat center center fixed;
+						background: url('/app/payment/empty_cart.gif') no-repeat center center fixed;
 						background-size: cover;
 						display: flex;
 						flex-direction: column;
@@ -841,7 +841,7 @@
 				width: 40%;
 				max-width: 320px;
 				height: 100%;
-				background: url('./app/payment/background.jpg') no-repeat center center fixed;
+				background: url('/app/payment/background.jpg') no-repeat center center fixed;
 				background-size: cover;
 				background-color: #6b5b95;
 				background-blend-mode: luminosity;

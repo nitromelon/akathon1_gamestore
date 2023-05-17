@@ -312,7 +312,7 @@
 			position: absolute;
 			height: 100%;
 			width: 100%;
-			background: url('./app/admin/ko.gif') no-repeat center center fixed;
+			background: url('/app/admin/ko.gif') no-repeat center center fixed;
 			background-size: cover;
 			background-color: #1f1d20;
 			&::before {
