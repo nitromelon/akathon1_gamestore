@@ -210,7 +210,7 @@
 		max-width: 640px;
 		height: 100%;
 		position: relative;
-		background: url('/app/login/background.jpg') no-repeat center center fixed;
+		background: url('/app/login/background.webp') no-repeat center center fixed;
 		background-color: #6b5b95;
 		background-blend-mode: luminosity;
 		background-size: cover;

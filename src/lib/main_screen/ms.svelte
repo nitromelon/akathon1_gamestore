@@ -77,7 +77,7 @@
 			left: 0;
 			height: 100%;
 			width: 100%;
-			background: url('/main_screen/ms3.jpg') no-repeat center center fixed;
+			background: url('/main_screen/ms3.webp') no-repeat center center fixed;
 			background-size: cover;
 			outline: 1px solid #fafafa;
 			overflow: hidden;

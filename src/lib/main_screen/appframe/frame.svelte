@@ -9,16 +9,6 @@
 		window_collection
 	} from '../collection/window';
 	import { browser } from '$app/environment';
-	import Product from '$lib/app/product/file.svelte';
-	import Game from '$lib/app/product/game/file.svelte';
-	import Signup from '$lib/app/signup/file.svelte';
-	import Login from '$lib/app/login/file.svelte';
-	import User from '$lib/app/user/file.svelte';
-	import Payment from '$lib/app/payment/file.svelte';
-	import Statistics from '$lib/app/statistics/file.svelte';
-	import Admin from '$lib/app/admin/file.svelte';
-	import Home from '$lib/app/home/file.svelte';
-	import Help from '$lib/app/help/file.svelte';
 	import { is_menu_open } from '../is_openmenu/i';
 
 	export let title: string;
@@ -380,34 +370,54 @@
 		<!-- Todo: add something in here -->
 		{#if title === 'product' || temp_title.includes('product / ')}
 			{#if special_title !== null}
-				<Game id={special_title} />
+				{#await import('$lib/app/product/game/file.svelte') then Game}
+					<Game.default id={special_title} />
+				{/await}
 			{:else}
-				<Product />
+				{#await import('$lib/app/product/file.svelte') then Product}
+					<Product.default />
+				{/await}
 			{/if}
 		{/if}
 		{#if title === 'signup'}
-			<Signup />
+			{#await import ('$lib/app/signup/file.svelte') then Signup}
+				<Signup.default />
+			{/await}
 		{/if}
 		{#if title === 'login'}
-			<Login />
+			{#await import ('$lib/app/login/file.svelte') then Login}
+				<Login.default />
+			{/await}
 		{/if}
 		{#if title === 'user'}
-			<User />
+			{#await import ('$lib/app/user/file.svelte') then User}
+				<User.default />
+			{/await}
 		{/if}
 		{#if title === 'payment'}
-			<Payment />
+			{#await import ('$lib/app/payment/file.svelte') then Payment}
+				<Payment.default />
+			{/await}
 		{/if}
 		{#if title === 'statistics'}
-			<Statistics />
+			{#await import ('$lib/app/statistics/file.svelte') then Statistics}
+				<Statistics.default />
+			{/await}
 		{/if}
 		{#if title === 'admin'}
-			<Admin />
+			{#await import ('$lib/app/admin/file.svelte') then Admin}
+				<Admin.default />
+			{/await}
 		{/if}
 		{#if title === 'home'}
-			<Home />
+			{#await import ('$lib/app/home/file.svelte') then Home}
+				<Home.default />
+			{/await}
 		{/if}
 		{#if title === 'help'}
-			<Help />
+			{#await import ('$lib/app/help/file.svelte') then Help}
+				<Help.default />
+			{/await}
 		{/if}
 	</div>
 </div>
