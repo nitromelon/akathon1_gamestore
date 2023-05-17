@@ -73,15 +73,15 @@
 						result.games === null ? (result_game = []) : get_game(result);
 					}
 				} else {
-					console.log("Can't get user infomation");
+					console.error("Can't get user infomation");
 				}
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 
 		const get_game = (i: App) => {
-			console.log(i.games);
+			console.error(i.games);
 			fetch('http://localhost:3000/library', {
 				method: 'GET',
 				credentials: 'include'
@@ -91,11 +91,11 @@
 					if (data.result) {
 						result_game = data.data;
 					} else {
-						console.log("Can't get user infomation");
+						console.error("Can't get user infomation");
 					}
 				})
 				.catch((err) => {
-					console.log(err);
+					console.error(err);
 				});
 		};
 	}

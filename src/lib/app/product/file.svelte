@@ -110,25 +110,7 @@
 			product.scrollLeft = product.scrollWidth;
 		}
 	};
-
-	// $: {
-	// 	if ($are_there_maximized_app.has(parent)) {
-	// 		if (product !== undefined) {
-	// 			for (let i = 0; i < product?.children.length; i++) {
-	// 				let child = product?.children[i] as HTMLDivElement;
-	// 				console.log(child);
-	// 				child.classList.add('product_not_visible');
-	// 			}
-	// 		}
-	// 	} else {
-	// 		if (product !== undefined) {
-	// 			for (let i = 0; i < product?.children.length; i++) {
-	// 				let child = product?.children[i] as HTMLDivElement;
-	// 				child.classList.add('product_not_visible');
-	// 			}
-	// 		}
-	// 	}
-	// }
+	
 	$: result_array = test.map((a) => {
 		return a.Price === 0 ? `Free` : `$${a.Price?.toFixed(2)}`;
 	});

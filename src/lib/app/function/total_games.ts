@@ -6,5 +6,5 @@ export const total_games = () => {
 		.then(r => {
 			num_total_games.set(r.result ? r.data.count : 0);
 		})
-		.catch((e) => console.log(e));
+		.catch((e) => console.error(e));
 };

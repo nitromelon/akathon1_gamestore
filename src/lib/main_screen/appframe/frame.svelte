@@ -17,6 +17,8 @@
 	import Payment from '$lib/app/payment/file.svelte';
 	import Statistics from '$lib/app/statistics/file.svelte';
 	import Admin from '$lib/app/admin/file.svelte';
+	import Home from '$lib/app/home/file.svelte';
+	import Help from '$lib/app/help/file.svelte';
 	import { is_menu_open } from '../is_openmenu/i';
 
 	export let title: string;
@@ -380,7 +382,6 @@
 			{#if special_title !== null}
 				<Game id={special_title} />
 			{:else}
-				<!-- <Product parent={id} /> -->
 				<Product />
 			{/if}
 		{/if}
@@ -401,6 +402,12 @@
 		{/if}
 		{#if title === 'admin'}
 			<Admin />
+		{/if}
+		{#if title === 'home'}
+			<Home />
+		{/if}
+		{#if title === 'help'}
+			<Help />
 		{/if}
 	</div>
 </div>

@@ -45,7 +45,7 @@
 				arr_student = r.data;
 			}
 		} catch (e) {
-			console.log(e);
+			console.error(e);
 		}
 	}
 
@@ -63,10 +63,9 @@
 			}).then((res) => res.json());
 			if (r.result) {
 				arr_student = [r.data];
-				console.log(r.data);
 			}
 		} catch (e) {
-			console.log(e);
+			console.error(e);
 		}
 	};
 </script>
@@ -135,7 +134,7 @@
 						da_target = '';
 						user_search = '';
 					} else {
-						console.log(result);
+						console.error(result);
 					}
 				}}
 			>

@@ -89,7 +89,7 @@
 				money
 			);
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		}
 
 		get_star_game();
@@ -112,7 +112,7 @@
 				}
 			}
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		}
 	};
 </script>

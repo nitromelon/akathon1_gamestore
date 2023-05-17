@@ -135,7 +135,7 @@
 								localStorage.clear();
 								window.location.reload();
 							} else {
-								console.log('Error logging out');
+								console.error('Error logging out');
 							}
 					  })
 					: is_menu_open.set(false);

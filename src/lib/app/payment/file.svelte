@@ -75,11 +75,11 @@
 					res.json().then((data) => {
 						fetch_result = data.data;
 						id_collection = JSON.parse(cart);
-						console.log(fetch_result);
+						console.error(fetch_result);
 						nap_lan_dau = false;
 					});
 				} else {
-					console.log('Network response was not ok.');
+					console.error('Network response was not ok.');
 				}
 			});
 		}
@@ -107,7 +107,7 @@
 							id_collection = new_cart;
 						});
 					} else {
-						console.log('Network response was not ok.');
+						console.error('Network response was not ok.');
 					}
 				});
 				id_collection = new_cart;
@@ -372,7 +372,6 @@
 			res
 				.json()
 				.then((data) => {
-					console.log(data);
 					// if data.result = false and data.code = 1, then redirect to login and a frame appear to tell user to login
 					if (data.result === false) {
 						if (data.code === 1) {
@@ -398,7 +397,7 @@
 					}
 				})
 				.catch((err) => {
-					console.log(err);
+					console.error(err);
 				});
 		}
 	};

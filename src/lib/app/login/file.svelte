@@ -126,7 +126,7 @@
 							// TODO
 							break;
 						default:
-							console.log('Login failed, also something went wrong');
+							console.error('Login failed, also something went wrong');
 							// TODO
 							break;
 					}

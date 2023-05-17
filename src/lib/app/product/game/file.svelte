@@ -75,7 +75,7 @@
 				}
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 
 		fetch(`http://localhost:3000/games/${id}/reviews`, {
@@ -89,7 +89,7 @@
 				}
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 
 		fetch('http://localhost:3000/user/username', {
@@ -101,11 +101,11 @@
 				if (data.result) {
 					username = data.data.username;
 				} else {
-					console.log("Can't get user infomation");
+					console.error("Can't get user infomation");
 				}
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 
 		fetch(`http://localhost:3000/rating/avg?game_id=${id}`, {
@@ -120,7 +120,7 @@
 				}
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 	});
 
@@ -146,6 +146,8 @@
 
 	let content: HTMLDivElement | undefined = undefined;
 	let form: HTMLFormElement | undefined = undefined;
+
+	$: rate = result?.Rate;
 </script>
 
 <div class="content" bind:this={content}>
@@ -222,8 +224,11 @@
 				<h2 class="des_intro">Price:</h2>
 				<p class="description">{result.Price === 0 ? 'Free' : '$' + result.Price.toString()}</p>
 				<h2 class="des_intro">Overall rate:</h2>
-				<p class="description bonus">{result.Rate.toFixed(2).replace(/\.?0+$/, '')} / 5</p>
-				<p class="description star" style="--offset_width: calc({(result.Rate / 5) * 100}%)">
+				<p class="description bonus">{rate?.toFixed(2).replace(/\.?0+$/, '')} / 5</p>
+				<p
+					class="description star"
+					style="--offset_width: calc({rate !== undefined ? (rate / 5) * 100 : 0}%)"
+				>
 					{#each '⭐⭐⭐⭐⭐' as _}
 						<p class="star_icon">⭐</p>
 					{/each}
@@ -282,7 +287,6 @@
 								)
 									return;
 								const lg = last_comment_id ?? 4;
-								console.log(lg % 4 > 0 ? lg + 4 - (lg % 4) - 7 : lg - 7);
 								fetch(
 									`http://localhost:3000/games/${id}/reviews?comment_id=${
 										lg % 4 > 0 ? lg + 4 - (lg % 4) - 8 : lg - 8
@@ -311,8 +315,6 @@
 									Number(page_th(last_comment_id)) >= Number(page_th(total_comment))
 								)
 									return;
-
-								console.log(last_comment_id, total_comment);
 								const lg = last_comment_id ?? 4;
 								fetch(`http://localhost:3000/games/${id}/reviews?comment_id=${lg}`)
 									.then((res) => res.json())
@@ -384,11 +386,9 @@
 										}
 									})
 									.catch((err) => {
-										console.log(err);
+										console.error(err);
 									});
-								//
-								console.log(result);
-								// const stuff = total_comment - (total_comment % 4);
+
 								const stuff = result.result ? stuff2(result.data - 1) : stuff2(total_comment);
 								fetch(`http://localhost:3000/games/${id}/reviews?comment_id=${stuff}`, {
 									method: 'GET',
@@ -401,7 +401,7 @@
 										}
 									})
 									.catch((err) => {
-										console.log(err);
+										console.error(err);
 									});
 								fetch(`http://localhost:3000/rating/avg?game_id=${id}`, {
 									method: 'GET',
@@ -411,14 +411,14 @@
 									.then((data) => {
 										if (data.result) {
 											if (result === undefined) return;
-											result.Rate = data.data;
+											rate = data.data;
 										}
 									})
 									.catch((err) => {
-										console.log(err);
+										console.error(err);
 									});
 							} catch (e) {
-								console.log(e);
+								console.error(e);
 							}
 						}}
 					>

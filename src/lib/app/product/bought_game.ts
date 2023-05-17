@@ -16,9 +16,8 @@ export function bg() {
 					return v;
 				});
 			}
-			// console.log(res);
 		})
 		.catch((err) => {
-			console.log(err);
+			console.error(err);
 		});
 }

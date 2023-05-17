@@ -299,7 +299,6 @@
 				method="post"
 				on:submit|preventDefault={async () => {
 					if (warning.every((item) => item === false)) {
-						// console.log(data);
 						await submit_n_get_stuff();
 					}
 				}}

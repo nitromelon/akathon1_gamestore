@@ -2,6 +2,7 @@
 	import { onDestroy } from 'svelte';
 	import { is_search_keyword, product_arr, search_keyword } from '../product';
 	import { getGame } from '../getGame';
+	import { bg } from '../bought_game';
 
 	// let tip_display = 'none';
 	let height = '0px';
@@ -77,7 +78,9 @@
 				body: jsonified_kw
 			})
 				.then((res) => res.json())
-				.then((res) => (res.result ? ($product_arr = res.data) : console.log(res)));
+				.then((res) => (res.result ? ($product_arr = res.data) : console.error(res)));
+
+			bg();
 		}, 1000);
 	}
 
